@@ -176,10 +176,16 @@ static bool8 FindMonThatAbsorbsOpponentsMove(void)
 
     if (gBattleMoves[gLastLandedMoves[gActiveBattler]].type == TYPE_FIRE)
         absorbingTypeAbility = ABILITY_FLASH_FIRE;
+    if (gBattleMoves[gLastLandedMoves[gActiveBattler]].type == TYPE_FIRE)
+        absorbingTypeAbility = ABILITY_INNER_FIRE;
     else if (gBattleMoves[gLastLandedMoves[gActiveBattler]].type == TYPE_WATER)
         absorbingTypeAbility = ABILITY_WATER_ABSORB;
+    else if (gBattleMoves[gLastLandedMoves[gActiveBattler]].type == TYPE_WATER)
+        absorbingTypeAbility = ABILITY_INNER_WATER;
     else if (gBattleMoves[gLastLandedMoves[gActiveBattler]].type == TYPE_ELECTRIC)
         absorbingTypeAbility = ABILITY_VOLT_ABSORB;
+    else if (gBattleMoves[gLastLandedMoves[gActiveBattler]].flags == FLAG_WIND_MOVE)
+        absorbingTypeAbility = ABILITY_CIRCULATE;
     else
         return FALSE;
 

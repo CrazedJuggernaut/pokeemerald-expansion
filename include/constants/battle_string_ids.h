@@ -664,8 +664,13 @@
 #define STRINGID_SNOWCONTINUES                        662
 #define STRINGID_SNOWSTOPPED                          663
 #define STRINGID_SNOWWARNINGSNOW                      664
+#define STRINGID_PKMNDIDNTBUDGE                       665
+#define STRINGID_EARLYBIRDENTERS                      666
+#define STRINGID_EARLYBIRDENDS                        667
+#define STRINGID_ATTACKERABILITYSTATLOWER             668
+#define STRINGID_ATTACKERREGAINEDHEALTH               669
 
-#define BATTLESTRINGS_COUNT                           665
+#define BATTLESTRINGS_COUNT                           670
 
 // This is the string id that gBattleStringsTable starts with.
 // String ids before this (e.g. STRINGID_INTROMSG) are not in the table,
@@ -710,19 +715,18 @@
 #define B_MSG_LEECH_SEED_OOZE  4
 
 // gFirstTurnOfTwoStringIds
-#define B_MSG_TURN1_RAZOR_WIND     0
-#define B_MSG_TURN1_SOLAR_BEAM     1
-#define B_MSG_TURN1_SKULL_BASH     2
-#define B_MSG_TURN1_SKY_ATTACK     3
-#define B_MSG_TURN1_FLY            4
-#define B_MSG_TURN1_DIG            5
-#define B_MSG_TURN1_DIVE           6
-#define B_MSG_TURN1_BOUNCE         7
-#define B_MSG_TURN1_PHANTOM_FORCE  8
-#define B_MSG_TURN1_GEOMANCY       9
-#define B_MSG_TURN1_FREEZE_SHOCK   10
-#define B_MSG_TURN1_SKY_DROP       11
-#define B_MSG_TURN1_METEOR_BEAM    12
+#define B_MSG_TURN1_SOLAR_BEAM     0
+#define B_MSG_TURN1_SKULL_BASH     1
+#define B_MSG_TURN1_SKY_ATTACK     2
+#define B_MSG_TURN1_FLY            3
+#define B_MSG_TURN1_DIG            4
+#define B_MSG_TURN1_DIVE           5
+#define B_MSG_TURN1_BOUNCE         6
+#define B_MSG_TURN1_PHANTOM_FORCE  7
+#define B_MSG_TURN1_GEOMANCY       8
+#define B_MSG_TURN1_FREEZE_SHOCK   9
+#define B_MSG_TURN1_SKY_DROP       10
+#define B_MSG_TURN1_METEOR_BEAM    11
 
 // gMoveWeatherChangeStringIds
 #define B_MSG_STARTED_RAIN      0
@@ -811,6 +815,7 @@
 // gFutureMoveUsedStringIds
 #define B_MSG_FUTURE_SIGHT 0
 #define B_MSG_DOOM_DESIRE  1
+#define B_MSG_TURN1_RAZOR_WIND 2
 
 // gItemSwapStringIds
 #define B_MSG_ITEM_SWAP_TAKEN 0
@@ -918,6 +923,7 @@
 #define B_MSG_SWITCHIN_CURIOUS_MEDICINE 14
 #define B_MSG_SWITCHIN_PASTEL_VEIL      15
 #define B_MSG_SWITCHIN_NEUTRALIZING_GAS 16
+#define B_MSG_SWITCHIN_EARLYBIRD        17
 
 // gMentalHerbCureStringIds
 #define B_MSG_MENTALHERBCURE_INFATUATION       0

@@ -831,6 +831,9 @@ static bool8 DoesAbilityPreventStatus(struct Pokemon *mon, u32 status)
         if (ability == ABILITY_LIMBER)
             ret = TRUE;
         break;
+        if (ability == ABILITY_NIMBLE)
+            ret = TRUE;
+        break;
     case STATUS1_SLEEP:
         if (ability == ABILITY_INSOMNIA || ability == ABILITY_VITAL_SPIRIT)
             ret = TRUE;

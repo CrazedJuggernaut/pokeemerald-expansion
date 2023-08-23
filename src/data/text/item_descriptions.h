@@ -540,10 +540,10 @@ static const u8 sRareCandyDesc[] = _(
     "of a Pokémon by\n"
     "one.");
 
-static const u8 sExpCandyXSDesc[] = _(
-    "Gives a very small\n"
-    "amount of Exp. to\n"
-    "a single Pokémon.");
+static const u8 sEndlessCandyDesc[] = _(
+    "Raises the level\n"
+    "of a Pokémon by\n"
+    "one.");
 
 static const u8 sExpCandySDesc[] = _(
     "Gives a small\n"

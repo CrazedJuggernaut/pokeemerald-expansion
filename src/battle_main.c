@@ -3187,7 +3187,7 @@ static void BattleStartClearSetData(void)
         gBattleStruct->allowedToChangeFormInWeather[i][B_SIDE_OPPONENT] = FALSE;
     }
 
-    gBattleStruct->swapDamageCategory = FALSE; // Photon Geyser, Shell Side Arm, Light That Burns the Sky
+    gBattleStruct->swapDamageCategory = FALSE; // Photon Geyser, Shell Side Arm, Light That Burns the Sky, Tri attack, Hidden Power, Return, Frustration
     gSelectedMonPartyId = PARTY_SIZE; // Revival Blessing
 }
 
@@ -3451,6 +3451,7 @@ void FaintClearSetData(void)
                 // If the released mon can be confused, do so.
                 // Don't use CanBeConfused here, since it can cause issues in edge cases.
                 if (!(GetBattlerAbility(otherSkyDropper) == ABILITY_OWN_TEMPO
+                    || GetBattlerAbility(otherSkyDropper) == ABILITY_UNBREAKABLE
                     || gBattleMons[otherSkyDropper].status2 & STATUS2_CONFUSION
                     || IsBattlerTerrainAffected(otherSkyDropper, STATUS_FIELD_MISTY_TERRAIN)))
                 {
@@ -4668,6 +4669,8 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId)
     {
         if (ability == ABILITY_SWIFT_SWIM       && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & B_WEATHER_RAIN)
             speed *= 2;
+        else if (ability == ABILITY_AGGRO_SWIM       && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & B_WEATHER_RAIN)
+            speed *= 2;
         else if (ability == ABILITY_CHLOROPHYLL && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & B_WEATHER_SUN)
             speed *= 2;
         else if (ability == ABILITY_SAND_RUSH   && gBattleWeather & B_WEATHER_SANDSTORM)
@@ -4751,6 +4754,15 @@ s8 GetMovePriority(u32 battlerId, u16 move)
         && BATTLER_MAX_HP(battlerId)
     #endif
         && gBattleMoves[move].type == TYPE_FLYING)
+    {
+        priority++;
+    }
+    else if (ability == ABILITY_RUSHDOWN && IS_MOVE_PHYSICAL(move)
+        && BATTLER_MAX_HP(battlerId))
+    {
+        priority++;
+    }
+    else if (ability == ABILITY_EARLY_BIRD && gDisableStructs[battlerId].slowStartTimer != 0)
     {
         priority++;
     }
@@ -5716,6 +5728,7 @@ void SetTypeBeforeUsingMove(u16 move, u8 battlerAtk)
                  || (attackerAbility == ABILITY_REFRIGERATE && (ateType = TYPE_ICE))
                  || (attackerAbility == ABILITY_AERILATE && (ateType = TYPE_FLYING))
                  || ((attackerAbility == ABILITY_GALVANIZE) && (ateType = TYPE_ELECTRIC))
+                 || ((attackerAbility == ABILITY_CONTAMINATE) && (ateType = TYPE_POISON))
                 )
              )
     {

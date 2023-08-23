@@ -103,7 +103,7 @@ static const s8 sAiAbilityRatings[ABILITIES_COUNT] =
     [ABILITY_HUGE_POWER] = 10,
     [ABILITY_HUSTLE] = 7,
     [ABILITY_HYDRATION] = 4,
-    [ABILITY_HYPER_CUTTER] = 3,
+    [ABILITY_HYPER_CUTTER] = 5,
     [ABILITY_ICE_BODY] = 3,
     [ABILITY_ILLUMINATE] = 0,
     [ABILITY_ILLUSION] = 8,
@@ -283,6 +283,37 @@ static const s8 sAiAbilityRatings[ABILITIES_COUNT] =
     [ABILITY_PERISH_BODY] = -1,
     [ABILITY_WANDERING_SPIRIT] = 2,
     [ABILITY_GORILLA_TACTICS] = 4,
+    [ABILITY_PROWESS] = 7,
+    [ABILITY_AURA] = 5,
+    [ABILITY_BRAWLER] = 5,
+    [ABILITY_ROYAL_HONEY] = 8,
+    [ABILITY_PARASITISM] = 5,
+    [ABILITY_CIRCULATE] = 7,
+    [ABILITY_SAGE] = 5,
+    [ABILITY_GALLANT] = 4,
+    [ABILITY_PINACEAE] = 7,
+    [ABILITY_NINJITSU] = 5,
+    [ABILITY_CONTAMINATE] = 8,
+    [ABILITY_NIMBLE] = 9,
+    [ABILITY_AGGRO_SWIM] = 8,
+    [ABILITY_STRIKER] = 5,
+    [ABILITY_KAKTOS] = 6,
+    [ABILITY_APPARITION] = 7,
+    [ABILITY_FORMATION] = 8,
+    [ABILITY_UNBREAKABLE] = 2,
+    [ABILITY_RUSHDOWN] = 6,
+    [ABILITY_BALLISTICS] = 7,
+    [ABILITY_FLY_TRAP] = 6,
+    [ABILITY_COURT_JESTER] = 3,
+    [ABILITY_CLEANSE] = 6,
+    [ABILITY_SHARPNESS] = 7,
+    [ABILITY_FRIGID_BODY] = 4,
+    [ABILITY_ROCK_BODY] = 8,
+    [ABILITY_ALLOY_BODY] = 6,
+    [ABILITY_INNER_FIRE] = 6,
+    [ABILITY_INNER_SPARK] = 6,
+    [ABILITY_INNER_WATER] = 6,
+
 };
 
 static const u16 sEncouragedEncoreEffects[] =
@@ -714,6 +745,7 @@ bool32 IsTruantMonVulnerable(u32 battlerAI, u32 opposingBattler)
 bool32 IsAffectedByPowder(u8 battler, u16 ability, u16 holdEffect)
 {
     if (ability == ABILITY_OVERCOAT
+        || ability == ABILITY_WATER_VEIL
     #if B_POWDER_GRASS >= GEN_6
         || IS_BATTLER_OF_TYPE(battler, TYPE_GRASS)
     #endif
@@ -1558,6 +1590,13 @@ bool32 ShouldTryOHKO(u8 battlerAtk, u8 battlerDef, u16 atkAbility, u16 defAbilit
     {
         return TRUE;
     }
+    if ((((gStatuses3[battlerDef] & STATUS3_ALWAYS_HITS)
+        && gDisableStructs[battlerDef].battlerWithSureHit == battlerAtk)
+        ||defAbility == ABILITY_FORMATION)
+        && gBattleMons[battlerAtk].level >= gBattleMons[battlerDef].level)
+    {
+        return TRUE;
+    }
     else    // test the odds
     {
         u16 odds = accuracy + (gBattleMons[battlerAtk].level - gBattleMons[battlerDef].level);
@@ -1583,6 +1622,7 @@ bool32 ShouldSetSandstorm(u8 battler, u16 ability, u16 holdEffect)
       || ability == ABILITY_SAND_FORCE
       || ability == ABILITY_OVERCOAT
       || ability == ABILITY_MAGIC_GUARD
+      || ability == ABILITY_KAKTOS
       || holdEffect == HOLD_EFFECT_SAFETY_GOGGLES
       || IS_BATTLER_OF_TYPE(battler, TYPE_ROCK)
       || IS_BATTLER_OF_TYPE(battler, TYPE_STEEL)
@@ -1740,7 +1780,10 @@ bool32 ShouldLowerStat(u8 battler, u16 battlerAbility, u8 stat)
         if (AI_DATA->holdEffects[battler] == HOLD_EFFECT_CLEAR_AMULET
          || battlerAbility == ABILITY_CLEAR_BODY
          || battlerAbility == ABILITY_WHITE_SMOKE
-         || battlerAbility == ABILITY_FULL_METAL_BODY)
+         || battlerAbility == ABILITY_FULL_METAL_BODY
+         || battlerAbility == ABILITY_BIG_PECKS
+         || battlerAbility == ABILITY_GALLANT
+         || battlerAbility == ABILITY_FRIGID_BODY)
             return FALSE;
 
         return TRUE;
@@ -1815,7 +1858,9 @@ bool32 ShouldLowerAttack(u8 battlerAtk, u8 battlerDef, u16 defAbility)
       && defAbility != ABILITY_CLEAR_BODY
       && defAbility != ABILITY_WHITE_SMOKE
       && defAbility != ABILITY_FULL_METAL_BODY
-      && defAbility != ABILITY_HYPER_CUTTER
+      && defAbility != ABILITY_BIG_PECKS
+      && defAbility != ABILITY_GALLANT
+      && defAbility != ABILITY_FRIGID_BODY
       && AI_DATA->holdEffects[battlerDef] != HOLD_EFFECT_CLEAR_AMULET)
         return TRUE;
     return FALSE;
@@ -1833,6 +1878,8 @@ bool32 ShouldLowerDefense(u8 battlerAtk, u8 battlerDef, u16 defAbility)
       && defAbility != ABILITY_WHITE_SMOKE
       && defAbility != ABILITY_FULL_METAL_BODY
       && defAbility != ABILITY_BIG_PECKS
+      && defAbility != ABILITY_GALLANT
+      && defAbility != ABILITY_FRIGID_BODY
       && AI_DATA->holdEffects[battlerDef] != HOLD_EFFECT_CLEAR_AMULET)
         return TRUE;
     return FALSE;
@@ -1848,6 +1895,9 @@ bool32 ShouldLowerSpeed(u8 battlerAtk, u8 battlerDef, u16 defAbility)
       && defAbility != ABILITY_CLEAR_BODY
       && defAbility != ABILITY_FULL_METAL_BODY
       && defAbility != ABILITY_WHITE_SMOKE
+      && defAbility != ABILITY_BIG_PECKS
+      && defAbility != ABILITY_GALLANT
+      && defAbility != ABILITY_FRIGID_BODY
       && AI_DATA->holdEffects[battlerDef] != HOLD_EFFECT_CLEAR_AMULET)
         return TRUE;
     return FALSE;
@@ -1864,6 +1914,9 @@ bool32 ShouldLowerSpAtk(u8 battlerAtk, u8 battlerDef, u16 defAbility)
       && defAbility != ABILITY_CLEAR_BODY
       && defAbility != ABILITY_FULL_METAL_BODY
       && defAbility != ABILITY_WHITE_SMOKE
+      && defAbility != ABILITY_BIG_PECKS
+      && defAbility != ABILITY_GALLANT
+      && defAbility != ABILITY_FRIGID_BODY
       && AI_DATA->holdEffects[battlerDef] != HOLD_EFFECT_CLEAR_AMULET)
         return TRUE;
     return FALSE;
@@ -1880,6 +1933,9 @@ bool32 ShouldLowerSpDef(u8 battlerAtk, u8 battlerDef, u16 defAbility)
       && defAbility != ABILITY_CLEAR_BODY
       && defAbility != ABILITY_FULL_METAL_BODY
       && defAbility != ABILITY_WHITE_SMOKE
+      && defAbility != ABILITY_BIG_PECKS
+      && defAbility != ABILITY_GALLANT
+      && defAbility != ABILITY_FRIGID_BODY
       && AI_DATA->holdEffects[battlerDef] != HOLD_EFFECT_CLEAR_AMULET)
         return TRUE;
     return FALSE;
@@ -1895,6 +1951,9 @@ bool32 ShouldLowerAccuracy(u8 battlerAtk, u8 battlerDef, u16 defAbility)
       && defAbility != ABILITY_WHITE_SMOKE
       && defAbility != ABILITY_FULL_METAL_BODY
       && defAbility != ABILITY_KEEN_EYE
+      && defAbility != ABILITY_BIG_PECKS
+      && defAbility != ABILITY_GALLANT
+      && defAbility != ABILITY_FRIGID_BODY
       && AI_DATA->holdEffects[battlerDef] != HOLD_EFFECT_CLEAR_AMULET)
         return TRUE;
     return FALSE;
@@ -1910,6 +1969,9 @@ bool32 ShouldLowerEvasion(u8 battlerAtk, u8 battlerDef, u16 defAbility)
       && defAbility != ABILITY_CLEAR_BODY
       && defAbility != ABILITY_FULL_METAL_BODY
       && defAbility != ABILITY_WHITE_SMOKE
+      && defAbility != ABILITY_BIG_PECKS
+      && defAbility != ABILITY_GALLANT
+      && defAbility != ABILITY_FRIGID_BODY
       && AI_DATA->holdEffects[battlerDef] != HOLD_EFFECT_CLEAR_AMULET)
         return TRUE;
     return FALSE;
@@ -2417,7 +2479,8 @@ static bool32 BattlerAffectedBySandstorm(u8 battlerId, u16 ability)
       && ability != ABILITY_SAND_VEIL
       && ability != ABILITY_SAND_FORCE
       && ability != ABILITY_SAND_RUSH
-      && ability != ABILITY_OVERCOAT)
+      && ability != ABILITY_OVERCOAT
+      && ability != ABILITY_KAKTOS)
         return TRUE;
     return FALSE;
 }
@@ -2881,6 +2944,7 @@ static bool32 AI_CanBeParalyzed(u8 battler, u16 ability)
 {
     if (ability == ABILITY_LIMBER
       || ability == ABILITY_COMATOSE
+      || ability == ABILITY_NIMBLE
       || IS_BATTLER_OF_TYPE(battler, TYPE_ELECTRIC)
       || gBattleMons[battler].status1 & STATUS1_ANY
       || IsAbilityStatusProtected(battler))
@@ -2903,6 +2967,7 @@ bool32 AI_CanBeConfused(u8 battler, u16 ability)
 {
     if ((gBattleMons[battler].status2 & STATUS2_CONFUSION)
       || (ability == ABILITY_OWN_TEMPO)
+      || (ability == ABILITY_UNBREAKABLE)
       || (IsBattlerGrounded(battler) && (gFieldStatuses & STATUS_FIELD_MISTY_TERRAIN)))
         return FALSE;
     return TRUE;
@@ -2990,7 +3055,7 @@ bool32 AI_CanBeInfatuated(u8 battlerAtk, u8 battlerDef, u16 defAbility)
     if ((gBattleMons[battlerDef].status2 & STATUS2_INFATUATION)
       || AI_GetMoveEffectiveness(AI_THINKING_STRUCT->moveConsidered, battlerAtk, battlerDef) == AI_EFFECTIVENESS_x0
       || defAbility == ABILITY_OBLIVIOUS
-      || !AreBattlersOfOppositeGender(battlerAtk, battlerDef)
+      || defAbility == ABILITY_UNBREAKABLE
       || AI_IsAbilityOnSide(battlerDef, ABILITY_AROMA_VEIL))
         return FALSE;
     return TRUE;
@@ -2998,7 +3063,7 @@ bool32 AI_CanBeInfatuated(u8 battlerAtk, u8 battlerDef, u16 defAbility)
 
 u32 ShouldTryToFlinch(u8 battlerAtk, u8 battlerDef, u16 atkAbility, u16 defAbility, u16 move)
 {
-    if (defAbility == ABILITY_INNER_FOCUS
+    if (defAbility == ABILITY_INNER_FOCUS || defAbility == ABILITY_INNER_FIRE || defAbility == ABILITY_INNER_SPARK || defAbility == ABILITY_INNER_WATER
       || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
       || AI_WhoStrikesFirst(battlerAtk, battlerDef, move) == AI_IS_SLOWER) // Opponent goes first
     {

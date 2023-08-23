@@ -1522,6 +1522,11 @@
 	various \battler, VARIOUS_TRY_ACTIVATE_MOXIE
 	.endm
 
+	.macro tryactivatesoulsiphon battler:req
+	various \battler, VARIOUS_TRY_ACTIVATE_SOUL_SIPHON
+	.endm
+
+
 	.macro tryactivatebeastboost battler:req
 	various \battler, VARIOUS_TRY_ACTIVATE_BEAST_BOOST
 	.endm
