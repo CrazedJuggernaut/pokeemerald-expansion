@@ -3034,4 +3034,8 @@ extern const u8 gText_BoxName[];
 extern const u8 gText_PkmnsNickname[];
 extern const u8 gText_TellHimTheWords[];
 
+extern const u8 gText_AccessPC[];
+extern const u8 gText_PokeVialEmpty[];
+extern const u8 gText_UsedPokeVial[];
+
 #endif // GUARD_STRINGS_H

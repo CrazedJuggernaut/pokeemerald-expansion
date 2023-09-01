@@ -254,6 +254,9 @@ const u8 gText_TheBattle[] = _("the battle");
 const u8 gText_ThePokemonList[] = _("the POKéMON LIST");
 const u8 gText_TheShop[] = _("the shop");
 const u8 gText_ThePC[] = _("the PC");
+const u8 gText_PokeVialEmpty[] = _("The Poké Vial is empty.\nRefill it at a Pokémon Center.{PAUSE_UNTIL_PRESS}");
+const u8 gText_UsedPokeVial[] = _("{PLAYER} used the Poké Vial.\nAll Pokémon were fully restored!{PAUSE_UNTIL_PRESS}");
+
 
 const u8 *const gBagMenu_ReturnToStrings[] =
 {
@@ -1833,3 +1836,4 @@ const u8 gText_Answer[] = _("ANSWER");
 const u8 gText_PokeBalls[] = _("POKé BALLS");
 const u8 gText_Berry[] = _("BERRY");
 const u8 gText_Berries[] = _("BERRIES");
+const u8 gText_AccessPC[] = _("PC");

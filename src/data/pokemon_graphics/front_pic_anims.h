@@ -9753,6 +9753,48 @@ static const union AnimCmd sAnim_LatiosMega_1[] =
     ANIMCMD_END,
 };
 
+static const union AnimCmd sAnim_MiloticMega_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_ButterfreeMega_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_MachampMega_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_KinglerMega_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_LaprasMega_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_FlygonMega_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_KingdraMega_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
 static const union AnimCmd sAnim_KyogrePrimal_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -11508,6 +11550,13 @@ SINGLE_ANIMATION(SalamenceMega);
 SINGLE_ANIMATION(MetagrossMega);
 SINGLE_ANIMATION(LatiasMega);
 SINGLE_ANIMATION(LatiosMega);
+SINGLE_ANIMATION(MiloticMega);
+SINGLE_ANIMATION(ButterfreeMega);
+SINGLE_ANIMATION(MachampMega);
+SINGLE_ANIMATION(KinglerMega);
+SINGLE_ANIMATION(LaprasMega);
+SINGLE_ANIMATION(FlygonMega);
+SINGLE_ANIMATION(KingdraMega);
 SINGLE_ANIMATION(KyogrePrimal);
 SINGLE_ANIMATION(GroudonPrimal);
 SINGLE_ANIMATION(RayquazaMega);
@@ -12595,6 +12644,13 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     [SPECIES_METAGROSS_MEGA] = sAnims_MetagrossMega,
     [SPECIES_LATIAS_MEGA] = sAnims_LatiasMega,
     [SPECIES_LATIOS_MEGA] = sAnims_LatiosMega,
+    [SPECIES_MILOTIC_MEGA] = sAnims_MiloticMega,
+    [SPECIES_BUTTERFREE_MEGA] = sAnims_ButterfreeMega,
+    [SPECIES_MACHAMP_MEGA] = sAnims_MachampMega,
+    [SPECIES_KINGLER_MEGA] = sAnims_KinglerMega,
+    [SPECIES_LAPRAS_MEGA] = sAnims_LaprasMega,
+    [SPECIES_FLYGON_MEGA] = sAnims_FlygonMega,
+    [SPECIES_KINGDRA_MEGA] = sAnims_KingdraMega,
 #if P_GEN_4_POKEMON == TRUE
     [SPECIES_LOPUNNY_MEGA] = sAnims_LopunnyMega,
     [SPECIES_GARCHOMP_MEGA] = sAnims_GarchompMega,

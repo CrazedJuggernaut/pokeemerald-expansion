@@ -1151,4 +1151,46 @@ static const u16 sBasculegionFormSpeciesIdTable[] = {
     FORM_SPECIES_END,
 };
 
+static const u16 sMiloticFormSpeciesIdTable[] = {
+    SPECIES_MILOTIC,
+    SPECIES_MILOTIC_MEGA,
+    FORM_SPECIES_END,
+};
+
+static const u16 sButterfreeFormSpeciesIdTable[] = {
+    SPECIES_BUTTERFREE,
+    SPECIES_BUTTERFREE_MEGA,
+    FORM_SPECIES_END,
+};
+
+static const u16 sMachampFormSpeciesIdTable[] = {
+    SPECIES_MACHAMP,
+    SPECIES_MACHAMP_MEGA,
+    FORM_SPECIES_END,
+};
+
+static const u16 sKinglerFormSpeciesIdTable[] = {
+    SPECIES_KINGLER,
+    SPECIES_KINGLER_MEGA,
+    FORM_SPECIES_END,
+};
+
+static const u16 sLaprasFormSpeciesIdTable[] = {
+    SPECIES_LAPRAS,
+    SPECIES_LAPRAS_MEGA,
+    FORM_SPECIES_END,
+};
+
+static const u16 sFlygonFormSpeciesIdTable[] = {
+    SPECIES_FLYGON,
+    SPECIES_FLYGON_MEGA,
+    FORM_SPECIES_END,
+};
+
+static const u16 sKingdraFormSpeciesIdTable[] = {
+    SPECIES_KINGDRA,
+    SPECIES_KINGDRA_MEGA,
+    FORM_SPECIES_END,
+};
+
 #endif

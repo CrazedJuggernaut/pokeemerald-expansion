@@ -974,7 +974,19 @@
 #define ITEM_PEAT_BLOCK 797
 #define ITEM_BERSERK_GENE 798
 
-#define ITEMS_COUNT 799
+#define ITEM_REPELLENT 799
+
+#define ITEM_FLYGONITE 801
+#define ITEM_BUTTERFRENITE 802
+#define ITEM_LAPRASITE 803
+#define ITEM_MACHAMPITE 804
+#define ITEM_KINGLERITE 805
+#define ITEM_KINGDRANITE 806
+#define ITEM_MILOTICITE 807
+
+#define ITEM_POKE_VIAL 808
+
+#define ITEMS_COUNT 809
 #define ITEM_FIELD_ARROW ITEMS_COUNT
 
 // A special item id associated with "Cancel"/"Exit" etc. in a list of items or decorations

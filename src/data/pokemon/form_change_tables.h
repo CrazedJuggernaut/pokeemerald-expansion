@@ -210,6 +210,41 @@ static const struct FormChange sLatiosFormChangeTable[] = {
     {FORM_CHANGE_TERMINATOR},
 };
 
+static const struct FormChange sButterfreeFormChangeTable[] = {
+    {FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM,    SPECIES_BUTTERFREE_MEGA, ITEM_BUTTERFRENITE},
+    {FORM_CHANGE_TERMINATOR},
+};
+
+static const struct FormChange sMiloticFormChangeTable[] = {
+    {FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM,    SPECIES_MILOTIC_MEGA, ITEM_MILOTICITE},
+    {FORM_CHANGE_TERMINATOR},
+};
+
+static const struct FormChange sMachampFormChangeTable[] = {
+    {FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM,    SPECIES_MACHAMP_MEGA, ITEM_MACHAMPITE},
+    {FORM_CHANGE_TERMINATOR},
+};
+
+static const struct FormChange sKinglerFormChangeTable[] = {
+    {FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM,    SPECIES_KINGLER_MEGA, ITEM_KINGLERITE},
+    {FORM_CHANGE_TERMINATOR},
+};
+
+static const struct FormChange sLaprasFormChangeTable[] = {
+    {FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM,    SPECIES_LAPRAS_MEGA, ITEM_LAPRASITE},
+    {FORM_CHANGE_TERMINATOR},
+};
+
+static const struct FormChange sFlygonFormChangeTable[] = {
+    {FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM,    SPECIES_FLYGON_MEGA, ITEM_FLYGONITE},
+    {FORM_CHANGE_TERMINATOR},
+};
+
+static const struct FormChange sKingdraFormChangeTable[] = {
+    {FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM,    SPECIES_KINGDRA_MEGA, ITEM_KINGDRANITE},
+    {FORM_CHANGE_TERMINATOR},
+};
+
 static const struct FormChange sKyogreFormChangeTable[] = {
     {FORM_CHANGE_BATTLE_PRIMAL_REVERSION,   SPECIES_KYOGRE_PRIMAL, ITEM_BLUE_ORB},
     {FORM_CHANGE_TERMINATOR},

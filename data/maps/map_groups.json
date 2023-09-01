@@ -429,7 +429,10 @@
     "TerraCave_Entrance",
     "TerraCave_End",
     "AlteringCave",
-    "MeteorFalls_StevensCave"
+    "MeteorFalls_StevensCave",
+    "DewfordMeadow",
+    "DewfordManor_1F",
+    "VerdanturfMeadow"
   ],
   "gMapGroup_IndoorDynamic": [
     "SecretBase_RedCave1",

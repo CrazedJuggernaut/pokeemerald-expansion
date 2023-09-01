@@ -354,6 +354,7 @@ static void BestowItem(u32 battlerAtk, u32 battlerDef);
 static bool8 IsFinalStrikeEffect(u16 move);
 static void TryUpdateRoundTurnOrder(void);
 static bool32 ChangeOrderTargetAfterAttacker(void);
+static void RemoveAllTerrains(void);
 
 static void Cmd_attackcanceler(void);
 static void Cmd_accuracycheck(void);
@@ -1129,7 +1130,6 @@ static const u8 sForbiddenMoves[MOVES_COUNT] =
     [MOVE_RELIC_SONG] = FORBIDDEN_METRONOME,
     [MOVE_REVIVAL_BLESSING] = FORBIDDEN_METRONOME,
     [MOVE_ROAR] = FORBIDDEN_ASSIST | FORBIDDEN_COPYCAT,
-    [MOVE_ROAR_OF_TIME] = FORBIDDEN_INSTRUCT,
     [MOVE_ROCK_BLAST] = FORBIDDEN_PARENTAL_BOND,
     [MOVE_ROCK_WRECKER] = FORBIDDEN_INSTRUCT,
     [MOVE_ROLLOUT] = FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
@@ -1643,6 +1643,19 @@ static void Cmd_attackcanceler(void)
         gBattlerAbility = gBattlerTarget;
         return;
     }
+    else if (GetBattlerAbility(gBattlerTarget) == ABILITY_KNOWLEDGE
+             && gBattleMoves[gCurrentMove].flags & FLAG_MAGIC_COAT_AFFECTED
+             && !gProtectStructs[gBattlerAttacker].usesBouncedMove)
+    {
+        gProtectStructs[gBattlerTarget].usesBouncedMove = TRUE;
+        gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+        // Edge case for bouncing a powder move against a grass type pokemon.
+        SetAtkCancellerForCalledMove();
+        BattleScriptPushCursor();
+        gBattlescriptCurrInstr = BattleScript_MagicCoatBounce;
+        gBattlerAbility = gBattlerTarget;
+        return;
+    }
 
     // Z-moves and Max Moves bypass protection, but deal reduced damage (factored in CalcFinalDmg)
     if (gBattleStruct->zmove.active && IS_BATTLER_PROTECTED(gBattlerTarget))
@@ -1804,7 +1817,6 @@ static bool32 AccuracyCalcHelper(u16 move)
             RecordAbilityBattle(gBattlerTarget, ABILITY_FORMATION);
         return TRUE;
     }
-
     if (gBattleStruct->zmove.active && !(gStatuses3[gBattlerTarget] & STATUS3_SEMI_INVULNERABLE))
     {
         JumpIfMoveFailed(7, move);
@@ -1918,24 +1930,6 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, u32 atkAbility, u
         break;
     }
 
-<<<<<<< Updated upstream
-    // Target's ability
-    switch (defAbility)
-    {
-    case ABILITY_SAND_VEIL:
-        if (WEATHER_HAS_EFFECT && gBattleWeather & B_WEATHER_SANDSTORM)
-            calc = (calc * 80) / 100; // 1.2 sand veil loss
-        break;
-    case ABILITY_SNOW_CLOAK:
-        if (WEATHER_HAS_EFFECT && (gBattleWeather & (B_WEATHER_HAIL | B_WEATHER_SNOW)))
-            calc = (calc * 80) / 100; // 1.2 snow cloak loss
-        break;
-    case ABILITY_TANGLED_FEET:
-        if (gBattleMons[battlerDef].status2 & STATUS2_CONFUSION)
-            calc = (calc * 50) / 100; // 1.5 tangled feet loss
-        break;
-    }
-=======
     if (atkAbility == ABILITY_KEEN_EYE)
         calc = (calc * 110) / 100; // 1.10 keen eye boost
 
@@ -1948,7 +1942,6 @@ u32 GetTotalAccuracy(u32 battlerAtk, u32 battlerDef, u32 move, u32 atkAbility, u
         calc = (calc * 80) / 100; // 1.2 snow cloak loss
     else if (defAbility == ABILITY_TANGLED_FEET && gBattleMons[battlerDef].status2 & STATUS2_CONFUSION)
         calc = (calc * 50) / 100; // 1.5 tangled feet loss
->>>>>>> Stashed changes
 
     // Attacker's ally's ability
     switch (atkAllyAbility)
@@ -3065,12 +3058,13 @@ void SetMoveEffect(bool32 primary, u32 certain)
     gBattleScripting.moveEffect &= ~MOVE_EFFECT_CERTAIN;
 
     if ((battlerAbility == ABILITY_SHIELD_DUST
+     || battlerAbility == ABILITY_LUNAR_GUARDIAN
      || GetBattlerHoldEffect(gEffectBattler, TRUE) == HOLD_EFFECT_COVERT_CLOAK)
       && !(gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
       && !primary
       && (gBattleScripting.moveEffect <= MOVE_EFFECT_TRI_ATTACK || gBattleScripting.moveEffect >= MOVE_EFFECT_SMACK_DOWN)) // Exclude stat lowering effects
     {
-        if (battlerAbility == ABILITY_SHIELD_DUST)
+        if (battlerAbility == ABILITY_SHIELD_DUST || ABILITY_LUNAR_GUARDIAN)
             RecordAbilityBattle(gEffectBattler, battlerAbility);
         else
             RecordItemEffectBattle(gEffectBattler, HOLD_EFFECT_COVERT_CLOAK);
@@ -3970,8 +3964,14 @@ static void Cmd_seteffectwithchance(void)
     CMD_ARGS();
 
     u32 percentChance;
+    u32 moveType, move;
 
     if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE)
+        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
+    else
+        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
+
+    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_FROZEN_HUSK && moveType == TYPE_ICE)
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
     else
         percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
@@ -8519,19 +8519,19 @@ static void HandleTerrainMove(u16 move)
     {
     case EFFECT_MISTY_TERRAIN:
         statusFlag = STATUS_FIELD_MISTY_TERRAIN;
-        gBattleCommunication[MULTISTRING_CHOOSER] = 0;
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAIN_SET_MISTY;
         break;
     case EFFECT_GRASSY_TERRAIN:
         statusFlag = STATUS_FIELD_GRASSY_TERRAIN;
-        gBattleCommunication[MULTISTRING_CHOOSER] = 1;
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAIN_SET_MISTY;
         break;
     case EFFECT_ELECTRIC_TERRAIN:
         statusFlag = STATUS_FIELD_ELECTRIC_TERRAIN;
-        gBattleCommunication[MULTISTRING_CHOOSER] = 2;
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAIN_SET_MISTY;
         break;
     case EFFECT_PSYCHIC_TERRAIN:
         statusFlag = STATUS_FIELD_PSYCHIC_TERRAIN;
-        gBattleCommunication[MULTISTRING_CHOOSER] = 3;
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAIN_SET_MISTY;
         break;
     case EFFECT_HIT_SET_REMOVE_TERRAIN:
         switch (gBattleMoves[move].argument)
@@ -8549,8 +8549,7 @@ static void HandleTerrainMove(u16 move)
             else
             {
                 // remove all terrain
-                gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;
-                gBattleCommunication[MULTISTRING_CHOOSER] = 4;
+                RemoveAllTerrains();
                 gBattlescriptCurrInstr += 7;
             }
             return;
@@ -8609,19 +8608,19 @@ static void RemoveAllTerrains(void)
     switch (gFieldStatuses & STATUS_FIELD_TERRAIN_ANY)
     {
     case STATUS_FIELD_MISTY_TERRAIN:
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINENDS_MISTY;
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAIN_END_MISTY;
         break;
     case STATUS_FIELD_GRASSY_TERRAIN:
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINENDS_GRASS;
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAIN_END_GRASSY;
         break;
     case STATUS_FIELD_ELECTRIC_TERRAIN:
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINENDS_ELECTRIC;
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAIN_END_ELECTRIC;
         break;
     case STATUS_FIELD_PSYCHIC_TERRAIN:
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINENDS_PSYCHIC;
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAIN_END_PSYCHIC;
         break;
     default:
-        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAINENDS_COUNT;  // failsafe
+        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_TERRAIN_COUNT;  // failsafe
         break;
     }
     gFieldStatuses &= ~STATUS_FIELD_TERRAIN_ANY;    // remove the terrain
@@ -9850,7 +9849,7 @@ static void Cmd_various(void)
         }
         break;
     }
-    case VARIOUS_SET_TERRAIN:
+    case VARIOUS_SET_REMOVE_TERRAIN:
     {
         VARIOUS_ARGS(const u8 *failInstr);
         HandleTerrainMove(gCurrentMove);
@@ -12102,6 +12101,11 @@ static u32 ChangeStatBuffs(s8 statValue, u32 statId, u32 flags, const u8 *BS_ptr
             return STAT_CHANGE_DIDNT_WORK;
         }
         else if (activeBattlerAbility == ABILITY_SHIELD_DUST && flags == 0)
+        {
+            RecordAbilityBattle(gActiveBattler, ABILITY_SHIELD_DUST);
+            return STAT_CHANGE_DIDNT_WORK;
+        }
+        else if (activeBattlerAbility == ABILITY_LUNAR_GUARDIAN && flags == 0)
         {
             RecordAbilityBattle(gActiveBattler, ABILITY_SHIELD_DUST);
             return STAT_CHANGE_DIDNT_WORK;

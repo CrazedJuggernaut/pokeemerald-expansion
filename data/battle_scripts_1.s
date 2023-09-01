@@ -378,7 +378,6 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectCoaching                @ EFFECT_COACHING
 	.4byte BattleScript_EffectHit                     @ EFFECT_LASH_OUT
 	.4byte BattleScript_EffectHit                     @ EFFECT_GRASSY_GLIDE
-	.4byte BattleScript_EffectRemoveTerrain           @ EFFECT_REMOVE_TERRAIN
 	.4byte BattleScript_EffectHit                     @ EFFECT_DYNAMAX_DOUBLE_DMG
 	.4byte BattleScript_EffectDecorate                @ EFFECT_DECORATE
 	.4byte BattleScript_EffectHit                     @ EFFECT_SNIPE_SHOT
@@ -431,6 +430,8 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectFrostbiteHit            @ EFFECT_FROSTBITE_HIT
 	.4byte BattleScript_EffectSnow                    @ EFFECT_SNOWSCAPE
 	.4byte BattleScript_EffectDefenseDownHit2  		  @ EFFECT_DEFENSE_DOWN_HIT_2
+	.4byte BattleScript_EffectDefenseUpUserAlly		  @ EFFECT_DEFENSE_UP_USER_ALLY
+	.4byte BattleScript_EffectHit                     @ EFFECT_SPACIAL_REND
 
 BattleScript_EffectRevivalBlessing::
 	attackcanceler
@@ -506,6 +507,43 @@ BattleScript_EffectAttackUpUserAlly_AllyAnim:
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
 	goto BattleScript_EffectAttackUpUserAlly_End
+
+BattleScript_EffectDefenseUpUserAlly:
+	jumpifnoally BS_ATTACKER, BattleScript_EffectDefenseUp
+	attackcanceler
+	attackstring
+	ppreduce
+	jumpifstat BS_ATTACKER, CMP_NOT_EQUAL, STAT_DEF, MAX_STAT_STAGE, BattleScript_EffectDefenseUpUserAlly_Works
+	jumpifstat BS_ATTACKER_PARTNER, CMP_EQUAL, STAT_DEF, MAX_STAT_STAGE, BattleScript_ButItFailed
+BattleScript_EffectDefenseUpUserAlly_Works:
+	attackanimation
+	waitanimation
+	setstatchanger STAT_DEF, 1, FALSE
+	statbuffchange MOVE_EFFECT_AFFECTS_USER | STAT_CHANGE_ALLOW_PTR, BattleScript_EffectDefenseUpUserAlly_TryAlly
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_EffectDefenseUpUserAllyUser_PrintString
+	setgraphicalstatchangevalues
+	playanimation BS_ATTACKER, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+BattleScript_EffectDefenseUpUserAllyUser_PrintString:
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+BattleScript_EffectDefenseUpUserAlly_TryAlly:
+	setallytonexttarget BattleScript_EffectDefenseUpUserAlly_TryAlly_
+BattleScript_EffectDefenseUpUserAlly_End:
+	goto BattleScript_MoveEnd
+BattleScript_EffectDefenseUpUserAlly_TryAlly_:
+	setstatchanger STAT_DEF, 1, FALSE
+	statbuffchange STAT_CHANGE_ALLOW_PTR, BattleScript_EffectDefenseUpUserAlly_End
+	jumpifbyte CMP_NOT_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_EffectDefenseUpUserAlly_AllyAnim
+	pause B_WAIT_TIME_SHORTEST
+	printstring STRINGID_TARGETSTATWONTGOHIGHER
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_EffectDefenseUpUserAlly_End
+BattleScript_EffectDefenseUpUserAlly_AllyAnim:
+	setgraphicalstatchangevalues
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printfromtable gStatUpStringIds
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_EffectDefenseUpUserAlly_End
 
 BattleScript_EffectTeatime::
 	attackcanceler
@@ -1298,33 +1336,6 @@ BattleScript_DecorateBoostSpAtk:
 	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, 0x2, BattleScript_MoveEnd
 	printfromtable gStatUpStringIds
 	waitmessage B_WAIT_TIME_LONG
-	goto BattleScript_MoveEnd
-
-BattleScript_EffectRemoveTerrain:
-	attackcanceler
-	attackstring
-	ppreduce
-	jumpifword CMP_NO_COMMON_BITS, gFieldStatuses, STATUS_FIELD_TERRAIN_ANY, BattleScript_ButItFailed
-	critcalc
-	damagecalc
-	adjustdamage
-	attackanimation
-	waitanimation
-	effectivenesssound
-	hitanimation BS_TARGET
-	waitstate
-	healthbarupdate BS_TARGET
-	datahpupdate BS_TARGET
-	critmessage
-	waitmessage B_WAIT_TIME_LONG
-	resultmessage
-	waitmessage B_WAIT_TIME_LONG
-	removeterrain
-	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_TERRAINENDS_COUNT, BattleScript_MoveEnd
-	printfromtable gTerrainEndingStringIds
-	waitmessage B_WAIT_TIME_LONG
-	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG
-	tryfaintmon BS_TARGET
 	goto BattleScript_MoveEnd
 
 BattleScript_EffectCoaching:
@@ -2638,7 +2649,7 @@ BattleScript_EffectPsychicTerrain:
 	attackcanceler
 	attackstring
 	ppreduce
-	setterrain BattleScript_ButItFailed
+	setremoveterrain BattleScript_ButItFailed
 	attackanimation
 	waitanimation
 	printfromtable gTerrainStringIds
@@ -3305,6 +3316,7 @@ BattleScript_EffectSleep::
 	jumpifability BS_TARGET, ABILITY_PURIFYING_SALT, BattleScript_AbilityProtectsDoesntAffect
 	jumpifflowerveil BattleScript_FlowerVeilProtects
 	jumpifability BS_TARGET_SIDE, ABILITY_SWEET_VEIL, BattleScript_SweetVeilProtects
+	jumpifability BS_TARGET_SIDE, ABILITY_LUNAR_GUARDIAN, BattleScript_LunarGuardianProtects
 	jumpifleafguardprotected BS_TARGET, BattleScript_AbilityProtectsDoesntAffect
 	jumpifshieldsdown BS_TARGET, BattleScript_AbilityProtectsDoesntAffect
 	jumpifstatus BS_TARGET, STATUS1_ANY, BattleScript_ButItFailed
@@ -3383,6 +3395,18 @@ BattleScript_PastelVeilProtectsRet::
 
 BattleScript_PastelVeilProtects:
 	call BattleScript_PastelVeilProtectsRet
+	orhalfword gMoveResultFlags, MOVE_RESULT_FAILED
+	goto BattleScript_MoveEnd
+
+BattleScript_LunarGuardianProtectsRet::
+	pause B_WAIT_TIME_SHORT
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_LUNARGUARDIANPROTECTED
+	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_LunarGuardianProtects:
+	call BattleScript_LunarGuardianProtectsRet
 	orhalfword gMoveResultFlags, MOVE_RESULT_FAILED
 	goto BattleScript_MoveEnd
 
@@ -6031,6 +6055,7 @@ BattleScript_EffectYawn::
 	jumpifability BS_TARGET, ABILITY_INSOMNIA, BattleScript_PrintBattlerAbilityMadeIneffective
 	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_PrintBattlerAbilityMadeIneffective
 	jumpifability BS_TARGET, ABILITY_PURIFYING_SALT, BattleScript_AbilityProtectsDoesntAffect
+	jumpifability BS_TARGET_SIDE, ABILITY_LUNAR_GUARDIAN, BattleScript_LunarGuardianProtects
 	jumpifflowerveil BattleScript_FlowerVeilProtects
 	jumpifleafguardprotected BS_TARGET, BattleScript_AbilityProtectsDoesntAffect
 	jumpifshieldsdown BS_TARGET, BattleScript_AbilityProtectsDoesntAffect
@@ -6934,7 +6959,7 @@ BattleScript_MagicRoomEnds::
 	end2
 
 BattleScript_TerrainEnds_Ret::
-	printfromtable gTerrainEndingStringIds
+	printfromtable gTerrainStringIds
 	waitmessage B_WAIT_TIME_LONG
 	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG
 	return
@@ -10242,9 +10267,10 @@ BattleScript_EffectHitSetRemoveTerrain:
 	waitmessage B_WAIT_TIME_LONG
 	resultmessage
 	waitmessage B_WAIT_TIME_LONG
-	setterrain BattleScript_TryFaint
+	setremoveterrain BattleScript_TryFaint
 	playanimation BS_ATTACKER, B_ANIM_RESTORE_BG
 	printfromtable gTerrainStringIds
+	waitmessage B_WAIT_TIME_LONG
 BattleScript_TryFaint:
 	tryfaintmon BS_TARGET
 	goto BattleScript_MoveEnd
@@ -10397,6 +10423,30 @@ BattleScript_PastelVeilLoopIncrement:
 BattleScript_PastelVeilEnd:
 	end3
 
+BattleScript_LunarGuardianActivates::
+	setbyte gBattleCommunication, 0
+	setbyte gBattleCommunication + 1, 0
+BattleScript_LunarGuardian_TryCureSleep:
+	jumpifstatus BS_TARGET, STATUS1_SLEEP | STATUS3_YAWN, BattleScript_LunarGuardianCureSleep
+	goto BattleScript_LunarGuardianLoopIncrement
+BattleScript_LunarGuardianCureSleep:
+	jumpifbyte CMP_NOT_EQUAL, gBattleCommunication + 1, 0x0, BattleScript_LunarGuardianCureSleepNoPopUp
+	call BattleScript_AbilityPopUp
+	setbyte gBattleCommunication + 1, 1
+BattleScript_LunarGuardianCureSleepNoPopUp: @ Only show Lunar Guardian pop up once if it cures two mons
+	printfromtable gSwitchInAbilityStringIds
+	waitmessage B_WAIT_TIME_LONG
+	curestatus BS_TARGET
+	updatestatusicon BS_TARGET
+BattleScript_LunarGuardianLoopIncrement:
+	jumpifbyte CMP_NOT_EQUAL, gBattleCommunication, 0x0, BattleScript_LunarGuardianEnd
+	addbyte gBattleCommunication, 1
+	jumpifnoally BS_TARGET, BattleScript_LunarGuardianEnd
+	setallytonexttarget BattleScript_LunarGuardian_TryCureSleep
+	goto BattleScript_LunarGuardianEnd
+BattleScript_LunarGuardianEnd:
+	end3
+
 sByteFour:
 .byte MAX_BATTLERS_COUNT
 
@@ -10520,3 +10570,68 @@ BattleScript_EffectSnow::
 	jumpifhalfword CMP_COMMON_BITS, gBattleWeather, B_WEATHER_STRONG_WINDS, BattleScript_MysteriousAirCurrentBlowsOn
 	setsnow
 	goto BattleScript_MoveWeatherChange
+
+BattleScript_SpaceDistortionActivated::
+	copybyte gBattlerAbility, gBattlerAttacker
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_SPACEDISTORTIONACTIVATED
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_AngerPointsLightBoostActivates::
+	call BattleScript_AbilityPopUp
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printstring STRINGID_ANGERPOINTSPKMNRAISEDATTACK
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_TimeManipulatorActivates::
+	showabilitypopup BS_ATTACKER
+	pause B_WAIT_TIME_LONG
+	destroyabilitypopup
+	setbyte gBattlerTarget, 0
+BattleScript_TimeManipulatorLoop:
+	jumpifbyteequal gBattlerTarget, gBattlerAttacker, BattleScript_TimeManipulatorLoopIncrement
+	jumpiftargetally BattleScript_TimeManipulatorLoopIncrement
+	jumpifabsent BS_TARGET, BattleScript_TimeManipulatorLoopIncrement
+	jumpifstatus2 BS_TARGET, STATUS2_SUBSTITUTE, BattleScript_TimeManipulatorLoopIncrement
+	jumpifability BS_TARGET, ABILITY_OWN_TEMPO, BattleScript_TimeManipulatorPrevented
+	jumpifability BS_TARGET, ABILITY_OBLIVIOUS, BattleScript_TimeManipulatorPrevented
+	jumpifability BS_TARGET, ABILITY_UNBREAKABLE, BattleScript_TimeManipulatorPrevented
+BattleScript_TimeManipulatorEffect:
+	copybyte sBATTLER, gBattlerAttacker
+	statbuffchange STAT_CHANGE_NOT_PROTECT_AFFECTED | STAT_CHANGE_ALLOW_PTR, BattleScript_IntimidateLoopIncrement
+	setgraphicalstatchangevalues
+	jumpifability BS_TARGET, ABILITY_CONTRARY, BattleScript_IntimidateContrary
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printstring STRINGID_PKMNCUTSSPEEDWITH
+BattleScript_TimeManipulatorEffect_WaitString:
+	waitmessage B_WAIT_TIME_LONG
+	copybyte sBATTLER, gBattlerTarget
+BattleScript_TimeManipulatorLoopIncrement:
+	addbyte gBattlerTarget, 1
+	jumpifbytenotequal gBattlerTarget, gBattlersCount, BattleScript_TimeManipulatorLoop
+BattleScript_TimeManipulatorEnd:
+	copybyte sBATTLER, gBattlerAttacker
+	destroyabilitypopup
+	pause B_WAIT_TIME_MED
+	end3
+
+BattleScript_TimeManipulatorPrevented:
+	call BattleScript_AbilityPopUp
+	pause B_WAIT_TIME_LONG
+	setbyte gBattleCommunication STAT_SPEED
+	stattextbuffer BS_TARGET
+	printstring STRINGID_STATWASNOTLOWERED
+	waitmessage B_WAIT_TIME_LONG
+	goto BattleScript_TimeManipulatorLoopIncrement
+
+BattleScript_TimeManipulatorContrary:
+	call BattleScript_AbilityPopUpTarget
+	jumpifbyte CMP_EQUAL, cMULTISTRING_CHOOSER, B_MSG_STAT_WONT_INCREASE, BattleScript_TimeManipulatorContrary_WontIncrease
+	playanimation BS_TARGET, B_ANIM_STATS_CHANGE, sB_ANIM_ARG1
+	printfromtable gStatUpStringIds
+	goto BattleScript_IntimidateEffect_WaitString
+BattleScript_TimeManipulatorContrary_WontIncrease:
+	printstring STRINGID_TARGETSTATWONTGOHIGHER
+	goto BattleScript_TimeManipulatorEffect_WaitString

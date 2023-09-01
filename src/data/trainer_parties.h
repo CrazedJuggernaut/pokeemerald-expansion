@@ -5242,11 +5242,12 @@ static const struct TrainerMonNoItemDefaultMoves sParty_Elliot1[] = {
     }
 };
 
-static const struct TrainerMonNoItemDefaultMoves sParty_Ned[] = {
+static const struct TrainerMonCustomized sParty_Ned[] = {
     {
     .iv = 10,
     .lvl = 11,
-    .species = SPECIES_TENTACOOL,
+    .species = SPECIES_DIALGA,
+    .ability = ABILITY_TIME_MANIPULATOR,
     }
 };
 
@@ -7535,7 +7536,14 @@ static const struct TrainerMonCustomized sParty_BrendanRoute103Mudkip[] = {
     .iv = 0,
     .lvl = 5,
     .species = SPECIES_TREECKO,
-    }
+    .moves = {MOVE_POUND, MOVE_GROWL, MOVE_LEAFAGE, MOVE_NONE}
+    },
+    {
+    .iv = 0,
+    .lvl = 5,
+    .species = SPECIES_EEVEE,
+    .moves = {MOVE_TACKLE, MOVE_GROWL, MOVE_SAND_ATTACK, MOVE_TAIL_WHIP}
+    },
 };
 
 static const struct TrainerMonCustomized sParty_BrendanRoute110Mudkip[] = {
@@ -7679,7 +7687,14 @@ static const struct TrainerMonCustomized sParty_BrendanRoute103Treecko[] = {
     .iv = 0,
     .lvl = 5,
     .species = SPECIES_TORCHIC,
-    }
+    .moves = {MOVE_SCRATCH, MOVE_GROWL, MOVE_EMBER, MOVE_NONE}
+    },
+    {
+    .iv = 0,
+    .lvl = 5,
+    .species = SPECIES_EEVEE,
+    .moves = {MOVE_TACKLE, MOVE_GROWL, MOVE_SAND_ATTACK, MOVE_TAIL_WHIP}
+    },
 };
 
 static const struct TrainerMonCustomized sParty_BrendanRoute110Treecko[] = {
@@ -7823,7 +7838,14 @@ static const struct TrainerMonCustomized sParty_BrendanRoute103Torchic[] = {
     .iv = 0,
     .lvl = 5,
     .species = SPECIES_MUDKIP,
-    }
+    .moves = {MOVE_TACKLE, MOVE_GROWL, MOVE_WATER_GUN, MOVE_NONE}
+    },
+    {
+    .iv = 0,
+    .lvl = 5,
+    .species = SPECIES_EEVEE,
+    .moves = {MOVE_TACKLE, MOVE_GROWL, MOVE_SAND_ATTACK, MOVE_TAIL_WHIP}
+    },
 };
 
 static const struct TrainerMonCustomized sParty_BrendanRoute110Torchic[] = {
@@ -7967,7 +7989,14 @@ static const struct TrainerMonCustomized sParty_MayRoute103Mudkip[] = {
     .iv = 0,
     .lvl = 5,
     .species = SPECIES_TREECKO,
-    }
+    .moves = {MOVE_POUND, MOVE_GROWL, MOVE_LEAFAGE, MOVE_NONE}
+    },
+    {
+    .iv = 0,
+    .lvl = 5,
+    .species = SPECIES_EEVEE,
+    .moves = {MOVE_TACKLE, MOVE_GROWL, MOVE_SAND_ATTACK, MOVE_TAIL_WHIP}
+    },
 };
 
 static const struct TrainerMonCustomized sParty_MayRoute110Mudkip[] = {
@@ -8111,7 +8140,14 @@ static const struct TrainerMonCustomized sParty_MayRoute103Treecko[] = {
     .iv = 0,
     .lvl = 5,
     .species = SPECIES_TORCHIC,
-    }
+    .moves = {MOVE_SCRATCH, MOVE_GROWL, MOVE_EMBER, MOVE_NONE}
+    },
+    {
+    .iv = 0,
+    .lvl = 5,
+    .species = SPECIES_EEVEE,
+    .moves = {MOVE_TACKLE, MOVE_GROWL, MOVE_SAND_ATTACK, MOVE_TAIL_WHIP}
+    },
 };
 
 static const struct TrainerMonCustomized sParty_MayRoute110Treecko[] = {
@@ -8255,7 +8291,14 @@ static const struct TrainerMonCustomized sParty_MayRoute103Torchic[] = {
     .iv = 0,
     .lvl = 5,
     .species = SPECIES_MUDKIP,
-    }
+    .moves = {MOVE_TACKLE, MOVE_GROWL, MOVE_WATER_GUN, MOVE_NONE}
+    },
+    {
+    .iv = 0,
+    .lvl = 5,
+    .species = SPECIES_EEVEE,
+    .moves = {MOVE_TACKLE, MOVE_GROWL, MOVE_SAND_ATTACK, MOVE_TAIL_WHIP}
+    },
 };
 
 static const struct TrainerMonCustomized sParty_MayRoute110Torchic[] = {

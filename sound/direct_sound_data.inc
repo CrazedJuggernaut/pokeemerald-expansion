@@ -4177,6 +4177,34 @@ Cry_LatiasMega::
 Cry_LatiosMega::
 	.incbin "sound/direct_sound_samples/cries/mega_latios.bin"
 
+	.align 2
+Cry_Milotic_Mega::
+	.incbin "sound/direct_sound_samples/cries/mega_milotic.bin"
+
+	.align 2
+Cry_Butterfree_Mega::
+	.incbin "sound/direct_sound_samples/cries/mega_butterfree.bin"
+
+	.align 2
+Cry_Machamp_Mega::
+	.incbin "sound/direct_sound_samples/cries/mega_machamp.bin"
+
+	.align 2
+Cry_Kingler_Mega::
+	.incbin "sound/direct_sound_samples/cries/mega_kingler.bin"
+
+	.align 2
+Cry_Lapras_Mega::
+	.incbin "sound/direct_sound_samples/cries/mega_lapras.bin"
+
+	.align 2
+Cry_Flygon_Mega::
+	.incbin "sound/direct_sound_samples/cries/mega_flygon.bin"
+
+	.align 2
+Cry_Kingdra_Mega::
+	.incbin "sound/direct_sound_samples/cries/mega_kingdra.bin"
+
 .if P_GEN_4_POKEMON == TRUE
 	.align 2
 Cry_LopunnyMega::

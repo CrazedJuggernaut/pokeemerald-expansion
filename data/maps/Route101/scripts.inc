@@ -236,6 +236,7 @@ Route101_EventScript_BirchsBag::
 	special HealPlayerParty
 	setflag FLAG_HIDE_ROUTE_101_BIRCH_ZIGZAGOON_BATTLE
 	clearflag FLAG_HIDE_LITTLEROOT_TOWN_BIRCHS_LAB_BIRCH
+	call_if_unset FLAG_RECEIVED_EEVEE, Route101_EventScript_ShowBirchsLabEevee
 	setflag FLAG_HIDE_ROUTE_101_BIRCH_STARTERS_BAG
 	setvar VAR_BIRCH_LAB_STATE, 2
 	setvar VAR_ROUTE101_STATE, 3
@@ -247,6 +248,10 @@ Route101_EventScript_BirchsBag::
 	waitstate
 	release
 	end
+
+Route101_EventScript_ShowBirchsLabEevee::
+	clearflag FLAG_HIDE_LITTLEROOT_TOWN_BIRCHS_LAB_EEVEE_POKEBALL
+	return
 
 Route101_EventScript_HideMayInBedroom::
 	setflag FLAG_HIDE_LITTLEROOT_TOWN_MAYS_HOUSE_RIVAL_BEDROOM

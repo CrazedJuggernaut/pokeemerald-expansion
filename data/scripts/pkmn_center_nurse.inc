@@ -1,13 +1,31 @@
 Common_EventScript_PkmnCenterNurse::
 	lock
-	faceplayer
-	setvar VAR_0x8004, 0
-	specialvar VAR_RESULT, CountPlayerTrainerStars
-	goto_if_eq VAR_RESULT, 4, EventScript_PkmnCenterNurse_GoldCard
-	msgbox gText_WouldYouLikeToRestYourPkmn, MSGBOX_YESNO
-	goto_if_eq VAR_RESULT, YES, EventScript_PkmnCenterNurse_HealPkmn
-	goto_if_eq VAR_RESULT, NO, EventScript_PkmnCenterNurse_Goodbye
-	end
+    faceplayer
+    checkitem ITEM_POKE_VIAL, 1
+    compare VAR_RESULT, 1
+    goto_if_eq EventScript_PkmnCenterNurseHasVial
+    msgbox gText_AreYouARookieTrainer, MSGBOX_DEFAULT
+    giveitem ITEM_POKE_VIAL, 1
+    setvar VAR_POKE_VIAL_MAX_CHARGES, 1
+    setvar VAR_POKE_VIAL_CHARGES, 1
+    msgbox gText_ExplainPokeVial, MSGBOX_YESNO
+    compare VAR_RESULT, YES
+    goto_if_eq EventScript_PkmnCenterNurse_HealPkmn
+    compare VAR_RESULT, NO
+    goto_if_eq EventScript_PkmnCenterNurse_Goodbye
+    end
+
+EventScript_PkmnCenterNurseHasVial::
+    setvar VAR_0x8004, 0
+    specialvar VAR_RESULT, CountPlayerTrainerStars
+    compare VAR_RESULT, 4
+    goto_if_eq EventScript_PkmnCenterNurse_GoldCard
+    msgbox gText_WouldYouLikeToRestYourPkmn, MSGBOX_YESNO
+    compare VAR_RESULT, YES
+    goto_if_eq EventScript_PkmnCenterNurse_HealPkmn
+    compare VAR_RESULT, NO
+    goto_if_eq EventScript_PkmnCenterNurse_Goodbye
+    end
 
 EventScript_PkmnCenterNurse_Goodbye::
 	message gText_WeHopeToSeeYouAgain
@@ -15,14 +33,17 @@ EventScript_PkmnCenterNurse_Goodbye::
 
 @ VAR_0x8004 is 1 when player has Gold Card; jumps are identical
 EventScript_PkmnCenterNurse_HealPkmn::
-	incrementgamestat GAME_STAT_USED_POKECENTER
-	call_if_eq VAR_0x8004, 0, EventScript_PkmnCenterNurse_IllTakeYourPkmn
-	call_if_eq VAR_0x8004, 1, EventScript_PkmnCenterNurse_IllTakeYourPkmn2
-	waitmessage
-	call EventScript_PkmnCenterNurse_TakeAndHealPkmn
-	goto_if_unset FLAG_POKERUS_EXPLAINED, EventScript_PkmnCenterNurse_CheckPokerus
-	goto EventScript_PkmnCenterNurse_CheckTrainerHillAndUnionRoom
-	end
+    copyvar VAR_POKE_VIAL_CHARGES, VAR_POKE_VIAL_MAX_CHARGES @ refill Poke Vial
+    incrementgamestat GAME_STAT_USED_POKECENTER
+    compare VAR_0x8004, 0
+    call_if_eq EventScript_PkmnCenterNurse_IllTakeYourPkmn
+    compare VAR_0x8004, 1
+    call_if_eq EventScript_PkmnCenterNurse_IllTakeYourPkmn2
+    waitmessage
+    call EventScript_PkmnCenterNurse_TakeAndHealPkmn
+    goto_if_unset FLAG_POKERUS_EXPLAINED, EventScript_PkmnCenterNurse_CheckPokerus
+    goto EventScript_PkmnCenterNurse_CheckTrainerHillAndUnionRoom
+    end
 
 EventScript_PkmnCenterNurse_IllTakeYourPkmn::
 	message gText_IllTakeYourPkmn

@@ -68,6 +68,7 @@ static void Task_ShowTMHMContainedMessage(u8);
 static void UseTMHMYesNo(u8);
 static void UseTMHM(u8);
 static void Task_StartUseRepel(u8);
+static void Task_StartUseRepellent(u8);
 static void Task_StartUseLure(u8 taskId);
 static void Task_UseRepel(u8);
 static void Task_UseLure(u8 taskId);
@@ -75,7 +76,10 @@ static void Task_CloseCantUseKeyItemMessage(u8);
 static void SetDistanceOfClosestHiddenItem(u8, s16, s16);
 static void CB2_OpenPokeblockFromBag(void);
 static void ItemUseOnFieldCB_Honey(u8 taskId);
+static void ItemUseOnFieldCB_PokeVial(u8 taskId);
 static bool32 CannotUseBagBattleItem(u16 itemId);
+
+void HealPlayerParty(void);
 
 // EWRAM variables
 EWRAM_DATA static void(*sItemUseOnFieldCB)(u8 taskId) = NULL;
@@ -798,6 +802,13 @@ void ItemUseOutOfBattle_RareCandy(u8 taskId)
     SetUpItemUseCallback(taskId);
 }
 
+void ItemUseOutOfBattle_EndlessCandy(u8 taskId)
+{
+     gItemUseCB = ItemUseCB_EndlessCandy;
+    SetUpItemUseCallback(taskId);
+
+}
+
 void ItemUseOutOfBattle_TMHM(u8 taskId)
 {
     if (gSpecialVar_ItemId >= ITEM_HM01_CUT)
@@ -881,6 +892,43 @@ static void Task_UseRepel(u8 taskId)
         VarSet(VAR_LAST_REPEL_LURE_USED, gSpecialVar_ItemId);
     #endif
         RemoveUsedItem();
+        if (!InBattlePyramid())
+            DisplayItemMessage(taskId, FONT_NORMAL, gStringVar4, CloseItemMessage);
+        else
+            DisplayItemMessageInBattlePyramid(taskId, gStringVar4, Task_CloseBattlePyramidBagMessage);
+    }
+}
+
+void ItemUseOutOfBattle_Repellent(u8 taskId)
+{
+    if (REPEL_STEP_COUNT == 0)
+        gTasks[taskId].func = Task_StartUseRepellent;
+    else if (!InBattlePyramid())
+        DisplayItemMessage(taskId, FONT_NORMAL, gText_RepelEffectsLingered, CloseItemMessage);
+    else
+        DisplayItemMessageInBattlePyramid(taskId, gText_RepelEffectsLingered, Task_CloseBattlePyramidBagMessage);
+}
+
+static void Task_StartUseRepellent(u8 taskId)
+{
+    s16 *data = gTasks[taskId].data;
+
+    if (++data[8] > 7)
+    {
+        data[8] = 0;
+        PlaySE(SE_REPEL);
+        gTasks[taskId].func = Task_StartUseRepellent;
+    }
+}
+
+static void Task_UseRepellent(u8 taskId)
+{
+    if (!IsSEPlaying())
+    {
+        VarSet(VAR_REPEL_STEP_COUNT, ItemId_GetHoldEffectParam(gSpecialVar_ItemId));
+    #if VAR_LAST_REPEL_LURE_USED != 0
+        VarSet(VAR_LAST_REPEL_LURE_USED, gSpecialVar_ItemId);
+    #endif
         if (!InBattlePyramid())
             DisplayItemMessage(taskId, FONT_NORMAL, gStringVar4, CloseItemMessage);
         else
@@ -1316,6 +1364,34 @@ void ItemUseOutOfBattle_Honey(u8 taskId)
     gFieldCallback = FieldCB_UseItemOnField;
     gBagMenu->newScreenCallback = CB2_ReturnToField;
     Task_FadeAndCloseBagMenu(taskId);
+}
+
+void ItemUseOutOfBattle_PokeVial(u8 taskId)
+{
+    if (VarGet(VAR_POKE_VIAL_CHARGES) == 0)
+    {
+        if (!gTasks[taskId].tUsingRegisteredKeyItem)
+        {
+            DisplayItemMessage(taskId, 1, gText_PokeVialEmpty, CloseItemMessage);
+        }
+        else
+        {
+            DisplayItemMessageOnField(taskId, gText_PokeVialEmpty, Task_CloseCantUseKeyItemMessage);
+        }
+    }
+    else
+    {
+        sItemUseOnFieldCB = ItemUseOnFieldCB_PokeVial;
+        SetUpItemUseOnFieldCallback(taskId);
+    }
+}
+
+static void ItemUseOnFieldCB_PokeVial(u8 taskId)
+{
+    PlaySE(SE_USE_ITEM);
+    HealPlayerParty();
+    VarSet(VAR_POKE_VIAL_CHARGES, VarGet(VAR_POKE_VIAL_CHARGES) - 1);
+    DisplayItemMessageOnField(taskId, gText_UsedPokeVial, Task_CloseCantUseKeyItemMessage);
 }
 
 void ItemUseOutOfBattle_CannotUse(u8 taskId)

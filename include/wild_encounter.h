@@ -40,4 +40,6 @@ u16 GetLocalWaterMon(void);
 bool8 UpdateRepelCounter(void);
 bool8 TryDoDoubleWildBattle(void);
 
+bool8 StandardWildEncounter_Debug(void);
+
 #endif // GUARD_WILD_ENCOUNTER_H

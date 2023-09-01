@@ -120,7 +120,7 @@ static void DrawMultichoiceMenu(u8 left, u8 top, u8 multichoiceId, bool8 ignoreB
 #if I_REPEL_LURE_MENU == TRUE
 void TryDrawRepelMenu(void)
 {
-    static const u16 repelItems[] = {ITEM_REPEL, ITEM_SUPER_REPEL, ITEM_MAX_REPEL};
+    static const u16 repelItems[] = {ITEM_REPEL, ITEM_SUPER_REPEL, ITEM_MAX_REPEL, ITEM_REPELLENT};
     struct MenuAction menuItems[ARRAY_COUNT(repelItems) + 1] = {NULL};
     int i, count = 0, menuPos = 0;
 

@@ -1295,6 +1295,13 @@ static const u16 sSpeciesToNationalPokedexNum[NUM_SPECIES - 1] =
     [SPECIES_METAGROSS_MEGA - 1] = NATIONAL_DEX_METAGROSS,
     [SPECIES_LATIAS_MEGA - 1] = NATIONAL_DEX_LATIAS,
     [SPECIES_LATIOS_MEGA - 1] = NATIONAL_DEX_LATIOS,
+    [SPECIES_MILOTIC_MEGA - 1] = NATIONAL_DEX_MILOTIC,
+    [SPECIES_BUTTERFREE_MEGA - 1] = NATIONAL_DEX_BUTTERFREE,
+    [SPECIES_MACHAMP_MEGA - 1] = NATIONAL_DEX_MACHAMP,
+    [SPECIES_KINGLER_MEGA - 1] = NATIONAL_DEX_KINGLER,
+    [SPECIES_LAPRAS_MEGA - 1] = NATIONAL_DEX_LAPRAS,
+    [SPECIES_FLYGON_MEGA - 1] = NATIONAL_DEX_FLYGON,
+    [SPECIES_KINGDRA_MEGA - 1] = NATIONAL_DEX_KINGDRA,
 #if P_GEN_4_POKEMON == TRUE
     [SPECIES_LOPUNNY_MEGA - 1] = NATIONAL_DEX_LOPUNNY,
     [SPECIES_GARCHOMP_MEGA - 1] = NATIONAL_DEX_GARCHOMP,
@@ -8610,4 +8617,21 @@ void UpdateMonPersonality(struct BoxPokemon *boxMon, u32 personality)
     *new3 = *old3;
     boxMon->checksum = CalculateBoxMonChecksum(boxMon);
     EncryptBoxMon(boxMon);
+}
+
+void CreateShinyMonWithNature(struct Pokemon *mon, u16 species, u8 level, u8 nature)
+{
+    u32 personality;
+    u32 otid = gSaveBlock2Ptr->playerTrainerId[0]
+              | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
+              | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
+              | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
+
+    do
+    {
+        personality = Random32();
+        personality = ((((Random() % 8) ^ (HIHALF(otid) ^ LOHALF(otid))) ^ LOHALF(personality)) << 16) | LOHALF(personality);
+    } while (nature != GetNatureFromPersonality(personality));
+
+    CreateMon(mon, species, level, 32, 1, personality, OT_ID_PRESET, otid);
 }

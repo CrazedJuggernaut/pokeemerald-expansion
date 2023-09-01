@@ -956,6 +956,13 @@ const struct CompressedSpritePalette gMonPaletteTable[] =
     SPECIES_PAL(METAGROSS_MEGA, gMonPalette_MetagrossMega),
     SPECIES_PAL(LATIAS_MEGA, gMonPalette_LatiasMega),
     SPECIES_PAL(LATIOS_MEGA, gMonPalette_LatiosMega),
+    SPECIES_PAL(MILOTIC_MEGA, gMonPalette_MiloticMega),
+    SPECIES_PAL(BUTTERFREE_MEGA, gMonPalette_ButterfreeMega),
+    SPECIES_PAL(MACHAMP_MEGA, gMonPalette_MachampMega),
+    SPECIES_PAL(KINGLER_MEGA, gMonPalette_KinglerMega),
+    SPECIES_PAL(LAPRAS_MEGA, gMonPalette_LaprasMega),
+    SPECIES_PAL(FLYGON_MEGA, gMonPalette_FlygonMega),
+    SPECIES_PAL(KINGDRA_MEGA, gMonPalette_KingdraMega),
 #if P_GEN_4_POKEMON == TRUE
     SPECIES_PAL(LOPUNNY_MEGA, gMonPalette_LopunnyMega),
     SPECIES_PAL(GARCHOMP_MEGA, gMonPalette_GarchompMega),

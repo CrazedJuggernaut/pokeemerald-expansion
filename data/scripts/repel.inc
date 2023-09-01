@@ -115,3 +115,4 @@ Text_UseAnotherLure::
 Text_UsedNewRepelLure::
 	.string "{PLAYER} used the\n"
 	.string "{STR_VAR_2}.$"
+
