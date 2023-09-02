@@ -31,7 +31,7 @@ static const s8 sAiAbilityRatings[ABILITIES_COUNT] =
     [ABILITY_AERILATE] = 8,
     [ABILITY_AIR_LOCK] = 5,
     [ABILITY_ANALYTIC] = 5,
-    [ABILITY_ANGER_POINT] = 4,
+    [ABILITY_ANGER_POINT] = 6,
     [ABILITY_ANTICIPATION] = 2,
     [ABILITY_ARENA_TRAP] = 9,
     [ABILITY_AROMA_VEIL] = 3,
@@ -313,7 +313,16 @@ static const s8 sAiAbilityRatings[ABILITIES_COUNT] =
     [ABILITY_INNER_FIRE] = 6,
     [ABILITY_INNER_SPARK] = 6,
     [ABILITY_INNER_WATER] = 6,
-
+    [ABILITY_KNOWLEDGE] = 7,
+    [ABILITY_EMPATHY] = 7,
+    [ABILITY_WILLPOWER] = 7,
+    [ABILITY_IRON_CLAD] = 7,
+    [ABILITY_SPACE_DISTORTION] = 8,
+    [ABILITY_TIME_MANIPULATOR] = 8,
+    [ABILITY_DISTORTED_LOGIC] = 8,
+    [ABILITY_LUNAR_GUARDIAN] = 4,
+    [ABILITY_MOLTEN_BODY] = 6,
+    [ABILITY_FROZEN_HUSK] = 8,
 };
 
 static const u16 sEncouragedEncoreEffects[] =
@@ -1364,6 +1373,8 @@ bool32 AI_IsBattlerGrounded(u8 battlerId)
         return FALSE;
     else if (AI_DATA->abilities[battlerId] == ABILITY_LEVITATE)
         return FALSE;
+    else if (AI_DATA->abilities[battlerId] == ABILITY_KNOWLEDGE)
+        return FALSE;
     else if (IS_BATTLER_OF_TYPE(battlerId, TYPE_FLYING))
         return FALSE;
     else
@@ -1385,7 +1396,8 @@ bool32 DoesBattlerIgnoreAbilityChecks(u16 atkAbility, u16 move)
 
     if (atkAbility == ABILITY_MOLD_BREAKER
       || atkAbility == ABILITY_TERAVOLT
-      || atkAbility == ABILITY_TURBOBLAZE)
+      || atkAbility == ABILITY_TURBOBLAZE
+      || atkAbility == ABILITY_DISTORTED_LOGIC)
         return TRUE;
 
     return FALSE;
@@ -1541,6 +1553,9 @@ bool32 IsMoveEncouragedToHit(u8 battlerAtk, u8 battlerDef, u16 move)
         return TRUE;
 
     if (AI_DATA->abilities[battlerDef] == ABILITY_NO_GUARD || AI_DATA->abilities[battlerAtk] == ABILITY_NO_GUARD)
+        return TRUE;
+
+    if (AI_DATA->abilities[battlerDef] == ABILITY_SPACE_DISTORTION || AI_DATA->abilities[battlerAtk] == ABILITY_SPACE_DISTORTION)
         return TRUE;
 
 #if B_TOXIC_NEVER_MISS >= GEN_6
@@ -2853,7 +2868,7 @@ bool32 CanKnockOffItem(u8 battler, u16 item)
 // status checks
 bool32 IsBattlerIncapacitated(u8 battler, u16 ability)
 {
-    if ((gBattleMons[battler].status1 & STATUS1_FREEZE) && !HasThawingMove(battler))
+    if ((gBattleMons[battler].status1 & STATUS1_FREEZE || STATUS1_FROSTBITE) && !HasThawingMove(battler))
         return TRUE;    // if battler has thawing move we assume they will definitely use it, and thus being frozen should be neglected
 
     if (gBattleMons[battler].status1 & STATUS1_SLEEP)
@@ -2870,6 +2885,7 @@ bool32 AI_CanSleep(u8 battler, u16 ability)
     if (ability == ABILITY_INSOMNIA
       || ability == ABILITY_VITAL_SPIRIT
       || ability == ABILITY_COMATOSE
+      || AI_IsAbilityOnSide(battler, ABILITY_LUNAR_GUARDIAN)
       || gBattleMons[battler].status1 & STATUS1_ANY
       || gSideStatuses[GetBattlerSide(battler)] & SIDE_STATUS_SAFEGUARD
       || (gFieldStatuses & (STATUS_FIELD_MISTY_TERRAIN | STATUS_FIELD_ELECTRIC_TERRAIN))
@@ -2883,6 +2899,8 @@ bool32 AI_CanPutToSleep(u8 battlerAtk, u8 battlerDef, u16 defAbility, u16 move, 
     if (!AI_CanSleep(battlerDef, defAbility)
       || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
       || PartnerMoveEffectIsStatusSameTarget(BATTLE_PARTNER(battlerAtk), battlerDef, partnerMove))   // shouldn't try to sleep mon that partner is trying to make sleep
+        return FALSE;
+    else if (IsValidDoubleBattle(battlerAtk) && AI_DATA->abilities[BATTLE_PARTNER(battlerDef)] == ABILITY_LUNAR_GUARDIAN)
         return FALSE;
     return TRUE;
 }

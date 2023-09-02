@@ -4,6 +4,7 @@
 .set LOCALID_BALL_CYNDAQUIL, 4
 .set LOCALID_BALL_TOTODILE, 5
 .set LOCALID_BALL_CHIKORITA, 6
+.set LOCALID_EEVEE_BALL, 7
 
 LittlerootTown_ProfessorBirchsLab_MapScripts::
 	map_script MAP_SCRIPT_ON_TRANSITION, LittlerootTown_ProfessorBirchsLab_OnTransition
@@ -999,3 +1000,74 @@ LittlerootTown_ProfessorBirchsLab_Text_ScottAboardSSTidalCall:
 	.string "we meet. I'll be waiting!\p"
 	.string "… … … … … …\n"
 	.string "… … … … … Click!$"
+
+LittlerootTown_ProfessorBirchsLab_EventScript_EeveePokeball::
+	lockall
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_TakeBallContainingEevee, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, LittlerootTown_ProfessorBirchsLab_EventScript_LeaveEevee
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_GiveEevee
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_LeaveEevee::
+	msgbox LittlerootTown_ProfessorBirchsLab_Text_LeftPokeBallWhereItWas, MSGBOX_DEFAULT
+	releaseall
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_GiveEevee::
+	setvar VAR_TEMP_1, SPECIES_EEVEE
+	givemon SPECIES_EEVEE, 5
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PARTY, LittlerootTown_ProfessorBirchsLab_EventScript_SendEeveeParty
+	goto_if_eq VAR_RESULT, MON_GIVEN_TO_PC, LittlerootTown_ProfessorBirchsLab_EventScript_SendEeveePC
+	goto Common_EventScript_NoMoreRoomForPokemon
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_SendEeveeParty::
+	call LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedEeveeFanfare
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedEevee
+	call Common_EventScript_GetGiftMonPartySlot
+	call Common_EventScript_NameReceivedPartyMon
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedEevee
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_SendEeveePC::
+	call LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedEeveeFanfare
+	msgbox gText_NicknameThisPokemon, MSGBOX_YESNO
+	goto_if_eq VAR_RESULT, NO, LittlerootTown_ProfessorBirchsLab_EventScript_EeveeTransferredToPC
+	call Common_EventScript_NameReceivedBoxMon
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_EeveeTransferredToPC
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_EeveeTransferredToPC::
+	call Common_EventScript_TransferredToPC
+	goto LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedEevee
+	end
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedEeveeFanfare::
+	bufferspeciesname STR_VAR_2, SPECIES_EEVEE
+	removeobject LOCALID_EEVEE_BALL
+	playfanfare MUS_OBTAIN_ITEM
+	message LittlerootTown_ProfessorBirchsLab_Text_ObtainedEevee
+	waitmessage
+	waitfanfare
+	bufferspeciesname STR_VAR_1, SPECIES_EEVEE
+	return
+
+LittlerootTown_ProfessorBirchsLab_EventScript_ReceivedEevee::
+	setflag FLAG_HIDE_LITTLEROOT_TOWN_BIRCHS_LAB_EEVEE_POKEBALL
+	setflag FLAG_RECEIVED_EEVEE
+	releaseall
+	end
+
+LittlerootTown_ProfessorBirchsLab_Text_LeftPokeBallWhereItWas:
+	.string "{PLAYER} left the POKé BALL where\n"
+	.string "it was.$"
+
+LittlerootTown_ProfessorBirchsLab_Text_TakeBallContainingEevee:
+	.string "{PLAYER} checked the POKé BALL.\p"
+	.string "It contained the POKéMON\n"
+	.string "Eevee.\p"
+	.string "Take the POKé BALL?$"
+
+LittlerootTown_ProfessorBirchsLab_Text_ObtainedEevee:
+	.string "{PLAYER} obtained a Eevee.$"

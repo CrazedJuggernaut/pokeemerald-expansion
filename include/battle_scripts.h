@@ -475,6 +475,10 @@ extern const u8 BattleScript_TargetFormChangeWithStringNoPopup[];
 extern const u8 BattleScript_EarlyBirdEnds[];
 extern const u8 BattleScript_UnbreakableActivates[];
 extern const u8 BattleScript_SoulSiphonEffect[];
+extern const u8 BattleScript_SpaceDistortionActivated[];
+extern const u8 BattleScript_AngerPointsLightBoostActivates[];
+extern const u8 BattleScript_LunarGuardianActivates[];
+extern const u8 BattleScript_TimeManipulatorActivates[];
 
 // zmoves
 extern const u8 BattleScript_ZMoveActivateDamaging[];

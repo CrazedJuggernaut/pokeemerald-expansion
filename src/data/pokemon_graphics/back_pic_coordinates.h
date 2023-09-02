@@ -979,6 +979,13 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_METAGROSS_MEGA]               = { .size = MON_COORDS_SIZE(64, 56), .y_offset =  6 },
     [SPECIES_LATIAS_MEGA]                  = { .size = MON_COORDS_SIZE(64, 64), .y_offset =  1 },
     [SPECIES_LATIOS_MEGA]                  = { .size = MON_COORDS_SIZE(64, 64), .y_offset =  1 },
+    [SPECIES_MILOTIC_MEGA]                 = { .size = MON_COORDS_SIZE(64, 64), .y_offset =  0 },
+    [SPECIES_BUTTERFREE_MEGA]              = { .size = MON_COORDS_SIZE(64, 56), .y_offset =  5 },
+    [SPECIES_MACHAMP_MEGA]                 = { .size = MON_COORDS_SIZE(64, 56), .y_offset =  7 },
+    [SPECIES_KINGLER_MEGA]                 = { .size = MON_COORDS_SIZE(64, 56), .y_offset =  5 },
+    [SPECIES_LAPRAS_MEGA]                  = { .size = MON_COORDS_SIZE(56, 64), .y_offset =  3 },
+    [SPECIES_FLYGON_MEGA]                  = { .size = MON_COORDS_SIZE(64, 64), .y_offset =  3 },
+    [SPECIES_KINGDRA_MEGA]                 = { .size = MON_COORDS_SIZE(64, 56), .y_offset =  7 },
 #if P_GEN_4_POKEMON == TRUE
     [SPECIES_LOPUNNY_MEGA]                 = { .size = MON_COORDS_SIZE(64, 64), .y_offset =  3 },
     [SPECIES_GARCHOMP_MEGA]                = { .size = MON_COORDS_SIZE(64, 56), .y_offset =  4 },

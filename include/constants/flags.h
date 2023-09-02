@@ -651,16 +651,16 @@
 #define FLAG_HIDDEN_ITEM_ROUTE_123_RARE_CANDY                (FLAG_HIDDEN_ITEMS_START + 0x6E)
 #define FLAG_HIDDEN_ITEM_ROUTE_105_BIG_PEARL                 (FLAG_HIDDEN_ITEMS_START + 0x6F)
 
-#define FLAG_UNUSED_0x264  0x264 // Unused Flag
-#define FLAG_UNUSED_0x265  0x265 // Unused Flag
-#define FLAG_UNUSED_0x266  0x266 // Unused Flag
-#define FLAG_UNUSED_0x267  0x267 // Unused Flag
-#define FLAG_UNUSED_0x268  0x268 // Unused Flag
-#define FLAG_UNUSED_0x269  0x269 // Unused Flag
-#define FLAG_UNUSED_0x26A  0x26A // Unused Flag
-#define FLAG_UNUSED_0x26B  0x26B // Unused Flag
-#define FLAG_UNUSED_0x26C  0x26C // Unused Flag
-#define FLAG_UNUSED_0x26D  0x26D // Unused Flag
+#define FLAG_HIDDEN_ITEM_RED_NECTAR                     0x264 
+#define FLAG_HIDDEN_ITEM_YELLOW_NECTAR                  0x265 
+#define FLAG_HIDDEN_ITEM_PINK_NECTAR                    0x266 
+#define FLAG_HIDDEN_ITEM_PURPLE_NECTAR                  0x267 
+#define FLAG_HIDDEN_ITEM_ASHEN_WOODS_BALM_MUSHROOM_1    0x268 
+#define FLAG_HIDDEN_ITEM_ASHEN_WOODS_BALM_MUSHROOM_2    0x269 
+#define FLAG_HIDDEN_ITEM_RUINS_EXTERIOR_STAR_PIECE_1    0x26A 
+#define FLAG_HIDDEN_ITEM_RUINS_EXTERIOR_STAR_PIECE_2    0x26B 
+#define FLAG_HIDDEN_ITEM_GAME_CORNER_BOTTLE_CAP1        0x26C 
+#define FLAG_HIDDEN_ITEM_GAME_CORNER_BOTTLE_CAP2        0x26D 
 #define FLAG_UNUSED_0x26E  0x26E // Unused Flag
 #define FLAG_UNUSED_0x26F  0x26F // Unused Flag
 #define FLAG_UNUSED_0x270  0x270 // Unused Flag
@@ -1217,11 +1217,11 @@
 #define FLAG_ITEM_SAFARI_ZONE_NORTH_EAST_NUGGET                     0x491
 #define FLAG_ITEM_SAFARI_ZONE_SOUTH_EAST_BIG_PEARL                  0x492
 
-#define FLAG_UNUSED_0x493                                           0x493 // Unused Flag
-#define FLAG_UNUSED_0x494                                           0x494 // Unused Flag
-#define FLAG_UNUSED_0x495                                           0x495 // Unused Flag
-#define FLAG_UNUSED_0x496                                           0x496 // Unused Flag
-#define FLAG_UNUSED_0x497                                           0x497 // Unused Flag
+#define FLAG_ITEM_PROFESSOR_BIRCHS_LAB_ENDLESS_CANDY                0x493
+#define FLAG_HIDE_LITTLEROOT_TOWN_BIRCHS_LAB_EEVEE_POKEBALL         0x494
+#define FLAG_RECEIVED_EEVEE                                         0x495 
+#define FLAG_ITEM_DEWFORD_MEADOW_RING_TARGET                        0x496 
+#define FLAG_RECEIVED_AUDINO                                        0x497 
 #define FLAG_UNUSED_0x498                                           0x498 // Unused Flag
 #define FLAG_UNUSED_0x499                                           0x499 // Unused Flag
 #define FLAG_UNUSED_0x49A                                           0x49A // Unused Flag
@@ -1501,13 +1501,13 @@
 
 #define FLAG_RECEIVED_POKEDEX_FROM_BIRCH            (SYSTEM_FLAGS + 0x84)
 
-#define FLAG_UNUSED_0x8E5                           (SYSTEM_FLAGS + 0x85) // Unused Flag
-#define FLAG_UNUSED_0x8E6                           (SYSTEM_FLAGS + 0x86) // Unused Flag
-#define FLAG_UNUSED_0x8E7                           (SYSTEM_FLAGS + 0x87) // Unused Flag
-#define FLAG_UNUSED_0x8E8                           (SYSTEM_FLAGS + 0x88) // Unused Flag
-#define FLAG_UNUSED_0x8E9                           (SYSTEM_FLAGS + 0x89) // Unused Flag
-#define FLAG_UNUSED_0x8EA                           (SYSTEM_FLAGS + 0x8A) // Unused Flag
-#define FLAG_UNUSED_0x8EB                           (SYSTEM_FLAGS + 0x8B) // Unused Flag
+#define FLAG_LANDMARK_DEWFORD_MEADOW                (SYSTEM_FLAGS + 0x85)
+#define FLAG_LANDMARK_DEWFORD_MANOR                 (SYSTEM_FLAGS + 0x86) 
+#define FLAG_LANDMARK_VERDANT_MEADOW                (SYSTEM_FLAGS + 0x87) // Unused Flag
+#define FLAG_LANDMARK_EMBER_PATH                    (SYSTEM_FLAGS + 0x88) // Unused Flag
+#define FLAG_LANDMARK_ASHEN_WOODS                   (SYSTEM_FLAGS + 0x89) // Unused Flag
+#define FLAG_LANDMARK_SANDSTREWN_RUINS              (SYSTEM_FLAGS + 0x8A) // Unused Flag
+#define FLAG_LANDMARK_SEASPRAY_CAVE                 (SYSTEM_FLAGS + 0x8B) // Unused Flag
 #define FLAG_UNUSED_0x8EC                           (SYSTEM_FLAGS + 0x8C) // Unused Flag
 #define FLAG_UNUSED_0x8ED                           (SYSTEM_FLAGS + 0x8D) // Unused Flag
 #define FLAG_UNUSED_0x8EE                           (SYSTEM_FLAGS + 0x8E) // Unused Flag

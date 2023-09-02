@@ -957,6 +957,13 @@ const struct CompressedSpriteSheet gMonBackPicTable[] =
     SPECIES_SPRITE(METAGROSS_MEGA, gMonBackPic_MetagrossMega),
     SPECIES_SPRITE(LATIAS_MEGA, gMonBackPic_LatiasMega),
     SPECIES_SPRITE(LATIOS_MEGA, gMonBackPic_LatiosMega),
+    SPECIES_SPRITE(MILOTIC_MEGA, gMonBackPic_MiloticMega),
+    SPECIES_SPRITE(BUTTERFREE_MEGA, gMonBackPic_ButterfreeMega),
+    SPECIES_SPRITE(MACHAMP_MEGA, gMonBackPic_MachampMega),
+    SPECIES_SPRITE(KINGLER_MEGA, gMonBackPic_KinglerMega),
+    SPECIES_SPRITE(LAPRAS_MEGA, gMonBackPic_LaprasMega),
+    SPECIES_SPRITE(FLYGON_MEGA, gMonBackPic_FlygonMega),
+    SPECIES_SPRITE(KINGDRA_MEGA, gMonBackPic_KingdraMega),
 #if P_GEN_4_POKEMON == TRUE
     SPECIES_SPRITE(LOPUNNY_MEGA, gMonBackPic_LopunnyMega),
     SPECIES_SPRITE(GARCHOMP_MEGA, gMonBackPic_GarchompMega),

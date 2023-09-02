@@ -704,7 +704,8 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         if (moveType == TYPE_GROUND
           && !IsBattlerGrounded(battlerDef)
           && ((AI_DATA->abilities[battlerDef] == ABILITY_LEVITATE
-          && DoesBattlerIgnoreAbilityChecks(AI_DATA->abilities[battlerAtk], move))
+          || (AI_DATA->abilities[battlerDef] == ABILITY_KNOWLEDGE
+          && DoesBattlerIgnoreAbilityChecks(AI_DATA->abilities[battlerAtk], move)))
           || AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_AIR_BALLOON
           || (gStatuses3[battlerDef] & (STATUS3_MAGNET_RISE | STATUS3_TELEKINESIS)))
           && move != MOVE_THOUSAND_ARROWS)
@@ -769,6 +770,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 break;
             case ABILITY_FLASH_FIRE:
             case ABILITY_INNER_FIRE:
+            case ABILITY_MOLTEN_BODY:
                 if (moveType == TYPE_FIRE)
                     RETURN_SCORE_MINUS(20);
                 break;
@@ -797,6 +799,10 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 if (TestMoveFlags(move, FLAG_BALLISTIC))
                     RETURN_SCORE_MINUS(10);
                 break;
+            case ABILITY_IRON_CLAD:
+                if (TestMoveFlags(move, FLAG_SLICING_MOVE))
+                    RETURN_SCORE_MINUS(10);
+                break;
             case ABILITY_DAZZLING:
             case ABILITY_QUEENLY_MAJESTY:
                 if (atkPriority > 0)
@@ -807,6 +813,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                     RETURN_SCORE_MINUS(10);
                 break;
             case ABILITY_SWEET_VEIL:
+            case ABILITY_LUNAR_GUARDIAN:
                 if (moveEffect == EFFECT_SLEEP || moveEffect == EFFECT_YAWN)
                     RETURN_SCORE_MINUS(10);
                 break;
@@ -815,6 +822,10 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                     RETURN_SCORE_MINUS(10);
                 break;
             case ABILITY_MAGIC_BOUNCE:
+                if (TestMoveFlags(move, FLAG_MAGIC_COAT_AFFECTED))
+                    RETURN_SCORE_MINUS(20);
+                break;
+            case ABILITY_KNOWLEDGE:
                 if (TestMoveFlags(move, FLAG_MAGIC_COAT_AFFECTED))
                     RETURN_SCORE_MINUS(20);
                 break;
@@ -874,7 +885,12 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                     if (TestMoveFlags(move, FLAG_MAGIC_COAT_AFFECTED) && moveTarget & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY | MOVE_TARGET_OPPONENTS_FIELD))
                         RETURN_SCORE_MINUS(20);
                     break;
+                case ABILITY_KNOWLEDGE:
+                    if (TestMoveFlags(move, FLAG_MAGIC_COAT_AFFECTED) && moveTarget & (MOVE_TARGET_BOTH | MOVE_TARGET_FOES_AND_ALLY | MOVE_TARGET_OPPONENTS_FIELD))
+                        RETURN_SCORE_MINUS(20);
+                    break;
                 case ABILITY_SWEET_VEIL:
+                case ABILITY_LUNAR_GUARDIAN:
                     if (moveEffect == EFFECT_SLEEP || moveEffect == EFFECT_YAWN)
                         RETURN_SCORE_MINUS(20);
                     break;
@@ -1010,6 +1026,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         case EFFECT_DEFENSE_UP_2:
         case EFFECT_DEFENSE_UP_3:
         case EFFECT_DEFENSE_CURL:
+        case EFFECT_DEFENSE_UP_USER_ALLY:
             if (!BattlerStatCanRise(battlerAtk, AI_DATA->abilities[battlerAtk], STAT_DEF))
                 score -= 10;
             break;
@@ -1599,6 +1616,9 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             break;
         case EFFECT_MAGNITUDE:
             if (AI_DATA->abilities[battlerDef] == ABILITY_LEVITATE)
+                score -= 10;
+            break;
+            if (AI_DATA->abilities[battlerDef] == ABILITY_KNOWLEDGE)
                 score -= 10;
             break;
         case EFFECT_PARTING_SHOT:
@@ -2744,7 +2764,7 @@ static s16 AI_DoubleBattle(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         case EFFECT_ALWAYS_CRIT:
         case EFFECT_SNIPE_SHOT:
             // Ally decided to use Frost Breath on us. we must have Anger Point as our ability
-            if (AI_DATA->abilities[battlerAtk] == ABILITY_ANGER_POINT)
+            if (AI_DATA->abilities[battlerAtk] == ABILITY_ANGER_POINT || ABILITY_STAMINA)
             {
                 if (AI_WhoStrikesFirst(battlerAtk, battlerAtkPartner, move) == AI_IS_SLOWER)   // Partner moving first
                 {
@@ -2891,6 +2911,7 @@ static s16 AI_DoubleBattle(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                     break;
                 case ABILITY_FLASH_FIRE:
                 case ABILITY_INNER_FIRE:
+                case ABILITY_MOLTEN_BODY:
                     if (moveType == TYPE_FIRE
                       && HasMoveWithType(battlerAtkPartner, TYPE_FIRE)
                       && !(gBattleResources->flags->flags[battlerAtkPartner] & RESOURCE_FLAG_FLASH_FIRE))
@@ -3204,7 +3225,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     // check thawing moves
     if ((gBattleMons[battlerAtk].status1 & (STATUS1_FREEZE | STATUS1_FROSTBITE)) && TestMoveFlags(move, FLAG_THAW_USER))
         score += (gBattleTypeFlags & BATTLE_TYPE_DOUBLE) ? 20 : 10;
-
+        
     // check burn
     if (gBattleMons[battlerAtk].status1 & STATUS1_BURN)
     {
@@ -3314,6 +3335,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     case EFFECT_DEFENSE_UP:
     case EFFECT_DEFENSE_UP_2:
     case EFFECT_DEFENSE_UP_3:
+    case EFFECT_DEFENSE_UP_USER_ALLY:
         if (!HasMoveWithSplit(battlerDef, SPLIT_PHYSICAL))
             score -= 2;
         if (AI_DATA->hpPercents[battlerAtk] > 90 && AI_RandLessThan(128))
@@ -3663,6 +3685,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     case EFFECT_SPECIAL_DEFENSE_DOWN_HIT:
     case EFFECT_ACCURACY_DOWN_HIT:
     case EFFECT_EVASION_DOWN_HIT:
+    case EFFECT_DEFENSE_DOWN_HIT_2:
         if (sereneGraceBoost && AI_DATA->abilities[battlerDef] != ABILITY_CONTRARY)
             score += 2;
         break;
@@ -3976,6 +3999,8 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     case EFFECT_STICKY_WEB:
     case EFFECT_TOXIC_SPIKES:
         if (AI_DATA->abilities[battlerDef] == ABILITY_MAGIC_BOUNCE || CountUsablePartyMons(battlerDef) == 0)
+            break;
+        if (AI_DATA->abilities[battlerDef] == ABILITY_KNOWLEDGE || CountUsablePartyMons(battlerDef) == 0)
             break;
         if (gDisableStructs[battlerAtk].isFirstTurn)
             score += 2;
@@ -4951,6 +4976,7 @@ static s16 AI_SetupFirstTurn(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     {
     case EFFECT_ATTACK_UP:
     case EFFECT_ATTACK_UP_USER_ALLY:
+    case EFFECT_DEFENSE_UP_USER_ALLY:
     case EFFECT_DEFENSE_UP:
     case EFFECT_SPEED_UP:
     case EFFECT_SPECIAL_ATTACK_UP:
@@ -5287,6 +5313,7 @@ static s16 AI_HPAware(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             {
             case EFFECT_ATTACK_UP:
             case EFFECT_ATTACK_UP_USER_ALLY:
+            case EFFECT_DEFENSE_UP_USER_ALLY:
             case EFFECT_DEFENSE_UP:
             case EFFECT_SPEED_UP:
             case EFFECT_SPECIAL_ATTACK_UP:

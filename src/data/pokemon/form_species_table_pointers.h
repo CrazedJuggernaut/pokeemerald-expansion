@@ -593,5 +593,13 @@ const u16 *const gFormSpeciesIdTables[NUM_SPECIES] =
     [SPECIES_ENAMORUS_THERIAN] = sEnamorusFormSpeciesIdTable,
     // Basculegion
     [SPECIES_BASCULEGION_FEMALE] = sBasculegionFormSpeciesIdTable,
+    //Custom Megas
+    [SPECIES_MILOTIC_MEGA] = sMiloticFormSpeciesIdTable,
+    [SPECIES_BUTTERFREE_MEGA] = sButterfreeFormSpeciesIdTable,
+    [SPECIES_MACHAMP_MEGA] = sMachampFormSpeciesIdTable,
+    [SPECIES_KINGLER_MEGA] = sKinglerFormSpeciesIdTable,
+    [SPECIES_LAPRAS_MEGA] = sLaprasFormSpeciesIdTable,
+    [SPECIES_FLYGON_MEGA] = sFlygonFormSpeciesIdTable,
+    [SPECIES_KINGDRA_MEGA] = sKingdraFormSpeciesIdTable,
 #endif
 };

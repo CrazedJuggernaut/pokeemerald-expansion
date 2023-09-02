@@ -2082,6 +2082,14 @@ gCryTable::
 	cry Cry_CalyrexShadowRider
 	@ Basculegion
 	cry Cry_Basculegion
+	@ Custom Megas
+	cry Cry_Milotic_Mega
+	cry Cry_Butterfree_Mega
+	cry Cry_Machamp_Mega
+	cry Cry_Kingler_Mega
+	cry Cry_Lapras_Mega
+	cry Cry_Flygon_Mega
+	cry Cry_Kingdra_Mega
 .else
 	@ Cramorant
 	cry Cry_Unown
@@ -4169,6 +4177,14 @@ gCryTable_Reverse::
 	cry_reverse Cry_CalyrexShadowRider
 	@ Basculegion
 	cry_reverse Cry_Basculegion
+	@ Custom Megas
+	cry_reverse Cry_Milotic_Mega
+	cry_reverse Cry_Butterfree_Mega
+	cry_reverse Cry_Machamp_Mega
+	cry_reverse Cry_Kingler_Mega
+	cry_reverse Cry_Lapras_Mega
+	cry_reverse Cry_Flygon_Mega
+	cry_reverse Cry_Kingdra_Mega
 .else
 	cry_reverse Cry_Unown
 	cry_reverse Cry_Unown

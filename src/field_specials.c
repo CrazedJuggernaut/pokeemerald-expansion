@@ -4207,3 +4207,86 @@ u8 Script_TryGainNewFanFromCounter(void)
 {
     return TryGainNewFanFromCounter(gSpecialVar_0x8004);
 }
+
+// Makes any hidden items using these flags reappear daily
+void ResetDailyHiddenItemFlags(void)
+{
+    u16 *specVar = &gSpecialVar_0x8004;
+    u16 flag;
+    u32 i = 0;
+    static const u16 dailyItemflags[] = 
+    {
+        FLAG_HIDDEN_ITEM_ASHEN_WOODS_BALM_MUSHROOM_1,
+        FLAG_HIDDEN_ITEM_ASHEN_WOODS_BALM_MUSHROOM_2,
+        FLAG_HIDDEN_ITEM_RUINS_EXTERIOR_STAR_PIECE_1,
+        FLAG_HIDDEN_ITEM_RUINS_EXTERIOR_STAR_PIECE_2,
+        FLAG_HIDDEN_ITEM_RED_NECTAR,
+        FLAG_HIDDEN_ITEM_PINK_NECTAR,
+        FLAG_HIDDEN_ITEM_PURPLE_NECTAR,
+        FLAG_HIDDEN_ITEM_YELLOW_NECTAR,
+        FLAG_HIDDEN_ITEM_GAME_CORNER_BOTTLE_CAP1,
+        FLAG_HIDDEN_ITEM_GAME_CORNER_BOTTLE_CAP2,
+        0xFFFF
+    };
+
+    while (dailyItemflags[i] != 0xFFFF)
+    {
+        flag = dailyItemflags[i];
+        *specVar = flag;
+        FlagClear(flag);
+        i++;
+    }
+}
+
+// Checks the player's party for up to three different Pokemon. Useful for Legendary events.
+// gSpecialVar_0x8004: set to first species to check for
+// gSpecialVar_0x8005: set to second species to check for
+// gSpecialVar_0x8006: set to third species to check for
+// gSpecialVar_0x8007: set to number of species to check for
+// Returns TRUE if all species are found, FALSE if not
+bool8 CheckSpeciesInParty (void)
+{
+    u16 species1 = gSpecialVar_0x8004;
+    u16 species2 = gSpecialVar_0x8005;
+    u16 species3 = gSpecialVar_0x8006;
+    u32 numSpecies = gSpecialVar_0x8007;
+    u32 i;
+    u32 speciesFound = 0;
+
+    for (i = 0; i < PARTY_SIZE; i++)
+    {
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == species1)
+        {
+            speciesFound++;
+        }
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == species2)
+        {
+            speciesFound++;
+        }
+        if (GetMonData(&gPlayerParty[i], MON_DATA_SPECIES) == species3)
+        {
+            speciesFound++;
+        }
+    }
+
+    if (speciesFound == numSpecies){
+        return TRUE;
+    }
+    return FALSE;
+}
+
+// Calculates level for gift mons and static encounters that can still evolve.
+// Sets that level to highest level - 3 and stores it in gSpecialVar_0x800A.
+void GetStaticEncounterLevel (void)
+{
+    gSpecialVar_0x800A = GetHighestLevelInPlayerParty();
+
+    if (gSpecialVar_0x800A - 3 < 1)
+    {
+        gSpecialVar_0x800A = 1;
+    }
+    else
+    {
+        gSpecialVar_0x800A -= 3;
+    }
+}

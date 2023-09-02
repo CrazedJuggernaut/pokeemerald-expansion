@@ -324,6 +324,16 @@ static const u8 sFrigidBodyDescription[] = _("Allies resist fire. Immune to stat
 static const u8 sInnerFireDescription[] = _("Powers up if hit by fire.");
 static const u8 sInnerSparkDescription[] = _("Electricity raises Speed.");
 static const u8 sInnerWaterDescription[] = _("Turns water into HP");
+static const u8 sKnowledgeDescription[] = _("Only damaged by attacks, Levitating.");
+static const u8 sEmpathyDescription[] = _("Protects allies from damage and ailments.");
+static const u8 sWillpowerDescription[] = _("Boost not very effective. Foes can't eat berries.");
+static const u8 sIronCladDescription[] = _("Blocks bladed attacks.");
+static const u8 sSpaceDistortionDescription[] =_("Space is distorted in your favor.");
+static const u8 sTimeManipulationDescription[] =_("Time is manipulated in your favor.");
+static const u8 sDistortedLogicDescription[] =_("The logic of this world does not effect you.");
+static const u8 sLunarGuardianDescription[] = _("Protects team from sleep.");
+static const u8 sMoltenBodyDescription[] = _("Fire-type is super effective against Rock-type.");
+static const u8 sFrozenHuskDescription[] = _("Boosts Ice-type move effects. Lowers super effective.");
 
 #if B_EXPANDED_ABILITY_NAMES == TRUE
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
@@ -658,9 +668,19 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_ROCK_BODY] = _("Rock Body"),
     [ABILITY_ALLOY_BODY] = _("Alloy Body"),
     [ABILITY_FRIGID_BODY] = _("Frigid Body"),
-    [ABILITY_INNER_FIRE] = _("Inner_Fire"),
-    [ABILITY_INNER_SPARK] = _("Inner_Spark"),
-    [ABILITY_INNER_WATER] = _("Inner_Water"),
+    [ABILITY_INNER_FIRE] = _("Inner Fire"),
+    [ABILITY_INNER_SPARK] = _("Inner Spark"),
+    [ABILITY_INNER_WATER] = _("Inner Water"),
+    [ABILITY_KNOWLEDGE] = _("Knowledge"),
+    [ABILITY_EMPATHY] = _("Empathy"),
+    [ABILITY_WILLPOWER] = _("Willpower"),
+    [ABILITY_IRON_CLAD] = _("Iron Clad"),
+    [ABILITY_SPACE_DISTORTION] = _("SpaceDistortion"),
+    [ABILITY_TIME_MANIPULATOR] = _("TimeManipulator"),
+    [ABILITY_DISTORTED_LOGIC] = _("Distorted Logic"),
+    [ABILITY_LUNAR_GUARDIAN] = _("Lunar Guardian"),
+    [ABILITY_MOLTEN_BODY] = _("Molten Body"),
+    [ABILITY_FROZEN_HUSK] = _("Frozen Husk"),
 };
 #else   // 12 characters
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
@@ -995,9 +1015,19 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_ROCK_BODY] = _("Rock Body"),
     [ABILITY_ALLOY_BODY] = _("Alloy Body"),
     [ABILITY_FRIGID_BODY] = _("Frigid Body"),
-    [ABILITY_INNER_FIRE] = _("Inner_Fire"),
-    [ABILITY_INNER_SPARK] = _("Inner_Spark"),
-    [ABILITY_INNER_WATER] = _("Inner_Water"),
+    [ABILITY_INNER_FIRE] = _("Inner Fire"),
+    [ABILITY_INNER_SPARK] = _("Inner Spark"),
+    [ABILITY_INNER_WATER] = _("Inner Water"),
+    [ABILITY_KNOWLEDGE] = _("Knowledge"),
+    [ABILITY_EMPATHY] = _("Empathy"),
+    [ABILITY_WILLPOWER] = _("Willpower"),
+    [ABILITY_IRON_CLAD] = _("Iron Clad"),
+    [ABILITY_SPACE_DISTORTION] = _("SpaceDistort"),
+    [ABILITY_TIME_MANIPULATOR] = _("TimeManip"),
+    [ABILITY_DISTORTED_LOGIC] = _("DistortLogic"),
+    [ABILITY_LUNAR_GUARDIAN] = _("LunarGuard."),
+    [ABILITY_MOLTEN_BODY] = _("Molten Body"),
+    [ABILITY_FROZEN_HUSK] = _("Frozen Husk"),
 };
 #endif
 
@@ -1336,5 +1366,14 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_INNER_FIRE] = sInnerFireDescription,
     [ABILITY_INNER_SPARK] = sInnerSparkDescription,
     [ABILITY_INNER_WATER] = sInnerFireDescription,
-    
+    [ABILITY_KNOWLEDGE] = sKnowledgeDescription,
+    [ABILITY_EMPATHY] = sEmpathyDescription,
+    [ABILITY_WILLPOWER] = sWillpowerDescription,
+    [ABILITY_IRON_CLAD] = sIronCladDescription,
+    [ABILITY_SPACE_DISTORTION] = sSpaceDistortionDescription,
+    [ABILITY_TIME_MANIPULATOR] = sTimeManipulationDescription,
+    [ABILITY_DISTORTED_LOGIC] = sDistortedLogicDescription,
+    [ABILITY_LUNAR_GUARDIAN] = sLunarGuardianDescription,
+    [ABILITY_MOLTEN_BODY] = sMoltenBodyDescription,
+    [ABILITY_FROZEN_HUSK] = sFrozenHuskDescription,
 };

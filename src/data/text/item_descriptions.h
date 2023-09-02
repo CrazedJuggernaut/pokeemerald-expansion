@@ -612,6 +612,11 @@ static const u8 sMaxRepelDesc[] = _(
     "Pokémon for 250\n"
     "steps.");
 
+static const u8 sRepellentDesc[] = _(
+    "Repels weak wild\n"
+    "Pokémon for as long\n"
+    "as it's active.");
+
 static const u8 sLureDesc[] = _(
     "Makes Pokémon more\n"
     "likely to appear\n"
@@ -1741,6 +1746,41 @@ static const u8 sLatiositeDesc[] = _(
     "Latios to Mega\n"
     "Evolve in battle.");
 
+static const u8 sMiloticiteDesc[] = _(
+    "This stone enables\n"
+    "Milotic to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sButterfreniteDesc[] = _(
+    "This stone enables\n"
+    "Butterfree to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sMachampiteDesc[] = _(
+    "This stone enables\n"
+    "Machamp to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sKingleriteDesc[] = _(
+    "This stone enables\n"
+    "Kingler to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sLaprasiteDesc[] = _(
+    "This stone enables\n"
+    "Lapras to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sKingdraniteDesc[] = _(
+    "This stone enables\n"
+    "Kingdra to Mega\n"
+    "Evolve in battle.");
+
+static const u8 sFlygoniteDesc[] = _(
+    "This stone enables\n"
+    "Flygon to Mega\n"
+    "Evolve in battle.");
+
 static const u8 sLopunniteDesc[] = _(
     "This stone enables\n"
     "Lopunny to Mega\n"
@@ -2676,6 +2716,11 @@ static const u8 sUtilityUmbrellaDesc[] = _(
     "An umbrella that\n"
     "protects from\n"
     "weather effects.");
+
+static const u8 sPokeVialDesc[] = _(
+    "Potent medicine\n"
+    "that fully restores\n"
+    "all Pokémon.");
 
 // Berries
 static const u8 sCheriBerryDesc[] = _(
