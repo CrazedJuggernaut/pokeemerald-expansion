@@ -1003,7 +1003,6 @@ static const u8 sForbiddenMoves[MOVES_COUNT] =
     [MOVE_BODY_PRESS] = FORBIDDEN_METRONOME,
     [MOVE_BONE_RUSH] = FORBIDDEN_PARENTAL_BOND,
     [MOVE_BONEMERANG] = FORBIDDEN_PARENTAL_BOND,
-    [MOVE_BOUNCE] = FORBIDDEN_ASSIST | FORBIDDEN_SLEEP_TALK | FORBIDDEN_INSTRUCT | FORBIDDEN_PARENTAL_BOND,
     [MOVE_BOUNCY_BUBBLE] = FORBIDDEN_METRONOME,
     [MOVE_BRANCH_POKE] = FORBIDDEN_METRONOME,
     [MOVE_BREAKING_SWIPE] = FORBIDDEN_METRONOME,
@@ -1682,14 +1681,6 @@ static void Cmd_attackcanceler(void)
     {
         gSpecialStatuses[gBattlerTarget].lightningRodRedirected = FALSE;
         gLastUsedAbility = ABILITY_LIGHTNING_ROD;
-        BattleScriptPushCursor();
-        gBattlescriptCurrInstr = BattleScript_TookAttack;
-        RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
-    }
-    else if (gSpecialStatuses[gBattlerTarget].lightningRodRedirected)
-    {
-        gSpecialStatuses[gBattlerTarget].lightningRodRedirected = FALSE;
-        gLastUsedAbility = ABILITY_PINACEAE;
         BattleScriptPushCursor();
         gBattlescriptCurrInstr = BattleScript_TookAttack;
         RecordAbilityBattle(gBattlerTarget, gLastUsedAbility);
@@ -3215,30 +3206,6 @@ void SetMoveEffect(bool32 primary, u32 certain)
                 else
                     break;
             }
-            if (battlerAbility == ABILITY_NIMBLE)
-            {
-                if (primary == TRUE || certain == MOVE_EFFECT_CERTAIN)
-                {
-                    gLastUsedAbility = ABILITY_NIMBLE;
-                    RecordAbilityBattle(gEffectBattler, ABILITY_NIMBLE);
-
-                    BattleScriptPush(gBattlescriptCurrInstr + 1);
-                    gBattlescriptCurrInstr = BattleScript_PRLZPrevention;
-
-                    if (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
-                    {
-                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_ABILITY_PREVENTS_ABILITY_STATUS;
-                        gHitMarker &= ~HITMARKER_IGNORE_SAFEGUARD;
-                    }
-                    else
-                    {
-                        gBattleCommunication[MULTISTRING_CHOOSER] = B_MSG_ABILITY_PREVENTS_MOVE_STATUS;
-                    }
-                    RESET_RETURN
-                }
-                else
-                    break;
-            }
             if (!CanParalyzeType(gBattleScripting.battler, gEffectBattler)
                 && (gHitMarker & HITMARKER_IGNORE_SAFEGUARD)
                 && (primary == TRUE || certain == MOVE_EFFECT_CERTAIN))
@@ -3952,6 +3919,25 @@ void SetMoveEffect(bool32 primary, u32 certain)
                     gBattlescriptCurrInstr = BattleScript_SpikesActivates;
                 }
                 break;
+            case MOVE_EFFECT_TRIPLE_ARROWS:
+                {
+                    u8 randomLowerDefenseChance = RandomPercentage(RNG_TRIPLE_ARROWS_DEFENSE_DOWN, CalcSecondaryEffectChance(gBattlerAttacker, 50));
+                    u8 randomFlinchChance = RandomPercentage(RNG_TRIPLE_ARROWS_FLINCH, CalcSecondaryEffectChance(gBattlerAttacker, 30));
+
+                    if (randomFlinchChance && battlerAbility != ABILITY_INNER_FOCUS && GetBattlerTurnOrderNum(gEffectBattler) > gCurrentTurnActionNumber)
+                        gBattleMons[gEffectBattler].status2 |= sStatusFlagsForMoveEffects[MOVE_EFFECT_FLINCH];
+
+                    if (randomLowerDefenseChance)
+                    {
+                        BattleScriptPush(gBattlescriptCurrInstr + 1);
+                        gBattlescriptCurrInstr = BattleScript_DefDown;
+                    }
+                    else
+                    {
+                        gBattlescriptCurrInstr++;
+                    }
+                }
+                break;
             }
         }
     }
@@ -3963,18 +3949,7 @@ static void Cmd_seteffectwithchance(void)
 {
     CMD_ARGS();
 
-    u32 percentChance;
-    u32 moveType, move;
-
-    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_SERENE_GRACE)
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
-    else
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
-
-    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_FROZEN_HUSK && moveType == TYPE_ICE)
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance * 2;
-    else
-        percentChance = gBattleMoves[gCurrentMove].secondaryEffectChance;
+    u32 percentChance = CalcSecondaryEffectChance(gBattlerAttacker, gBattleMoves[gCurrentMove].secondaryEffectChance);
 
     if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
      && gBattleScripting.moveEffect)
@@ -8754,10 +8729,6 @@ static bool32 IsAbilityRodAffected(void)
         return TRUE;
     else
         return FALSE;
-    if (moveType == TYPE_ELECTRIC && GetBattlerAbility(gBattlerTarget) == ABILITY_PINACEAE)
-        return TRUE;
-    else
-        return FALSE;
 }
 
 static bool32 IsAbilityMotorAffected(void)
@@ -12709,10 +12680,6 @@ static void Cmd_tryKO(void)
         else
         {
             u16 odds = gBattleMoves[gCurrentMove].accuracy + (gBattleMons[gBattlerAttacker].level - gBattleMons[gBattlerTarget].level);
-        #if B_SHEER_COLD_ACC >= GEN_7
-            if (gCurrentMove == MOVE_SHEER_COLD && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ICE))
-                odds -= 10;
-        #endif
             if (RandomPercentage(RNG_ACCURACY, odds) && gBattleMons[gBattlerAttacker].level >= gBattleMons[gBattlerTarget].level)
                 lands = TRUE;
         }
@@ -14269,7 +14236,6 @@ static void Cmd_setsemiinvulnerablebit(void)
     switch (gCurrentMove)
     {
     case MOVE_FLY:
-    case MOVE_BOUNCE:
     case MOVE_SKY_DROP:
         gStatuses3[gBattlerAttacker] |= STATUS3_ON_AIR;
         break;

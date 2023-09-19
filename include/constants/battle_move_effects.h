@@ -409,7 +409,12 @@
 #define EFFECT_DEFENSE_DOWN_HIT_2           403
 #define EFFECT_DEFENSE_UP_USER_ALLY         404
 #define EFFECT_SPACIAL_REND                 405
+#define EFFECT_TRIPLE_ARROWS                406
+#define EFFECT_INFERNAL_PARADE              407
+#define EFFECT_TAKE_HEART                   408
+#define EFFECT_AXE_KICK                     409
+#define EFFECT_BOUNCE                       410
 
-#define NUM_BATTLE_MOVE_EFFECTS             406
+#define NUM_BATTLE_MOVE_EFFECTS             411
 
 #endif  // GUARD_CONSTANTS_BATTLE_MOVE_EFFECTS_H

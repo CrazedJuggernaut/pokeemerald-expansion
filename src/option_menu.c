@@ -28,6 +28,7 @@
 #define tFollower data[7]
 #define tDifficulty data[8]
 #define tBattleBag data[9]
+#define tTypeEffect data[10]
 
 enum
 {
@@ -47,6 +48,7 @@ enum
     MENUITEM_FOLLOWER,
     MENUITEM_DIFFICULTY,
     MENUITEM_BATTLEBAG,
+    MENUITEM_TYPEEFFECT,
     MENUITEM_CANCEL_PG2,
     MENUITEM_COUNT_PG2,
 };
@@ -66,9 +68,10 @@ enum
 #define YPOS_FRAMETYPE    (MENUITEM_FRAMETYPE * 16)
 
 //Pg2
-#define YPOS_FOLLOWER        (MENUITEM_FOLLOWER * 16)
-#define YPOS_DIFFICULTY      (MENUITEM_DIFFICULTY * 16)
-#define YPOS_BATTLEBAG        (MENUITEM_BATTLEBAG * 16)
+#define YPOS_FOLLOWER      (MENUITEM_FOLLOWER * 16)
+#define YPOS_DIFFICULTY    (MENUITEM_DIFFICULTY * 16)
+#define YPOS_BATTLEBAG     (MENUITEM_BATTLEBAG * 16)
+#define YPOS_TYPEEFFECT    (MENUITEM_TYPEEFFECT * 16)
 
 #define PAGE_COUNT  2
 
@@ -91,6 +94,8 @@ static u8 Difficulty_ProcessInput(u8 selection);
 static void Difficulty_DrawChoices(u8 selection);
 static u8 BattleBag_ProcessInput(u8 selection);
 static void BattleBag_DrawChoices(u8 selection);
+static u8 TypeEffect_ProcessInput(u8 selection);
+static void TypeEffect_DrawChoices(u8 selection);
 static u8 Sound_ProcessInput(u8 selection);
 static void Sound_DrawChoices(u8 selection);
 static u8 FrameType_ProcessInput(u8 selection);
@@ -121,8 +126,9 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
 
 static const u8 *const sOptionMenuItemsNames_Pg2[MENUITEM_COUNT_PG2] =
 {
-    [MENUITEM_FOLLOWER]       = gText_Follower,
+    [MENUITEM_FOLLOWER]        = gText_Follower,
     [MENUITEM_DIFFICULTY]      = gText_Difficulty,
+    [MENUITEM_TYPEEFFECT]      = gText_TypeEffect,
     [MENUITEM_BATTLEBAG]       = gText_BattleBag,
     [MENUITEM_CANCEL_PG2]      = gText_OptionMenuCancel,
 };
@@ -200,6 +206,7 @@ static void ReadAllCurrentSettings(u8 taskId)
     gTasks[taskId].tWindowFrameType = gSaveBlock2Ptr->optionsWindowFrameType;
     gTasks[taskId].tBattleBag = FlagGet(B_FLAG_NO_BAG_USE);
     gTasks[taskId].tDifficulty = VarGet(VAR_DIFFICULTY);
+    gTasks[taskId].tTypeEffect = FlagGet(FLAG_TYPE_EFFECTIVENESS_BATTLE_SHOW);
 }
 
 static void DrawOptionsPg1(u8 taskId)
@@ -220,6 +227,8 @@ static void DrawOptionsPg2(u8 taskId)
     ReadAllCurrentSettings(taskId);
     Follower_DrawChoices(gTasks[taskId].tFollower);
     Difficulty_DrawChoices(gTasks[taskId].tFollower);
+    TypeEffect_DrawChoices(gTasks[taskId].tTypeEffect);
+    BattleBag_DrawChoices(gTasks[taskId].tBattleBag);
     HighlightOptionMenuItem(gTasks[taskId].tMenuSelection);
     CopyWindowToVram(WIN_OPTIONS, COPYWIN_FULL);
 }
@@ -520,6 +529,20 @@ static void Task_OptionMenuProcessInput_Pg2(u8 taskId)
             if (previousOption != gTasks[taskId].tDifficulty)
                 Difficulty_DrawChoices(gTasks[taskId].tDifficulty);
             break;
+        case MENUITEM_TYPEEFFECT:
+            previousOption = gTasks[taskId].tTypeEffect;
+            gTasks[taskId].tTypeEffect = TypeEffect_ProcessInput(gTasks[taskId].tTypeEffect);
+
+            if (previousOption != gTasks[taskId].tTypeEffect)
+                TypeEffect_DrawChoices(gTasks[taskId].tTypeEffect);
+            break;
+        case MENUITEM_BATTLEBAG:
+            previousOption = gTasks[taskId].tBattleBag;
+            gTasks[taskId].tBattleBag = BattleBag_ProcessInput(gTasks[taskId].tBattleBag);
+
+            if (previousOption != gTasks[taskId].tBattleBag)
+                BattleBag_DrawChoices(gTasks[taskId].tBattleBag);
+            break;
         default:
             return;
         }
@@ -541,7 +564,9 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2Ptr->optionsButtonMode = gTasks[taskId].tButtonMode;
     gSaveBlock2Ptr->optionsWindowFrameType = gTasks[taskId].tWindowFrameType;
     gTasks[taskId].tFollower == 0 ? FlagClear(FLAG_POKEMON_FOLLOWERS) : FlagSet(FLAG_POKEMON_FOLLOWERS);
-   VarSet(VAR_DIFFICULTY, gTasks[taskId].tDifficulty);
+    VarSet(VAR_DIFFICULTY, gTasks[taskId].tDifficulty);
+    gTasks[taskId].tTypeEffect == 0 ? FlagClear(FLAG_TYPE_EFFECTIVENESS_BATTLE_SHOW) : FlagSet(FLAG_TYPE_EFFECTIVENESS_BATTLE_SHOW);
+    gTasks[taskId].tBattleBag == 0 ? FlagClear(B_FLAG_NO_BAG_USE) : FlagSet(B_FLAG_NO_BAG_USE);
 
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
     gTasks[taskId].func = Task_OptionMenuFadeOut;
@@ -831,6 +856,52 @@ static void FrameType_DrawChoices(u8 selection)
 
     DrawOptionMenuChoice(gText_FrameType, 104, YPOS_FRAMETYPE, 0);
     DrawOptionMenuChoice(text, 128, YPOS_FRAMETYPE, 1);
+}
+
+static u8 TypeEffect_ProcessInput(u8 selection)
+{
+    if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
+    {
+        selection ^= 1;
+        sArrowPressed = TRUE;
+    }
+
+    return selection;
+}
+
+static void TypeEffect_DrawChoices(u8 selection)
+{
+    u8 styles[2];
+
+    styles[0] = 0;
+    styles[1] = 0;
+    styles[selection] = 1;
+
+    DrawOptionMenuChoice(gText_TypeEffectOff, 104, YPOS_TYPEEFFECT, styles[0]);
+    DrawOptionMenuChoice(gText_TypeEffectOn, GetStringRightAlignXOffset(FONT_NORMAL, gText_TypeEffectOn, 198), YPOS_TYPEEFFECT, styles[1]);
+}
+
+static u8 BattleBag_ProcessInput(u8 selection)
+{
+    if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
+    {
+        selection ^= 1;
+        sArrowPressed = TRUE;
+    }
+
+    return selection;
+}
+
+static void BattleBag_DrawChoices(u8 selection)
+{
+    u8 styles[2];
+
+    styles[0] = 0;
+    styles[1] = 0;
+    styles[selection] = 1;
+
+    DrawOptionMenuChoice(gText_BattleBagOff, 104, YPOS_BATTLEBAG, styles[0]);
+    DrawOptionMenuChoice(gText_BattleBagOn, GetStringRightAlignXOffset(FONT_NORMAL, gText_BattleBagOn, 198), YPOS_BATTLEBAG, styles[1]);
 }
 
 static u8 ButtonMode_ProcessInput(u8 selection)

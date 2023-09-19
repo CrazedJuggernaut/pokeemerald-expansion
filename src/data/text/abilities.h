@@ -306,11 +306,8 @@ static const u8 sSageDescription[] =  _("Powers up Psychic moves");
 static const u8 sBirdEaterDescription[] = _("Turns birds into HP.");
 static const u8 sFervorDescription[] =  _("Boosts a move used consecutively.");
 static const u8 sGallantDescription[] = _("Prevents stat drops. Boosts slicing moves.");
-static const u8 sPinaceaeDescription[] = _("Draws Electrical moves. Boosts slicing moves.");
 static const u8 sNinjitsuDescription[] = _("Moving first boosts power.");
 static const u8 sContaminateDescription[] = _("Normal moves become Poison.");
-static const u8 sNimbleDescription[]= _("Gradually boosts Speed. Immune to paralysis");
-static const u8 sAggroSwimDescription[]= _("Doubles Speed in rain. Boosts STAB");
 static const u8 sStrikerDescription[]= _("Boosts Kicking moves");
 static const u8 sFlyTrapDescription[]= _("Boosts Grass moves against bug/flying.");
 static const u8 sCourtJesterDescription[]= _("Extends duration of field effects.");
@@ -334,6 +331,8 @@ static const u8 sDistortedLogicDescription[] =_("The logic of this world does no
 static const u8 sLunarGuardianDescription[] = _("Protects team from sleep.");
 static const u8 sMoltenBodyDescription[] = _("Fire-type is super effective against Rock-type.");
 static const u8 sFrozenHuskDescription[] = _("Boosts Ice-type move effects. Lowers super effective.");
+static const u8 sSolenoglyphousDescription[] = _("Biting moves poison foes.");
+static const u8 sLorentzDescription[] = _("Biting moves poison foes.");
 
 #if B_EXPANDED_ABILITY_NAMES == TRUE
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
@@ -653,11 +652,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_BIRD_EATER] = _("Bird Eater"),
     [ABILITY_FERVOR] = _("Fervor"),
     [ABILITY_GALLANT] = _("Gallant"),
-    [ABILITY_PINACEAE] = _("Pinaceae"),
     [ABILITY_NINJITSU] = _("Ninjitsu"),
     [ABILITY_CONTAMINATE] = _("Contaminate"),
-    [ABILITY_NIMBLE] = _("Nimble"),
-    [ABILITY_AGGRO_SWIM] = _("AGGRO_SWIM"),
     [ABILITY_STRIKER] = _("Striker"),
     [ABILITY_FLY_TRAP] = _("Fly Trap"),
     [ABILITY_COURT_JESTER] = _("Court Jester"),
@@ -681,6 +677,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_LUNAR_GUARDIAN] = _("Lunar Guardian"),
     [ABILITY_MOLTEN_BODY] = _("Molten Body"),
     [ABILITY_FROZEN_HUSK] = _("Frozen Husk"),
+    [ABILITY_SOLENOGLYPHOUS] = _("Solenoglyphous"),
+    [ABILITY_LORENTZ] = _("Lorentz")
 };
 #else   // 12 characters
 const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
@@ -1000,11 +998,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_BIRD_EATER] = _("Bird Eater"),
     [ABILITY_FERVOR] = _("Fervor"), 
     [ABILITY_GALLANT] = _("Gallant"),
-    [ABILITY_PINACEAE] = _("Pinaceae"),
     [ABILITY_NINJITSU] = _("Ninjitsu"),
     [ABILITY_CONTAMINATE] = _("Contaminate"),
-    [ABILITY_NIMBLE] = _("Nimble"),
-    [ABILITY_AGGRO_SWIM] = _("Aggro Swim")
     [ABILITY_STRIKER] = _("Striker"),
     [ABILITY_FLY_TRAP] = _("Fly Trap"),
     [ABILITY_COURT_JESTER] =_("Court Jester"),
@@ -1028,6 +1023,8 @@ const u8 gAbilityNames[ABILITIES_COUNT][ABILITY_NAME_LENGTH + 1] =
     [ABILITY_LUNAR_GUARDIAN] = _("LunarGuard."),
     [ABILITY_MOLTEN_BODY] = _("Molten Body"),
     [ABILITY_FROZEN_HUSK] = _("Frozen Husk"),
+    [ABILITY_SOLENOGLYPHOUS] = _("Solenoglyph"),
+    [ABILITY_LORENTZ] = _("Lorentz")
 };
 #endif
 
@@ -1348,11 +1345,8 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_BIRD_EATER] = sBirdEaterDescription,
     [ABILITY_FERVOR] = sFervorDescription,
     [ABILITY_GALLANT] = sGallantDescription,
-    [ABILITY_PINACEAE] = sPinaceaeDescription,
     [ABILITY_NINJITSU] = sNinjitsuDescription,
     [ABILITY_CONTAMINATE] = sContaminateDescription,
-    [ABILITY_NIMBLE] = sNimbleDescription,
-    [ABILITY_AGGRO_SWIM] = sAggroSwimDescription,
     [ABILITY_STRIKER] = sStrikerDescription,
     [ABILITY_FLY_TRAP] = sFlyTrapDescription,
     [ABILITY_COURT_JESTER] = sCourtJesterDescription,
@@ -1376,4 +1370,6 @@ const u8 *const gAbilityDescriptionPointers[ABILITIES_COUNT] =
     [ABILITY_LUNAR_GUARDIAN] = sLunarGuardianDescription,
     [ABILITY_MOLTEN_BODY] = sMoltenBodyDescription,
     [ABILITY_FROZEN_HUSK] = sFrozenHuskDescription,
+    [ABILITY_SOLENOGLYPHOUS] = sSolenoglyphousDescription,
+    [ABILITY_LORENTZ] = sLorentzDescription,
 };

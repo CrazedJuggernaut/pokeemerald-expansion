@@ -4088,7 +4088,7 @@ const struct Trainer gTrainers[] = {
         .trainerPic = TRAINER_PIC_FISHERMAN,
         .trainerName = _("NED"),
         .items = {},
-        .doubleBattle = TRUE,
+        .doubleBattle = FALSE,
         .aiFlags = AI_FLAG_CHECK_BAD_MOVE,
         .party = EVERYTHING_CUSTOMIZED(sParty_Ned),
     },

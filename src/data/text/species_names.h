@@ -957,6 +957,7 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_METAGROSS_MEGA] = _("Metagross"),
     [SPECIES_LATIAS_MEGA] = _("Latias"),
     [SPECIES_LATIOS_MEGA] = _("Latios"),
+    [SPECIES_MILOTIC_MEGA] = _("Milotic"),
     [SPECIES_BUTTERFREE_MEGA] = _("Butterfree"),
     [SPECIES_MACHAMP_MEGA] = _("Machamp"),
     [SPECIES_KINGLER_MEGA] = _("Kingler"),

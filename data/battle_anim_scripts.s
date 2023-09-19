@@ -20464,14 +20464,15 @@ FlyUnleash:
 Move_BOUNCE:
 	loadspritegfx ANIM_TAG_ROUND_SHADOW
 	loadspritegfx ANIM_TAG_IMPACT
-	choosetwoturnanim BounceSetUp, BounceUnleash
+	goto BounceSetUp
 BounceEnd:
 	end
 
 BounceSetUp:
 	playsewithpan SE_M_TELEPORT, SOUND_PAN_ATTACKER
 	createsprite gBounceBallShrinkSpriteTemplate, ANIM_ATTACKER, 2, 0, 0
-	goto BounceEnd
+	waitforvisualfinish
+	goto BounceUnleash
 
 BounceUnleash:
 	monbg ANIM_DEF_PARTNER

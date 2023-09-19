@@ -53,6 +53,10 @@ extern const u8 gText_Key_Items[];
 extern const u8 gText_Poke_Balls[];
 extern const u8 gText_TMs_Hms[];
 extern const u8 gText_Berries2[];
+extern const u8 gText_Medicine[];
+extern const u8 gText_BattleItems[];
+extern const u8 gText_Treasures[];
+extern const u8 gText_MegaStones[];
 
 extern const u8 gText_Single2[];
 extern const u8 gText_Double2[];
@@ -312,6 +316,10 @@ extern const u8 gText_FollowerOn[];
 extern const u8 gText_DifficultyEasy[];
 extern const u8 gText_DifficultyNormal[];
 extern const u8 gText_DifficultyHard[];
+extern const u8 gText_TypeEffectOff[];
+extern const u8 gText_TypeEffectOn[];
+extern const u8 gText_BattleBagOff[];
+extern const u8 gText_BattleBagOn[];
 extern const u8 gText_Option[];
 extern const u8 gText_OptionMenu[];
 extern const u8 gText_SmallDot[];
@@ -326,6 +334,7 @@ extern const u8 gText_OptionMenuCancel[];
 extern const u8 gText_ButtonMode[];
 extern const u8 gText_Follower[];
 extern const u8 gText_Difficulty[];
+extern const u8 gText_TypeEffect[];
 
 extern const u8 gText_MaleSymbol[];
 extern const u8 gText_FemaleSymbol[];
@@ -533,6 +542,7 @@ extern const u8 gText_SpDef[];
 extern const u8 gText_Speed[];
 extern const u8 gText_Dash[];
 extern const u8 gText_Plus[];
+extern const u8 gText_Nickname[];
 
 //pokedex text
 extern const u8 gText_CryOf[];
@@ -2981,6 +2991,7 @@ extern const u8 gText_Cancel6[];
 extern const u8 gText_CheckMapOfHoenn[];
 extern const u8 gText_CheckPokemonInDetail[];
 extern const u8 gText_CallRegisteredTrainer[];
+extern const u8 gText_Pokenav_Access_PC[];
 extern const u8 gText_CheckObtainedRibbons[];
 extern const u8 gText_PutAwayPokenav[];
 extern const u8 gText_CheckPartyPokemonInDetail[];
@@ -2992,6 +3003,7 @@ extern const u8 gText_FindCutePokemon[];
 extern const u8 gText_FindSmartPokemon[];
 extern const u8 gText_FindToughPokemon[];
 extern const u8 gText_ReturnToConditionMenu[];
+extern const u8 gText_Pokenav_Cannot_Access_PC[];
 extern const u8 gText_NoRibbonWinners[];
 
 // Pokenav
@@ -3044,8 +3056,12 @@ extern const u8 gText_BoxName[];
 extern const u8 gText_PkmnsNickname[];
 extern const u8 gText_TellHimTheWords[];
 
-extern const u8 gText_AccessPC[];
 extern const u8 gText_PokeVialEmpty[];
 extern const u8 gText_UsedPokeVial[];
+
+extern const u8 gText_CurrentTime[];
+extern const u8 gText_CurrentTimeOff[];
+
+extern const u8 gText_Moves_Menu[];
 
 #endif // GUARD_STRINGS_H

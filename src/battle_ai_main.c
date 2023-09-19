@@ -752,7 +752,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             case ABILITY_VOLT_ABSORB:
             case ABILITY_MOTOR_DRIVE:
             case ABILITY_LIGHTNING_ROD:
-            case ABILITY_PINACEAE:
             case ABILITY_INNER_SPARK:
                 if (moveType == TYPE_ELECTRIC)
                     RETURN_SCORE_MINUS(20);
@@ -873,7 +872,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 switch (AI_DATA->abilities[BATTLE_PARTNER(battlerDef)])
                 {
                 case ABILITY_LIGHTNING_ROD:
-                case ABILITY_PINACEAE:
                     if (moveType == TYPE_ELECTRIC && !IsMoveRedirectionPrevented(move, AI_DATA->abilities[battlerAtk]))
                         RETURN_SCORE_MINUS(20);
                     break;
@@ -1390,10 +1388,6 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 score -= 10;
             break;
         case EFFECT_OHKO:
-        #if B_SHEER_COLD_IMMUNITY >= GEN_7
-            if (move == MOVE_SHEER_COLD && IS_BATTLER_OF_TYPE(battlerDef, TYPE_ICE))
-                return 0;
-        #endif
             if (!ShouldTryOHKO(battlerAtk, battlerDef, AI_DATA->abilities[battlerAtk], AI_DATA->abilities[battlerDef], move))
                 score -= 10;
             break;
@@ -2662,6 +2656,22 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
              && AI_WhoStrikesFirst(battlerAtk, battlerDef, move) == AI_IS_SLOWER)
                 score -= 10;
             break;
+        case EFFECT_JUNGLE_HEALING:
+           if (AtMaxHp(battlerAtk)
+            && AtMaxHp(BATTLE_PARTNER(battlerAtk))
+            && !(gBattleMons[battlerAtk].status1 & STATUS1_ANY)
+            && !(gBattleMons[BATTLE_PARTNER(battlerAtk)].status1 & STATUS1_ANY))
+                score -= 10;
+            break;
+        case EFFECT_TAKE_HEART:
+            if ((!(gBattleMons[battlerAtk].status1 & STATUS1_ANY)
+             || PartnerMoveIs(BATTLE_PARTNER(battlerAtk), AI_DATA->partnerMove, MOVE_JUNGLE_HEALING)
+             || PartnerMoveIs(BATTLE_PARTNER(battlerAtk), AI_DATA->partnerMove, MOVE_HEAL_BELL)
+             || PartnerMoveIs(BATTLE_PARTNER(battlerAtk), AI_DATA->partnerMove, MOVE_AROMATHERAPY))
+             && !BattlerStatCanRise(battlerAtk, AI_DATA->abilities[battlerAtk], STAT_SPATK)
+             && !BattlerStatCanRise(battlerAtk, AI_DATA->abilities[battlerAtk], STAT_SPDEF))
+                score -= 10;
+            break;
         case EFFECT_PLACEHOLDER:
             return 0;   // cannot even select
     } // move effect checks
@@ -2878,14 +2888,7 @@ static s16 AI_DoubleBattle(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                         RETURN_SCORE_PLUS(1);
                     }
                     break;
-                case ABILITY_PINACEAE:
-                    if (moveType == TYPE_ELECTRIC
-                      && HasMoveWithSplit(battlerAtkPartner, SPLIT_PHYSICAL)
-                      && BattlerStatCanRise(battlerAtkPartner, atkPartnerAbility, STAT_ATK))
-                    {
-                        RETURN_SCORE_PLUS(1);
-                    }
-                    break;
+
                 case ABILITY_WATER_ABSORB:
                 case ABILITY_DRY_SKIN:
                 case ABILITY_INNER_WATER:
@@ -3847,7 +3850,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     case EFFECT_WISH:
     case EFFECT_HEAL_BELL:
         if (ShouldUseWishAromatherapy(battlerAtk, battlerDef, move))
-            score += 7;
+            score += 3;
         break;
     case EFFECT_THIEF:
         {
@@ -4358,7 +4361,6 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 switch (AI_DATA->abilities[battlerDef])
                 {
                 case ABILITY_SWIFT_SWIM:
-                case ABILITY_AGGRO_SWIM:
                     if (gBattleWeather & B_WEATHER_RAIN)
                         score += 3; // Slow 'em down
                     break;
@@ -4500,6 +4502,12 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         break;
     case EFFECT_REFRESH:
         if (gBattleMons[battlerAtk].status1 & STATUS1_ANY)
+            score += 2;
+        break;
+    case EFFECT_TAKE_HEART:
+        if (gBattleMons[battlerAtk].status1 & STATUS1_ANY
+         || BattlerStatCanRise(battlerAtk, AI_DATA->abilities[battlerAtk], STAT_SPATK)
+         || BattlerStatCanRise(battlerAtk, AI_DATA->abilities[battlerAtk], STAT_SPDEF))
             score += 2;
         break;
     case EFFECT_PSYCHO_SHIFT:
@@ -4718,8 +4726,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
     case EFFECT_ION_DELUGE:
         if ((AI_DATA->abilities[battlerAtk] == ABILITY_VOLT_ABSORB
           || AI_DATA->abilities[battlerAtk] == ABILITY_MOTOR_DRIVE
-          || AI_DATA->abilities[battlerAtk] == ABILITY_LIGHTNING_ROD
-          || AI_DATA->abilities[battlerAtk] == ABILITY_PINACEAE)
+          || AI_DATA->abilities[battlerAtk] == ABILITY_LIGHTNING_ROD)
           && gBattleMoves[predictedMove].type == TYPE_NORMAL)
             score += 2;
         break;
@@ -4788,8 +4795,7 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         if (predictedMove != MOVE_NONE
          && (AI_DATA->abilities[battlerAtk] == ABILITY_VOLT_ABSORB
           || AI_DATA->abilities[battlerAtk] == ABILITY_MOTOR_DRIVE
-          || AI_DATA->abilities[battlerAtk] == ABILITY_LIGHTNING_ROD
-          || AI_DATA->abilities[battlerAtk] == ABILITY_PINACEAE))
+          || AI_DATA->abilities[battlerAtk] == ABILITY_LIGHTNING_ROD))
         {
             score += 3;
         }
@@ -4951,6 +4957,13 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
         //break;
     //case EFFECT_SKY_DROP
         //break;
+    case EFFECT_JUNGLE_HEALING:
+        if (ShouldRecover(battlerAtk, battlerDef, move, 25)
+         || ShouldRecover(BATTLE_PARTNER(battlerAtk), battlerDef, move, 25)
+         || gBattleMons[battlerAtk].status1 & STATUS1_ANY
+         || gBattleMons[BATTLE_PARTNER(battlerAtk)].status1 & STATUS1_ANY)
+            score += 3;
+        break;
     } // move effect checks
 
     return score;

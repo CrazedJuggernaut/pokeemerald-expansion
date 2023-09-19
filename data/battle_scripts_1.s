@@ -432,6 +432,37 @@ gBattleScriptsForMoveEffects::
 	.4byte BattleScript_EffectDefenseDownHit2  		  @ EFFECT_DEFENSE_DOWN_HIT_2
 	.4byte BattleScript_EffectDefenseUpUserAlly		  @ EFFECT_DEFENSE_UP_USER_ALLY
 	.4byte BattleScript_EffectHit                     @ EFFECT_SPACIAL_REND
+	.4byte BattleScript_EffectTripleArrows            @ EFFECT_TRIPLE_ARROWS
+	.4byte BattleScript_EffectInfernalParade          @ EFFECT_INFERNAL_PARADE
+	.4byte BattleScript_EffectTakeHeart               @ EFFECT_TAKE_HEART
+	.4byte BattleScript_EffectAxeKick                 @ EFFECT_AXE_KICK
+	.4byte BattleScript_EffectBounce                  @ EFFECT_BOUNCE
+
+BattleScript_EffectBounce::
+	setmoveeffect MOVE_EFFECT_PARALYSIS
+	goto BattleScript_EffectRecoilIfMiss
+
+BattleScript_EffectAxeKick::
+	setmoveeffect MOVE_EFFECT_CONFUSION
+	goto BattleScript_EffectRecoilIfMiss
+
+BattleScript_EffectTakeHeart::
+	attackcanceler
+	attackstring
+	ppreduce
+	cureifburnedparalysedorpoisoned BattleScript_CalmMindTryToRaiseStats
+	attackanimation
+	waitanimation
+	updatestatusicon BS_ATTACKER
+	printstring STRINGID_PKMNSTATUSNORMAL
+	waitmessage B_WAIT_TIME_LONG
+	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_SPATK, MAX_STAT_STAGE, BattleScript_CalmMindStatRaise
+	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_CalmMindStatRaise
+	goto BattleScript_CantRaiseMultipleStats
+
+BattleScript_EffectTripleArrows::
+	setmoveeffect MOVE_EFFECT_TRIPLE_ARROWS
+	goto BattleScript_EffectHit
 
 BattleScript_EffectRevivalBlessing::
 	attackcanceler
@@ -1492,6 +1523,11 @@ BattleScript_DoubleShockRemoveType::
 	losetype BS_ATTACKER, TYPE_ELECTRIC
 	printstring STRINGID_ATTACKERLOSTELECTRICTYPE
 	waitmessage B_WAIT_TIME_LONG
+	return
+
+BattleScript_DefDown::
+	modifybattlerstatstage BS_TARGET, STAT_DEF, DECREASE, 1, BattleScript_DefDown_Ret, ANIM_ON
+BattleScript_DefDown_Ret:
 	return
 
 BattleScript_EffectPurify:
@@ -3499,6 +3535,7 @@ BattleScript_AbsorbHealBlock::
 	tryfaintmon BS_TARGET
 	goto BattleScript_MoveEnd
 
+BattleScript_EffectInfernalParade::
 BattleScript_EffectBurnHit::
 	setmoveeffect MOVE_EFFECT_BURN
 	goto BattleScript_EffectHit
@@ -4327,7 +4364,6 @@ BattleScript_EffectParalyze:
 	attackstring
 	ppreduce
 	jumpifability BS_TARGET, ABILITY_LIMBER, BattleScript_LimberProtected
-	jumpifability BS_TARGET, ABILITY_NIMBLE, BattleScript_LimberProtected
 	jumpifability BS_TARGET, ABILITY_COMATOSE, BattleScript_AbilityProtectsDoesntAffect
 	jumpifability BS_TARGET, ABILITY_PURIFYING_SALT, BattleScript_AbilityProtectsDoesntAffect
 	jumpifflowerveil BattleScript_FlowerVeilProtects
@@ -6348,11 +6384,13 @@ BattleScript_EffectCalmMind::
 	attackcanceler
 	attackstring
 	ppreduce
+BattleScript_CalmMindTryToRaiseStats::
 	jumpifstat BS_ATTACKER, CMP_LESS_THAN, STAT_SPATK, MAX_STAT_STAGE, BattleScript_CalmMindDoMoveAnim
 	jumpifstat BS_ATTACKER, CMP_EQUAL, STAT_SPDEF, MAX_STAT_STAGE, BattleScript_CantRaiseMultipleStats
 BattleScript_CalmMindDoMoveAnim::
 	attackanimation
 	waitanimation
+BattleScript_CalmMindStatRaise::
 	setbyte sSTAT_ANIM_PLAYED, FALSE
 	playstatchangeanimation BS_ATTACKER, BIT_SPATK | BIT_SPDEF, 0
 	setstatchanger STAT_SPATK, 1, FALSE
@@ -10575,6 +10613,13 @@ BattleScript_SpaceDistortionActivated::
 	copybyte gBattlerAbility, gBattlerAttacker
 	call BattleScript_AbilityPopUp
 	printstring STRINGID_SPACEDISTORTIONACTIVATED
+	waitmessage B_WAIT_TIME_LONG
+	end3
+
+BattleScript_LorentzActivated::
+	copybyte gBattlerAbility, gBattlerAttacker
+	call BattleScript_AbilityPopUp
+	printstring STRINGID_PKMNLEVITATEDONELECTROMAGNETISM
 	waitmessage B_WAIT_TIME_LONG
 	end3
 

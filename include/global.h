@@ -1006,6 +1006,10 @@ struct SaveBlock1
     /*0x650*/ struct ItemSlot bagPocket_PokeBalls[BAG_POKEBALLS_COUNT];
     /*0x690*/ struct ItemSlot bagPocket_TMHM[BAG_TMHM_COUNT];
     /*0x790*/ struct ItemSlot bagPocket_Berries[BAG_BERRIES_COUNT];
+              struct ItemSlot bagPocket_Medicine[BAG_MEDICINE_COUNT];
+              struct ItemSlot bagPocket_BattleItems[BAG_BATTLEITEMS_COUNT];
+              struct ItemSlot bagPocket_Treasures[BAG_TREASURES_COUNT];
+              struct ItemSlot bagPocket_Megastones[BAG_MEGASTONES_COUNT];
     /*0x848*/ struct Pokeblock pokeblocks[POKEBLOCKS_COUNT];
     /*0x988*/ u8 filler1[0x34]; // Previously Dex Flags, feel free to remove.
     /*0x9BC*/ u16 berryBlenderRecords[3];
@@ -1072,7 +1076,6 @@ struct SaveBlock1
     /*0x3???*/ u8 registeredTexts[UNION_ROOM_KB_ROW_COUNT][21];
     /*0x3???*/ struct TrainerHillSave trainerHill;
     /*0x3???*/ struct WaldaPhrase waldaPhrase;
-    /*0x3???*/ struct ItemSlot bagPocket_Megastones[BAG_MEGASTONES_COUNT];
     // sizeof: 0x3???
 };
 

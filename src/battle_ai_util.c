@@ -291,11 +291,8 @@ static const s8 sAiAbilityRatings[ABILITIES_COUNT] =
     [ABILITY_CIRCULATE] = 7,
     [ABILITY_SAGE] = 5,
     [ABILITY_GALLANT] = 4,
-    [ABILITY_PINACEAE] = 7,
     [ABILITY_NINJITSU] = 5,
     [ABILITY_CONTAMINATE] = 8,
-    [ABILITY_NIMBLE] = 9,
-    [ABILITY_AGGRO_SWIM] = 8,
     [ABILITY_STRIKER] = 5,
     [ABILITY_KAKTOS] = 6,
     [ABILITY_APPARITION] = 7,
@@ -433,7 +430,6 @@ static const u16 sInstructBannedMoves[] =
     MOVE_MIMIC,
     MOVE_KINGS_SHIELD,
     MOVE_STRUGGLE,
-    MOVE_BOUNCE,
     MOVE_DIG,
     MOVE_DIVE,
     MOVE_FLY,
@@ -1615,10 +1611,6 @@ bool32 ShouldTryOHKO(u8 battlerAtk, u8 battlerDef, u16 atkAbility, u16 defAbilit
     else    // test the odds
     {
         u16 odds = accuracy + (gBattleMons[battlerAtk].level - gBattleMons[battlerDef].level);
-    #if B_SHEER_COLD_ACC >= GEN_7
-        if (gCurrentMove == MOVE_SHEER_COLD && !IS_BATTLER_OF_TYPE(gBattlerAttacker, TYPE_ICE))
-            odds -= 10;
-    #endif
         if (Random() % 100 + 1 < odds && gBattleMons[battlerAtk].level >= gBattleMons[battlerDef].level)
             return TRUE;
     }
@@ -2146,6 +2138,7 @@ bool32 IsHealingMoveEffect(u16 effect)
     case EFFECT_HEALING_WISH:
     case EFFECT_HEAL_PULSE:
     case EFFECT_REST:
+    case EFFECT_JUNGLE_HEALING:
         return TRUE;
     default:
         return FALSE;
@@ -2962,7 +2955,6 @@ static bool32 AI_CanBeParalyzed(u8 battler, u16 ability)
 {
     if (ability == ABILITY_LIMBER
       || ability == ABILITY_COMATOSE
-      || ability == ABILITY_NIMBLE
       || IS_BATTLER_OF_TYPE(battler, TYPE_ELECTRIC)
       || gBattleMons[battler].status1 & STATUS1_ANY
       || IsAbilityStatusProtected(battler))

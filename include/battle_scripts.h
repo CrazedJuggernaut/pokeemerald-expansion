@@ -479,6 +479,8 @@ extern const u8 BattleScript_SpaceDistortionActivated[];
 extern const u8 BattleScript_AngerPointsLightBoostActivates[];
 extern const u8 BattleScript_LunarGuardianActivates[];
 extern const u8 BattleScript_TimeManipulatorActivates[];
+extern const u8 BattleScript_DefDown[];
+extern const u8 BattleScript_LorentzActivated[];
 
 // zmoves
 extern const u8 BattleScript_ZMoveActivateDamaging[];

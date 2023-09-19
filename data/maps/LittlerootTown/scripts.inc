@@ -393,8 +393,10 @@ LittlerootTown_EventScript_GoSaveBirchTrigger::
 	end
 
 LittlerootTown_EventScript_TownSign::
-	msgbox LittlerootTown_Text_TownSign, MSGBOX_SIGN
-	end
+    giveitem ITEM_POTION, 2
+    giveitem ITEM_ORAN_BERRY, 3
+    giveitem ITEM_POKE_BALL, 1
+    end
 
 LittlerootTown_EventScript_BirchsLabSign::
 	msgbox LittlerootTown_Text_ProfBirchsLab, MSGBOX_SIGN

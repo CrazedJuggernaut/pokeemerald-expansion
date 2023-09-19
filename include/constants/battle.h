@@ -384,8 +384,9 @@
 #define MOVE_EFFECT_DIRE_CLAW           75
 #define MOVE_EFFECT_STEALTH_ROCK        76
 #define MOVE_EFFECT_SPIKES              77
+#define MOVE_EFFECT_TRIPLE_ARROWS       78
 
-#define NUM_MOVE_EFFECTS                78
+#define NUM_MOVE_EFFECTS                79
 
 #define MOVE_EFFECT_AFFECTS_USER        0x4000
 #define MOVE_EFFECT_CERTAIN             0x8000
@@ -468,6 +469,9 @@
 #define B_WIN_VS_OUTCOME_DRAW    21
 #define B_WIN_VS_OUTCOME_LEFT    22
 #define B_WIN_VS_OUTCOME_RIGHT   23
+#define B_WIN_TYPE_SUPER_EFF     24
+#define B_WIN_TYPE_NOT_VERY_EFF  25
+#define B_WIN_TYPE_NO_EFF        26
 
 // The following are duplicate id values for windows that Battle Arena uses differently.
 #define ARENA_WIN_PLAYER_NAME      15

@@ -28,7 +28,6 @@
 #include "overworld.h"
 #include "palette.h"
 #include "party_menu.h"
-#include "pokemon_storage_system.h"
 #include "pokedex.h"
 #include "pokenav.h"
 #include "safari_zone.h"
@@ -48,6 +47,7 @@
 #include "constants/battle_frontier.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
+#include "rtc.h"
 
 // Menu actions
 enum
@@ -65,7 +65,6 @@ enum
     MENU_ACTION_REST_FRONTIER,
     MENU_ACTION_RETIRE_FRONTIER,
     MENU_ACTION_PYRAMID_BAG,
-    MENU_ACTION_ACCESS_PC,
     MENU_ACTION_DEBUG,
 };
 
@@ -93,6 +92,7 @@ EWRAM_DATA static u8 (*sSaveDialogCallback)(void) = NULL;
 EWRAM_DATA static u8 sSaveDialogTimer = 0;
 EWRAM_DATA static bool8 sSavingComplete = FALSE;
 EWRAM_DATA static u8 sSaveInfoWindowId = 0;
+EWRAM_DATA static u8 sCurrentTimeWindowId = 0;
 
 // Menu action callbacks
 static bool8 StartMenuPokedexCallback(void);
@@ -107,7 +107,6 @@ static bool8 StartMenuSafariZoneRetireCallback(void);
 static bool8 StartMenuLinkModePlayerNameCallback(void);
 static bool8 StartMenuBattlePyramidRetireCallback(void);
 static bool8 StartMenuBattlePyramidBagCallback(void);
-static bool8 StartMenuStorageCallback(void);
 static bool8 StartMenuDebugCallback(void);
 
 // Menu callbacks
@@ -160,6 +159,7 @@ static const u8 *const sPyramidFloorNames[FRONTIER_STAGES_PER_CHALLENGE + 1] =
 static const struct WindowTemplate sPyramidFloorWindowTemplate_2 = {0, 1, 1, 0xA, 4, 0xF, 8};
 static const struct WindowTemplate sPyramidFloorWindowTemplate_1 = {0, 1, 1, 0xC, 4, 0xF, 8};
 
+
 static const u8 gText_MenuDebug[] = _("DEBUG");
 
 static const struct MenuAction sStartMenuItems[] =
@@ -177,7 +177,6 @@ static const struct MenuAction sStartMenuItems[] =
     [MENU_ACTION_REST_FRONTIER]   = {gText_MenuRest,    {.u8_void = StartMenuSaveCallback}},
     [MENU_ACTION_RETIRE_FRONTIER] = {gText_MenuRetire,  {.u8_void = StartMenuBattlePyramidRetireCallback}},
     [MENU_ACTION_PYRAMID_BAG]     = {gText_MenuBag,     {.u8_void = StartMenuBattlePyramidBagCallback}},
-    [MENU_ACTION_ACCESS_PC]       = {gText_AccessPC,    {.u8_void = StartMenuStorageCallback}},
     [MENU_ACTION_DEBUG]           = {gText_MenuDebug,   {.u8_void = StartMenuDebugCallback}},
 };
 
@@ -199,8 +198,8 @@ static const struct WindowTemplate sWindowTemplates_LinkBattleSave[] =
     {
         .bg = 0,
         .tilemapLeft = 2,
-        .tilemapTop = 15,
         .width = 26,
+        .tilemapTop = 15,
         .height = 4,
         .paletteNum = 15,
         .baseBlock = 0x194
@@ -217,6 +216,8 @@ static const struct WindowTemplate sSaveInfoWindowTemplate = {
     .paletteNum = 15,
     .baseBlock = 8
 };
+
+static const struct WindowTemplate sCurrentTimeWindowTemplate = {0, 1, 17, 4, 2, 0xF, 48};
 
 // Local functions
 static void BuildStartMenuActions(void);
@@ -252,6 +253,8 @@ static void ShowSaveInfoWindow(void);
 static void RemoveSaveInfoWindow(void);
 static void HideStartMenuWindow(void);
 static void HideStartMenuDebug(void);
+static void ShowCurrentTimeWindow(void);
+static void UpdateClockDisplay(void);
 
 void SetDexPokemonPokenavFlags(void) // unused
 {
@@ -324,7 +327,6 @@ static void BuildNormalStartMenu(void)
     AddStartMenuAction(MENU_ACTION_PLAYER);
     AddStartMenuAction(MENU_ACTION_SAVE);
     AddStartMenuAction(MENU_ACTION_OPTION);
-    AddStartMenuAction(MENU_ACTION_ACCESS_PC);
     AddStartMenuAction(MENU_ACTION_EXIT);
 }
 
@@ -451,6 +453,13 @@ static void RemoveExtraStartMenuWindows(void)
         ClearStdWindowAndFrameToTransparent(sBattlePyramidFloorWindowId, FALSE);
         RemoveWindow(sBattlePyramidFloorWindowId);
     }
+	if (FlagGet(FLAG_SYS_CLOCK_SET))
+	{
+		ClearStdWindowAndFrameToTransparent(sCurrentTimeWindowId, FALSE);
+        CopyWindowToVram(sCurrentTimeWindowId, 2);
+        RemoveWindow(sCurrentTimeWindowId);
+		FlagClear(FLAG_TEMP_5);
+	}
 }
 
 static bool32 PrintStartMenuActions(s8 *pIndex, u32 count)
@@ -508,6 +517,8 @@ static bool32 InitStartMenuStep(void)
             ShowSafariBallsWindow();
         if (InBattlePyramid())
             ShowPyramidFloorWindow();
+		if (FlagGet(FLAG_SYS_CLOCK_SET))
+			ShowCurrentTimeWindow();
         sInitStartMenuData[0]++;
         break;
     case 4:
@@ -599,6 +610,7 @@ void ShowStartMenu(void)
 
 static bool8 HandleStartMenuInput(void)
 {
+	UpdateClockDisplay();
     if (JOY_NEW(DPAD_UP))
     {
         PlaySE(SE_SELECT);
@@ -610,7 +622,6 @@ static bool8 HandleStartMenuInput(void)
         PlaySE(SE_SELECT);
         sStartMenuCursorPos = Menu_MoveCursor(1);
     }
-
     if (JOY_NEW(A_BUTTON))
     {
         PlaySE(SE_SELECT);
@@ -626,7 +637,6 @@ static bool8 HandleStartMenuInput(void)
             && gMenuCallback != StartMenuExitCallback
             && gMenuCallback != StartMenuDebugCallback
             && gMenuCallback != StartMenuSafariZoneRetireCallback
-            && gMenuCallback != StartMenuStorageCallback
             && gMenuCallback != StartMenuBattlePyramidRetireCallback)
         {
            FadeScreen(FADE_TO_BLACK, 0);
@@ -833,17 +843,6 @@ static bool8 StartMenuBattlePyramidBagCallback(void)
     }
 
     return FALSE;
-}
-
-static bool8 StartMenuStorageCallback(void)
-{
-    RemoveExtraStartMenuWindows();
-    HideStartMenu();
-
-	PlaySE(SE_PC_ON);
-    ScriptContext_SetupScript(EventScript_PC_FromStartMenu); // Display save menu
-
-    return TRUE;
 }
 
 static bool8 SaveStartCallback(void)
@@ -1055,7 +1054,7 @@ static u8 SaveConfirmInputCallback(void)
                 return SAVE_IN_PROGRESS;
             }
 
-            sSaveDialogCallback = SaveSavingMessageCallback;
+        ShowSaveMessage(gText_AlreadySavedFile, SaveConfirmOverwriteCallback);
             return SAVE_IN_PROGRESS;
         default:
             sSaveDialogCallback = SaveFileExistsCallback;
@@ -1080,7 +1079,7 @@ static u8 SaveFileExistsCallback(void)
     }
     else
     {
-        ShowSaveMessage(gText_AlreadySavedFile, SaveConfirmOverwriteCallback);
+        sSaveDialogCallback = SaveSavingMessageCallback;
     }
 
     return SAVE_IN_PROGRESS;
@@ -1476,4 +1475,34 @@ void AppendToList(u8 *list, u8 *pos, u8 newEntry)
 {
     list[*pos] = newEntry;
     (*pos)++;
+}
+
+
+static void ShowCurrentTimeWindow(void)
+{
+	RtcCalcLocalTime();
+	sCurrentTimeWindowId = AddWindow(&sCurrentTimeWindowTemplate);
+	PutWindowTilemap(sCurrentTimeWindowId);
+	DrawStdWindowFrame(sCurrentTimeWindowId, FALSE);
+	FlagSet(FLAG_TEMP_5);
+	ConvertIntToDecimalStringN(gStringVar1, gLocalTime.hours, STR_CONV_MODE_LEADING_ZEROS, 2);
+	ConvertIntToDecimalStringN(gStringVar2, gLocalTime.minutes, STR_CONV_MODE_LEADING_ZEROS, 2);
+	StringExpandPlaceholders(gStringVar4, gText_CurrentTime);
+	AddTextPrinterParameterized(sCurrentTimeWindowId, 1, gStringVar4, 0, 1, 0xFF, NULL);
+	CopyWindowToVram(sCurrentTimeWindowId, 2);
+}
+
+void UpdateClockDisplay(void)
+{
+	if (!FlagGet(FLAG_TEMP_5))
+		return;
+	RtcCalcLocalTime();
+	ConvertIntToDecimalStringN(gStringVar1, gLocalTime.hours, STR_CONV_MODE_LEADING_ZEROS, 2);
+	ConvertIntToDecimalStringN(gStringVar2, gLocalTime.minutes, STR_CONV_MODE_LEADING_ZEROS, 2);
+	if (gLocalTime.seconds % 2)
+		StringExpandPlaceholders(gStringVar4, gText_CurrentTime);
+	else
+		StringExpandPlaceholders(gStringVar4, gText_CurrentTimeOff);
+	AddTextPrinterParameterized(sCurrentTimeWindowId, 1, gStringVar4, 0, 1, 0xFF, NULL);
+	CopyWindowToVram(sCurrentTimeWindowId, 2);
 }

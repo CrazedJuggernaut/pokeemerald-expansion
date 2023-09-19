@@ -4669,8 +4669,6 @@ u32 GetBattlerTotalSpeedStat(u8 battlerId)
     {
         if (ability == ABILITY_SWIFT_SWIM       && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & B_WEATHER_RAIN)
             speed *= 2;
-        else if (ability == ABILITY_AGGRO_SWIM       && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & B_WEATHER_RAIN)
-            speed *= 2;
         else if (ability == ABILITY_CHLOROPHYLL && holdEffect != HOLD_EFFECT_UTILITY_UMBRELLA && gBattleWeather & B_WEATHER_SUN)
             speed *= 2;
         else if (ability == ABILITY_SAND_RUSH   && gBattleWeather & B_WEATHER_SANDSTORM)
@@ -4791,6 +4789,7 @@ s8 GetMovePriority(u32 battlerId, u16 move)
         case EFFECT_SOFTBOILED:
         case EFFECT_ABSORB:
         case EFFECT_ROOST:
+        case EFFECT_JUNGLE_HEALING:
             priority += 3;
             break;
         }

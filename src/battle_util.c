@@ -349,7 +349,6 @@ void HandleAction_UseMove(void)
            && gSideTimers[side].followmeTimer == 0
            && (gBattleMoves[gCurrentMove].power != 0 || (moveTarget != MOVE_TARGET_USER && moveTarget != MOVE_TARGET_ALL_BATTLERS))
            && ((GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_LIGHTNING_ROD && moveType == TYPE_ELECTRIC)
-            || (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_PINACEAE && moveType == TYPE_ELECTRIC)
             || (GetBattlerAbility(*(gBattleStruct->moveTarget + gBattlerAttacker)) != ABILITY_STORM_DRAIN && moveType == TYPE_WATER)))
     {
         side = GetBattlerSide(gBattlerAttacker);
@@ -358,7 +357,6 @@ void HandleAction_UseMove(void)
             if (side != GetBattlerSide(gActiveBattler)
                 && *(gBattleStruct->moveTarget + gBattlerAttacker) != gActiveBattler
                 && ((GetBattlerAbility(gActiveBattler) == ABILITY_LIGHTNING_ROD && moveType == TYPE_ELECTRIC)
-                 || (GetBattlerAbility(gActiveBattler) == ABILITY_PINACEAE && moveType == TYPE_ELECTRIC)
                  || (GetBattlerAbility(gActiveBattler) == ABILITY_STORM_DRAIN && moveType == TYPE_WATER))
                 && GetBattlerTurnOrderNum(gActiveBattler) < var
                 && gBattleMoves[gCurrentMove].effect != EFFECT_SNIPE_SHOT
@@ -423,8 +421,7 @@ void HandleAction_UseMove(void)
             battlerAbility = GetBattlerAbility(gActiveBattler);
 
             RecordAbilityBattle(gActiveBattler, gBattleMons[gActiveBattler].ability);
-            if (battlerAbility == ABILITY_LIGHTNING_ROD 
-            || (battlerAbility == ABILITY_PINACEAE && gCurrentMove != MOVE_TEATIME))
+            if (battlerAbility == ABILITY_LIGHTNING_ROD && gCurrentMove != MOVE_TEATIME)
                 gSpecialStatuses[gActiveBattler].lightningRodRedirected = TRUE;
             else if (battlerAbility == ABILITY_STORM_DRAIN)
                 gSpecialStatuses[gActiveBattler].stormDrainRedirected = TRUE;
@@ -1009,8 +1006,6 @@ static const u8 sAbilitiesAffectedByMoldBreaker[] =
     [ABILITY_UNBREAKABLE] = 1,
     [ABILITY_BIRD_EATER] = 1,
     [ABILITY_GALLANT] = 1,
-    [ABILITY_PINACEAE] = 1,
-    [ABILITY_NIMBLE] = 1,
     [ABILITY_KAKTOS] = 1,
     [ABILITY_ROCK_BODY] = 1,
     [ABILITY_ALLOY_BODY] = 1,
@@ -4462,6 +4457,18 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
 				effect++;
 			}
 			break;
+        case ABILITY_LORENTZ:
+            if (!gSpecialStatuses[battler].switchInAbilityDone &&
+			    !(gStatuses3[battler] & STATUS3_MAGNET_RISE))
+            {
+                gSpecialStatuses[battler].switchInAbilityDone = TRUE;
+				gBattleScripting.abilityPopupOverwrite = gLastUsedAbility = ABILITY_LORENTZ;
+				gStatuses3[battler] |= STATUS3_MAGNET_RISE;
+                gDisableStructs[battler].magnetRiseTimer = 3;
+				BattleScriptPushCursorAndCallback(BattleScript_LorentzActivated);
+				effect++;
+			}
+			break;
         case ABILITY_UNNERVE:
             if (!gSpecialStatuses[battler].switchInAbilityDone)
             {
@@ -4999,7 +5006,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
                 break;
             case ABILITY_SPEED_BOOST:
-            case ABILITY_NIMBLE:
                 if (CompareStat(battler, STAT_SPEED, MAX_STAT_STAGE, CMP_LESS_THAN) && gDisableStructs[battler].isFirstTurn != 2)
                 {
                     SET_STATCHANGER(STAT_SPEED, 1, FALSE);
@@ -5211,19 +5217,51 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 break;
             case ABILITY_LIGHTNING_ROD:
                 if (moveType == TYPE_ELECTRIC)
-                    effect = 2, statId = STAT_SPATK;
-                break;
-            case ABILITY_PINACEAE:
-                if (moveType == TYPE_ELECTRIC)
-                    effect = 2, statId = STAT_ATK;
+                {
+					u16 userAttack;					
+					u16 userSpAttack;
+                    effect = 2;
+					
+                    userAttack   = gBattleMons[battler].attack * gStatStageRatios[gBattleMons[battler].statStages[STAT_ATK]][0] / gStatStageRatios[gBattleMons[battler].statStages[STAT_ATK]][1];
+                    userSpAttack = gBattleMons[battler].spAttack * gStatStageRatios[gBattleMons[battler].statStages[STAT_SPATK]][0] / gStatStageRatios[gBattleMons[battler].statStages[STAT_SPATK]][1];
+
+                    if (userSpAttack < userAttack)
+                        statId = STAT_ATK;
+                    else
+                        statId = STAT_SPATK;
+                }
                 break;
             case ABILITY_STORM_DRAIN:
                 if (moveType == TYPE_WATER)
-                    effect = 2, statId = STAT_SPATK;
+                {
+					u16 userAttack;					
+					u16 userSpAttack;
+                    effect = 2;
+					
+                    userAttack   = gBattleMons[battler].attack * gStatStageRatios[gBattleMons[battler].statStages[STAT_ATK]][0] / gStatStageRatios[gBattleMons[battler].statStages[STAT_ATK]][1];
+                    userSpAttack = gBattleMons[battler].spAttack * gStatStageRatios[gBattleMons[battler].statStages[STAT_SPATK]][0] / gStatStageRatios[gBattleMons[battler].statStages[STAT_SPATK]][1];
+
+                    if (userSpAttack < userAttack)
+                        statId = STAT_ATK;
+                    else
+                        statId = STAT_SPATK;
+				}
                 break;
             case ABILITY_SAP_SIPPER:
                 if (moveType == TYPE_GRASS)
-                    effect = 2, statId = STAT_ATK;
+                {
+					u16 userAttack;					
+					u16 userSpAttack;
+                    effect = 2;
+					
+                    userAttack   = gBattleMons[battler].attack * gStatStageRatios[gBattleMons[battler].statStages[STAT_ATK]][0] / gStatStageRatios[gBattleMons[battler].statStages[STAT_ATK]][1];
+                    userSpAttack = gBattleMons[battler].spAttack * gStatStageRatios[gBattleMons[battler].statStages[STAT_SPATK]][0] / gStatStageRatios[gBattleMons[battler].statStages[STAT_SPATK]][1];
+
+                    if (userSpAttack < userAttack)
+                        statId = STAT_ATK;
+                    else
+                        statId = STAT_SPATK;
+				}
                 break;
             case ABILITY_CIRCULATE:
                 if (gBattleMoves[gCurrentMove].flags & FLAG_WIND_MOVE && !(GetBattlerMoveTargetType(gBattlerAttacker, gCurrentMove) & MOVE_TARGET_USER))
@@ -5984,7 +6022,24 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
              && TARGET_TURN_DAMAGED // Need to actually hit the target
              && (Random() % 3) == 0)
             {
-                gBattleScripting.moveEffect = MOVE_EFFECT_POISON;
+                gBattleScripting.moveEffect = MOVE_EFFECT_TOXIC;
+                PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
+                BattleScriptPushCursor();
+                gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
+                gHitMarker |= HITMARKER_IGNORE_SAFEGUARD;
+                effect++;
+            }
+            break;
+        case ABILITY_SOLENOGLYPHOUS:
+            if (!(gMoveResultFlags & MOVE_RESULT_NO_EFFECT)
+             && gBattleMons[gBattlerTarget].hp != 0
+             && !gProtectStructs[gBattlerAttacker].confusionSelfDmg
+             && CanBePoisoned(gBattlerAttacker, gBattlerTarget)
+             && (gBattleMoves[move].flags & FLAG_STRONG_JAW_BOOST)//Biting Moves
+             && TARGET_TURN_DAMAGED // Need to actually hit the target
+             && (Random() % 2) == 0)
+            {
+                gBattleScripting.moveEffect = MOVE_EFFECT_TOXIC;
                 PREPARE_ABILITY_BUFFER(gBattleTextBuff1, gLastUsedAbility);
                 BattleScriptPushCursor();
                 gBattlescriptCurrInstr = BattleScript_AbilityStatusEffect;
@@ -6085,7 +6140,6 @@ u8 AbilityBattleEffects(u8 caseID, u8 battler, u16 ability, u8 special, u16 move
                 }
                 break;
             case ABILITY_LIMBER:
-            case ABILITY_NIMBLE:
                 if (gBattleMons[battler].status1 & STATUS1_PARALYSIS)
                 {
                     StringCopy(gBattleTextBuff1, gStatusConditionString_ParalysisJpn);
@@ -6653,7 +6707,6 @@ bool32 CanBeParalyzed(u8 battlerId)
         gSideStatuses[GetBattlerSide(battlerId)] & SIDE_STATUS_SAFEGUARD
         || ability == ABILITY_LIMBER
         || ability == ABILITY_COMATOSE
-        || ability == ABILITY_NIMBLE
         || gBattleMons[battlerId].status1 & STATUS1_ANY
         || IsAbilityStatusProtected(battlerId)
         || IsBattlerTerrainAffected(battlerId, STATUS_FIELD_MISTY_TERRAIN))
@@ -8228,14 +8281,6 @@ u32 GetMoveTarget(u16 move, u8 setTarget)
                 RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
                 gSpecialStatuses[targetBattler].lightningRodRedirected = TRUE;
             }
-            else if (gBattleMoves[move].type == TYPE_ELECTRIC
-                && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_PINACEAE)
-                && GetBattlerAbility(targetBattler) != ABILITY_PINACEAE)
-            {
-                targetBattler ^= BIT_FLANK;
-                RecordAbilityBattle(targetBattler, gBattleMons[targetBattler].ability);
-                gSpecialStatuses[targetBattler].lightningRodRedirected = TRUE;
-            }
             else if (gBattleMoves[move].type == TYPE_WATER
                 && IsAbilityOnOpposingSide(gBattlerAttacker, ABILITY_STORM_DRAIN)
                 && GetBattlerAbility(targetBattler) != ABILITY_STORM_DRAIN)
@@ -9231,7 +9276,6 @@ static u32 CalcMoveBasePowerAfterModifiers(u16 move, u8 battlerAtk, u8 battlerDe
         break;
     case ABILITY_SHARPNESS:
     case ABILITY_GALLANT:
-    case ABILITY_PINACEAE:
         if (gBattleMoves[move].flags & FLAG_SLICING_MOVE)
            MulModifier(&modifier, UQ_4_12(1.5));
         break;
@@ -9595,10 +9639,6 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
         if (gBattleMoves[move].effect == EFFECT_ABSORB)
             MulModifier(&modifier, UQ_4_12(1.3));
         break;
-    case ABILITY_BRAWLER:
-    case ABILITY_POISON_TOUCH:
-        if (IsMoveMakingContact(move, gBattlerAttacker))
-            MulModifier(&modifier, UQ_4_12(1.2));
     case ABILITY_MAGICIAN:
         if (IS_MOVE_SPECIAL(move))
             MulModifier(&modifier, UQ_4_12(1.2));
@@ -9744,7 +9784,9 @@ static u32 CalcAttackStat(u16 move, u8 battlerAtk, u8 battlerDef, u8 moveType, b
     case HOLD_EFFECT_LIGHT_BALL:
         if (atkBaseSpeciesId == SPECIES_PIKACHU)
             MulModifier(&modifier, UQ_4_12(2.0));
-        if (atkBaseSpeciesId == SPECIES_RAICHU, SPECIES_RAICHU_ALOLAN)
+        if (atkBaseSpeciesId == SPECIES_RAICHU)
+            MulModifier(&modifier, UQ_4_12(1.5));
+        if (atkBaseSpeciesId == SPECIES_RAICHU_ALOLAN)
             MulModifier(&modifier, UQ_4_12(1.5));
         break;
     case HOLD_EFFECT_CHOICE_BAND:
@@ -9985,12 +10027,6 @@ static u32 CalcFinalDmg(u32 dmg, u16 move, u8 battlerAtk, u8 battlerDef, u8 move
     {
         if (abilityAtk == ABILITY_ADAPTABILITY)
             MulModifier(&finalModifier, UQ_4_12(2.0));
-        else
-            MulModifier(&finalModifier, UQ_4_12(1.5));
-    }
-    {
-        if (abilityAtk == ABILITY_AGGRO_SWIM)
-            MulModifier(&finalModifier, UQ_4_12(1.75));
         else
             MulModifier(&finalModifier, UQ_4_12(1.5));
     }
@@ -10350,12 +10386,6 @@ static u16 CalcTypeEffectivenessMultiplierInternal(u16 move, u8 moveType, u8 bat
             RecordAbilityBattle(battlerDef, ABILITY_KNOWLEDGE);
         }
     }
-#if B_SHEER_COLD_IMMUNITY >= GEN_7
-    else if (move == MOVE_SHEER_COLD && IS_BATTLER_OF_TYPE(battlerDef, TYPE_ICE))
-    {
-        modifier = UQ_4_12(0.0);
-    }
-#endif
 
     // Thousand Arrows ignores type modifiers for flying mons
     if (!IsBattlerGrounded(battlerDef) && (gBattleMoves[move].flags & FLAG_DMG_UNGROUNDED_IGNORE_TYPE_IF_FLYING)
@@ -11492,4 +11522,17 @@ bool8 AreBattlersOfOppositeGender(u8 battler1, u8 battler2)
     u8 gender2 = GetBattlerGender(battler2);
 
     return (gender1 != MON_GENDERLESS && gender2 != MON_GENDERLESS && gender1 != gender2);
+}
+
+u32 CalcSecondaryEffectChance(u8 battlerId, u8 secondaryEffectChance)
+{
+    u32 moveType, move;
+    
+    if (GetBattlerAbility(battlerId) == ABILITY_SERENE_GRACE)
+        secondaryEffectChance *= 2;
+    
+    if (GetBattlerAbility(gBattlerAttacker) == ABILITY_FROZEN_HUSK && moveType == TYPE_ICE)
+        secondaryEffectChance * 2;
+
+    return secondaryEffectChance;
 }
