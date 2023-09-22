@@ -291,6 +291,9 @@ extern const u8 gText_SavingPlayer[];
 extern const u8 gText_SavingBadges[];
 extern const u8 gText_SavingPokedex[];
 extern const u8 gText_SavingTime[];
+extern const u8 gText_SavingEasyMode[];
+extern const u8 gText_SavingNormalMode[];
+extern const u8 gText_SavingChampionMode[];
 
 // Battle pyramid menu texts
 extern const u8 gText_BattlePyramidConfirmRest[];
@@ -311,11 +314,6 @@ extern const u8 gText_FrameType[];
 extern const u8 gText_ButtonTypeNormal[];
 extern const u8 gText_ButtonTypeLR[];
 extern const u8 gText_ButtonTypeLEqualsA[];
-extern const u8 gText_FollowerOff[];
-extern const u8 gText_FollowerOn[];
-extern const u8 gText_DifficultyEasy[];
-extern const u8 gText_DifficultyNormal[];
-extern const u8 gText_DifficultyHard[];
 extern const u8 gText_TypeEffectOff[];
 extern const u8 gText_TypeEffectOn[];
 extern const u8 gText_BattleBagOff[];
@@ -332,8 +330,7 @@ extern const u8 gText_Sound[];
 extern const u8 gText_Frame[];
 extern const u8 gText_OptionMenuCancel[];
 extern const u8 gText_ButtonMode[];
-extern const u8 gText_Follower[];
-extern const u8 gText_Difficulty[];
+extern const u8 gText_AutoRun[];
 extern const u8 gText_TypeEffect[];
 
 extern const u8 gText_MaleSymbol[];
@@ -356,6 +353,13 @@ extern const u8 gText_MainMenuMysteryGift[];
 extern const u8 gText_WirelessNotConnected[];
 extern const u8 gText_MysteryGiftCantUse[];
 extern const u8 gText_MysteryEventsCantUse[];
+extern const u8 gText_Welcome[];
+
+extern const u8 gText_WhichDifficulty[];
+extern const u8 gText_EasyMode[];
+extern const u8 gText_NormalMode[];
+extern const u8 gText_ChampionMode[];
+
 extern const u8 gText_Birch_Welcome[];
 extern const u8 gText_ThisIsAPokemon[];
 extern const u8 gText_Birch_MainSpeech[];

@@ -25,7 +25,7 @@
 #define tSound data[4]
 #define tButtonMode data[5]
 #define tWindowFrameType data[6]
-#define tFollower data[7]
+#define tAutoRun data[7]
 #define tDifficulty data[8]
 #define tBattleBag data[9]
 #define tTypeEffect data[10]
@@ -45,7 +45,7 @@ enum
 // Menu items Pg2
 enum
 {
-    MENUITEM_FOLLOWER,
+    MENUITEM_AUTORUN,
     MENUITEM_DIFFICULTY,
     MENUITEM_BATTLEBAG,
     MENUITEM_TYPEEFFECT,
@@ -68,7 +68,7 @@ enum
 #define YPOS_FRAMETYPE    (MENUITEM_FRAMETYPE * 16)
 
 //Pg2
-#define YPOS_FOLLOWER      (MENUITEM_FOLLOWER * 16)
+#define YPOS_AUTORUN       (MENUITEM_AUTORUN * 16)
 #define YPOS_DIFFICULTY    (MENUITEM_DIFFICULTY * 16)
 #define YPOS_BATTLEBAG     (MENUITEM_BATTLEBAG * 16)
 #define YPOS_TYPEEFFECT    (MENUITEM_TYPEEFFECT * 16)
@@ -88,8 +88,8 @@ static u8 BattleScene_ProcessInput(u8 selection);
 static void BattleScene_DrawChoices(u8 selection);
 static u8 BattleStyle_ProcessInput(u8 selection);
 static void BattleStyle_DrawChoices(u8 selection);
-static u8 Follower_ProcessInput(u8 selection);
-static void Follower_DrawChoices(u8 selection);
+static u8   AutoRun_ProcessInput(u8 selection);
+static void AutoRun_DrawChoices(u8 selection);
 static u8 Difficulty_ProcessInput(u8 selection);
 static void Difficulty_DrawChoices(u8 selection);
 static u8 BattleBag_ProcessInput(u8 selection);
@@ -126,7 +126,7 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
 
 static const u8 *const sOptionMenuItemsNames_Pg2[MENUITEM_COUNT_PG2] =
 {
-    [MENUITEM_FOLLOWER]        = gText_Follower,
+    [MENUITEM_AUTORUN]        = gText_AutoRun,
     [MENUITEM_DIFFICULTY]      = gText_Difficulty,
     [MENUITEM_TYPEEFFECT]      = gText_TypeEffect,
     [MENUITEM_BATTLEBAG]       = gText_BattleBag,
@@ -225,8 +225,8 @@ static void DrawOptionsPg1(u8 taskId)
 static void DrawOptionsPg2(u8 taskId)
 {
     ReadAllCurrentSettings(taskId);
-    Follower_DrawChoices(gTasks[taskId].tFollower);
-    Difficulty_DrawChoices(gTasks[taskId].tFollower);
+    AutoRun_DrawChoices(gTasks[taskId].tAutoRun);
+    Difficulty_DrawChoices(gTasks[taskId].tDifficulty);
     TypeEffect_DrawChoices(gTasks[taskId].tTypeEffect);
     BattleBag_DrawChoices(gTasks[taskId].tBattleBag);
     HighlightOptionMenuItem(gTasks[taskId].tMenuSelection);
@@ -515,12 +515,12 @@ static void Task_OptionMenuProcessInput_Pg2(u8 taskId)
 
         switch (gTasks[taskId].tMenuSelection)
         {
-        case MENUITEM_FOLLOWER:
-            previousOption = gTasks[taskId].tFollower;
-            gTasks[taskId].tFollower = Follower_ProcessInput(gTasks[taskId].tFollower);
+        case MENUITEM_AUTORUN:
+            previousOption = gTasks[taskId].tAutoRun;
+            gTasks[taskId].tAutoRun = AutoRun_ProcessInput(gTasks[taskId].tAutoRun);
 
-            if (previousOption != gTasks[taskId].tFollower)
-                Follower_DrawChoices(gTasks[taskId].tFollower);
+            if (previousOption != gTasks[taskId].tAutoRun)
+                AutoRun_DrawChoices(gTasks[taskId].tAutoRun);
             break;
         case MENUITEM_DIFFICULTY:
             previousOption = gTasks[taskId].tDifficulty;
@@ -563,7 +563,7 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2Ptr->optionsSound = gTasks[taskId].tSound;
     gSaveBlock2Ptr->optionsButtonMode = gTasks[taskId].tButtonMode;
     gSaveBlock2Ptr->optionsWindowFrameType = gTasks[taskId].tWindowFrameType;
-    gTasks[taskId].tFollower == 0 ? FlagClear(FLAG_POKEMON_FOLLOWERS) : FlagSet(FLAG_POKEMON_FOLLOWERS);
+    gSaveBlock2Ptr->autoRun = gTasks[taskId].tAutoRun;
     VarSet(VAR_DIFFICULTY, gTasks[taskId].tDifficulty);
     gTasks[taskId].tTypeEffect == 0 ? FlagClear(FLAG_TYPE_EFFECTIVENESS_BATTLE_SHOW) : FlagSet(FLAG_TYPE_EFFECTIVENESS_BATTLE_SHOW);
     gTasks[taskId].tBattleBag == 0 ? FlagClear(B_FLAG_NO_BAG_USE) : FlagSet(B_FLAG_NO_BAG_USE);
@@ -675,8 +675,9 @@ static void BattleScene_DrawChoices(u8 selection)
     DrawOptionMenuChoice(gText_BattleSceneOff, GetStringRightAlignXOffset(FONT_NORMAL, gText_BattleSceneOff, 198), YPOS_BATTLESCENE, styles[1]);
 }
 
-static u8 Follower_ProcessInput(u8 selection)
+static u8 AutoRun_ProcessInput(u8 selection)
 {
+    // Shift mode disabled on Challenge and above
     if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
     {
         selection ^= 1;
@@ -686,14 +687,16 @@ static u8 Follower_ProcessInput(u8 selection)
     return selection;
 }
 
-static void Follower_DrawChoices(u8 selection)
+static void AutoRun_DrawChoices(u8 selection)
 {
     u8 styles[2];
+
     styles[0] = 0;
     styles[1] = 0;
     styles[selection] = 1;
-    DrawOptionMenuChoice(gText_FollowerOff, 104, YPOS_FOLLOWER, styles[0]);
-    DrawOptionMenuChoice(gText_FollowerOn, GetStringRightAlignXOffset(FONT_NORMAL, gText_FollowerOn, 198), YPOS_FOLLOWER, styles[1]);
+
+    DrawOptionMenuChoice(gText_BattleSceneOff, 104, YPOS_BATTLESTYLE, styles[0]);
+    DrawOptionMenuChoice(gText_BattleSceneOn, GetStringRightAlignXOffset(1, gText_BattleSceneOn, 198), YPOS_BATTLESTYLE, styles[1]);
 }
 
 static u8 Difficulty_ProcessInput(u8 selection)

@@ -1283,6 +1283,9 @@ s32 AI_GetAbility(u32 battlerId)
 {
     u32 knownAbility = GetBattlerAbility(battlerId);
 
+    if(gSaveBlock2Ptr->optionsDifficulty != DIFFICULTY_EASY) //AI knows your ability if difficulty is not easy
+    return knownAbility;
+    
     // We've had ability overwritten by e.g. Worry Seed. It is not part of AI_PARTY in case of switching
     if (gBattleStruct->overwrittenAbilities[battlerId])
         return gBattleStruct->overwrittenAbilities[battlerId];

@@ -152,7 +152,7 @@
 #define OPTIONS_BATTLE_STYLE_SET 1
 
 #define DIFFICULTY_NORMAL    0
-#define DIFFICULTY_HARD      1
+#define DIFFICULTY_CHAMPION  1
 #define DIFFICULTY_EASY      2
 
 #define DIR_NONE        0
