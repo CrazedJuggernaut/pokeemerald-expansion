@@ -1059,9 +1059,7 @@ Common_EventScript_LegendaryFlewAway::
 	.include "data/text/frontier_brain.inc"
 	.include "data/text/save.inc"
 	.include "data/text/birch_speech.inc"
-
 	.include "data/maps/DewfordMeadow/scripts.inc"
-
 	.include "data/maps/DewfordManor_1F/scripts.inc"
-
 	.include "data/maps/VerdanturfMeadow/scripts.inc"
+    .include "data/scripts/dexnav.inc"
