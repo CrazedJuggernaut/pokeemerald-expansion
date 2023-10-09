@@ -4452,6 +4452,45 @@ const struct Item gItems[] =
         .flingPower = 80,
     },
 
+    [ITEM_SNORLAXITE] =
+    {
+        .name = _("Snorlaxite"),
+        .itemId = ITEM_SNORLAXITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sSnorlaxiteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .flingPower = 80,
+    },
+
+    [ITEM_TYPHLOSIONITE] =
+    {
+        .name = _("Typhlosionite"),
+        .itemId = ITEM_TYPHLOSIONITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sTyphlosioniteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .flingPower = 80,
+    },
+
+    [ITEM_FERALIGATRITE] =
+    {
+        .name = _("Feraligatrite"),
+        .itemId = ITEM_FERALIGATRITE,
+        .price = 0,
+        .holdEffect = HOLD_EFFECT_MEGA_STONE,
+        .description = sFeraligatriteDesc,
+        .pocket = POCKET_MEGA_STONES,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .flingPower = 80,
+    },
+
     [ITEM_LOPUNNITE] =
     {
         .name = _("Lopunnite"),

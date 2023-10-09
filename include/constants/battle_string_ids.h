@@ -675,8 +675,19 @@
 #define STRINGID_LUNARGUARDIANPROTECTED               673
 #define STRING_ID_PKMNWOKEUPLUNARGUARDIAN             674
 #define STRINGID_PKMNCUTSSPEEDWITH                    675
+#define STRINGID_THUNDERCLAPCHARGING                  676
+#define STRINGID_ULTRABURSTREACTING                   677
+#define STRINGID_ULTRABURSTCOMPLETED                  678
+#define STRINGID_TEAMGAINEDEXP                        679
+#define STRINGID_CURRENTMOVECANTSELECT                680
+#define STRINGID_TARGETISBEINGSALTCURED               681
+#define STRINGID_TARGETISHURTBYSALTCURE               682
+#define STRINGID_PKMNITEMMELTED                       683
+#define STRINGID_MAGNETSTORMTRAPPED                   684
+#define STRINGID_GRANDSTARFALLLEAP                    685
+#define STRINGID_PKMNSINGS                            686
 
-#define BATTLESTRINGS_COUNT                           676
+#define BATTLESTRINGS_COUNT                           687
 
 // This is the string id that gBattleStringsTable starts with.
 // String ids before this (e.g. STRINGID_INTROMSG) are not in the table,
@@ -733,6 +744,8 @@
 #define B_MSG_TURN1_FREEZE_SHOCK   9
 #define B_MSG_TURN1_SKY_DROP       10
 #define B_MSG_TURN1_METEOR_BEAM    11
+#define B_MSG_TURN1_THUNDERCLAP    12
+#define B_MSG_TURN1_GRAND_STARFALL 13
 
 // gMoveWeatherChangeStringIds
 #define B_MSG_STARTED_RAIN      0
@@ -969,7 +982,8 @@
 #define B_MSG_WRAPPED_INFESTATION  7
 #define B_MSG_WRAPPED_SNAP_TRAP    8
 #define B_MSG_WRAPPED_THUNDER_CAGE 9
-#define NUM_TRAPPING_MOVES         10
+#define B_MSG_WRAPPED_MAGNET_STORM 10
+#define NUM_TRAPPING_MOVES         11
 
 // z effects
 #define B_MSG_Z_RESET_STATS   0

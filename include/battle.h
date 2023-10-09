@@ -148,6 +148,7 @@ struct ProtectStruct
     u16 shellTrap:1;
     u16 silkTrapped:1;
     u16 eatMirrorHerb:1;
+    u16 requiemCharge:1;
     u32 physicalDmg;
     u32 specialDmg;
     u8 physicalBattlerId;
@@ -300,7 +301,7 @@ struct AI_ThinkingStruct
     u8 movesetIndex;
     u16 moveConsidered;
     s8 score[MAX_MON_MOVES];
-    u32 funcResult;
+    u32 funcResult;     
     u32 aiFlags;
     u8 aiAction;
     u8 aiLogicId;

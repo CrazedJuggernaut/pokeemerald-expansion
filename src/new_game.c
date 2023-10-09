@@ -95,9 +95,9 @@ static void SetDefaultOptions(void)
     gSaveBlock2Ptr->optionsTextSpeed = OPTIONS_TEXT_SPEED_MID;
     gSaveBlock2Ptr->optionsWindowFrameType = 0;
     gSaveBlock2Ptr->optionsSound = OPTIONS_SOUND_MONO;
-    gSaveBlock2Ptr->optionsBattleStyle = OPTIONS_BATTLE_STYLE_SHIFT;
+    gSaveBlock2Ptr->optionsBattleStyle = OPTIONS_BATTLE_STYLE_SET;
     gSaveBlock2Ptr->optionsBattleSceneOff = FALSE;
-    gSaveBlock2Ptr->autoRun = TRUE;
+    gSaveBlock2Ptr->AutoRun = TRUE;
     FlagSet(FLAG_TYPE_EFFECTIVENESS_BATTLE_SHOW);
     FlagClear(B_FLAG_NO_BAG_USE);
     gSaveBlock2Ptr->regionMapZoom = FALSE;

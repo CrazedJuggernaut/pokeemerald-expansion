@@ -799,6 +799,13 @@ static const u8 sText_ItemCuredSpeciesStatus[] = _("{B_BUFF1} had\nits status he
 static const u8 sText_ItemRestoredSpeciesPP[] = _("{B_BUFF1} had its\nPP restored!");
 static const u8 sText_AtkTrappedDef[] = _("{B_ATK_NAME_WITH_PREFIX} trapped\nthe {B_DEF_NAME_WITH_PREFIX}!");
 static const u8 sText_MirrorHerbCopied[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} used its {B_LAST_ITEM}\nto mirror its opponent's stat changes!");
+static const u8 sText_PkmnItemMelted[] = _("{B_ATK_NAME_WITH_PREFIX} corroded\n{B_DEF_NAME_WITH_PREFIX}'s {B_LAST_ITEM}!");
+static const u8 sText_UltraBurstReacting[] = _("Bright light is about to\nburst out of {B_ATK_NAME_WITH_PREFIX}!");
+static const u8 sText_UltraBurstCompleted[] = _("{B_ATK_NAME_WITH_PREFIX} regained its\ntrue power through Ultra Burst!");
+static const u8 sText_TeamGainedEXP[] = _("The rest of your team gained EXP.\nPoints thanks to the {B_LAST_ITEM}!\p");
+static const u8 sText_CurrentMoveCantSelect[] = _("{B_BUFF1} cannot be used!\p");
+static const u8 sText_TargetIsBeingSaltCured[] = _("{B_DEF_NAME_WITH_PREFIX} is being salt cured!");
+static const u8 sText_TargetIsHurtBySaltCure[] = _("{B_DEF_NAME_WITH_PREFIX} is hurt by {B_BUFF1}!");
 static const u8 sText_EarlyBirdEnters[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} gets the worm!");
 static const u8 sText_EarlyBirdEnds[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX} got the worm!");
 static const u8 sText_AttackerRegainedHealth[] = _("{B_ATK_NAME_WITH_PREFIX} regained\nhealth!");
@@ -809,9 +816,17 @@ static const u8 sText_LunarGuardianEnters[] = _("{B_DEF_NAME_WITH_PREFIX} was cu
 static const u8 sText_LunarGuardianProtected[] = _("{B_DEF_NAME_WITH_PREFIX} is protected\nby the moon!");
 static const u8 sText_PkmnWokeUpLunarGuardian[] = _("{B_ATK_NAME_WITH_PREFIX} woke up due\nto the moon's grace!");
 static const u8 sText_PkmnCutsSpeedWith[] = _("{B_SCR_ACTIVE_NAME_WITH_PREFIX}'s {B_SCR_ACTIVE_ABILITY}\ncuts {B_DEF_NAME_WITH_PREFIX}'s speed!");
+static const u8 sText_ThunderclapCharging[] = _("{B_ATK_NAME_WITH_PREFIX} plants\nits feet!");
+static const u8 sText_GrandStarfallLeap[] = _("{B_ATK_NAME_WITH_PREFIX} leaped\n into the sky!");
+static const u8 sText_PkmnSings[] = _("{B_ATK_NAME_WITH_PREFIX} sings a\nhaunting melody!");
 
 const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
 {
+    [STRINGID_MAGNETSTORMTRAPPED - BATTLESTRINGS_TABLE_START] = sText_AtkTrappedDef,
+    [STRINGID_TARGETISHURTBYSALTCURE - BATTLESTRINGS_TABLE_START] = sText_TargetIsHurtBySaltCure,
+    [STRINGID_TARGETISBEINGSALTCURED - BATTLESTRINGS_TABLE_START] = sText_TargetIsBeingSaltCured,
+    [STRINGID_CURRENTMOVECANTSELECT - BATTLESTRINGS_TABLE_START] = sText_CurrentMoveCantSelect,
+    [STRINGID_PKMNITEMMELTED - BATTLESTRINGS_TABLE_START] = sText_PkmnItemMelted,
     [STRINGID_MIRRORHERBCOPIED - BATTLESTRINGS_TABLE_START] = sText_MirrorHerbCopied,
     [STRINGID_THUNDERCAGETRAPPED - BATTLESTRINGS_TABLE_START] = sText_AtkTrappedDef,
     [STRINGID_ITEMRESTOREDSPECIESHEALTH - BATTLESTRINGS_TABLE_START] = sText_ItemRestoredSpeciesHealth,
@@ -1474,6 +1489,9 @@ const u8 *const gBattleStringsTable[BATTLESTRINGS_COUNT] =
     [STRINGID_LUNARGUARDIANPROTECTED - BATTLESTRINGS_TABLE_START] = sText_LunarGuardianProtected,
     [STRINGID_PKMNCUTSSPEEDWITH - BATTLESTRINGS_TABLE_START] = sText_PkmnCutsSpeedWith,
     [STRING_ID_PKMNWOKEUPLUNARGUARDIAN - BATTLESTRINGS_TABLE_START] sText_PkmnWokeUpLunarGuardian,
+    [STRINGID_THUNDERCLAPCHARGING - BATTLESTRINGS_TABLE_START] = sText_ThunderclapCharging,
+    [STRINGID_GRANDSTARFALLLEAP - BATTLESTRINGS_TABLE_START] = sText_GrandStarfallLeap,
+    [STRINGID_PKMNSINGS - BATTLESTRINGS_TABLE_START] = sText_PkmnSings,
 };
 
 const u16 gTrainerUsedItemStringIds[] =
@@ -1704,18 +1722,20 @@ const u16 gStatDownStringIds[] =
 // Index read from sTWOTURN_STRINGID
 const u16 gFirstTurnOfTwoStringIds[] =
 {
-    [B_MSG_TURN1_SOLAR_BEAM]    = STRINGID_PKMNTOOKSUNLIGHT,
-    [B_MSG_TURN1_SKULL_BASH]    = STRINGID_PKMNLOWEREDHEAD,
-    [B_MSG_TURN1_SKY_ATTACK]    = STRINGID_PKMNISGLOWING,
-    [B_MSG_TURN1_FLY]           = STRINGID_PKMNFLEWHIGH,
-    [B_MSG_TURN1_DIG]           = STRINGID_PKMNDUGHOLE,
-    [B_MSG_TURN1_DIVE]          = STRINGID_PKMNHIDUNDERWATER,
-    [B_MSG_TURN1_BOUNCE]        = STRINGID_PKMNSPRANGUP,
-    [B_MSG_TURN1_PHANTOM_FORCE] = STRINGID_VANISHEDINSTANTLY,
-    [B_MSG_TURN1_GEOMANCY]      = STRINGID_PKNMABSORBINGPOWER,
-    [B_MSG_TURN1_FREEZE_SHOCK]  = STRINGID_CLOAKEDINAFREEZINGLIGHT,
-    [B_MSG_TURN1_SKY_DROP]      = STRINGID_PKMNTOOKTARGETHIGH,
-    [B_MSG_TURN1_METEOR_BEAM]   = STRINGID_METEORBEAMCHARGING,
+    [B_MSG_TURN1_SOLAR_BEAM]     = STRINGID_PKMNTOOKSUNLIGHT,
+    [B_MSG_TURN1_SKULL_BASH]     = STRINGID_PKMNLOWEREDHEAD,
+    [B_MSG_TURN1_SKY_ATTACK]     = STRINGID_PKMNISGLOWING,
+    [B_MSG_TURN1_FLY]            = STRINGID_PKMNFLEWHIGH,
+    [B_MSG_TURN1_DIG]            = STRINGID_PKMNDUGHOLE,
+    [B_MSG_TURN1_DIVE]           = STRINGID_PKMNHIDUNDERWATER,
+    [B_MSG_TURN1_BOUNCE]         = STRINGID_PKMNSPRANGUP,
+    [B_MSG_TURN1_PHANTOM_FORCE]  = STRINGID_VANISHEDINSTANTLY,
+    [B_MSG_TURN1_GEOMANCY]       = STRINGID_PKNMABSORBINGPOWER,
+    [B_MSG_TURN1_FREEZE_SHOCK]   = STRINGID_CLOAKEDINAFREEZINGLIGHT,
+    [B_MSG_TURN1_SKY_DROP]       = STRINGID_PKMNTOOKTARGETHIGH,
+    [B_MSG_TURN1_METEOR_BEAM]    = STRINGID_METEORBEAMCHARGING,
+    [B_MSG_TURN1_THUNDERCLAP]    = STRINGID_THUNDERCLAPCHARGING,
+    [B_MSG_TURN1_GRAND_STARFALL] = STRINGID_GRANDSTARFALLLEAP,
 };
 
 // Index copied from move's index in sTrappingMoves
@@ -1731,6 +1751,7 @@ const u16 gWrappedStringIds[NUM_TRAPPING_MOVES] =
     [B_MSG_WRAPPED_INFESTATION] = STRINGID_INFESTATION,            // MOVE_INFESTATION
     [B_MSG_WRAPPED_SNAP_TRAP]   = STRINGID_PKMNINSNAPTRAP,         // MOVE_SNAP_TRAP
     [B_MSG_WRAPPED_THUNDER_CAGE]= STRINGID_THUNDERCAGETRAPPED,     // MOVE_THUNDER_CAGE
+    [B_MSG_WRAPPED_MAGNET_STORM]= STRINGID_MAGNETSTORMTRAPPED,     // MOVE_MAGNET_STORM
 };
 
 const u16 gMistUsedStringIds[] =

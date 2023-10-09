@@ -307,7 +307,7 @@ static const s8 sAiAbilityRatings[ABILITIES_COUNT] =
     [ABILITY_FRIGID_BODY] = 4,
     [ABILITY_ROCK_BODY] = 8,
     [ABILITY_ALLOY_BODY] = 6,
-    [ABILITY_INNER_FIRE] = 6,
+    [ABILITY_INNER_FLAME] = 6,
     [ABILITY_INNER_SPARK] = 6,
     [ABILITY_INNER_WATER] = 6,
     [ABILITY_KNOWLEDGE] = 7,
@@ -444,17 +444,13 @@ static const u16 sInstructBannedMoves[] =
     MOVE_SKY_DROP,
     MOVE_SOLAR_BEAM,
     MOVE_SOLAR_BLADE,
+    MOVE_GRAND_STARFALL,
+    MOVE_REQUIEM,
 };
 
 static const u16 sRechargeMoves[] =
 {
-    MOVE_HYPER_BEAM,
-    MOVE_BLAST_BURN,
-    MOVE_HYDRO_CANNON,
-    MOVE_FRENZY_PLANT,
-    MOVE_GIGA_IMPACT,
     MOVE_ROCK_WRECKER,
-    MOVE_ROAR_OF_TIME,
     MOVE_PRISMATIC_LASER,
     MOVE_METEOR_ASSAULT,
     MOVE_ETERNABEAM,
@@ -1282,9 +1278,6 @@ bool32 AI_IsAbilityOnSide(u32 battlerId, u32 ability)
 s32 AI_GetAbility(u32 battlerId)
 {
     u32 knownAbility = GetBattlerAbility(battlerId);
-
-    if(gSaveBlock2Ptr->optionsDifficulty != DIFFICULTY_EASY) //AI knows your ability if difficulty is not easy
-    return knownAbility;
     
     // We've had ability overwritten by e.g. Worry Seed. It is not part of AI_PARTY in case of switching
     if (gBattleStruct->overwrittenAbilities[battlerId])
@@ -1552,9 +1545,6 @@ bool32 IsMoveEncouragedToHit(u8 battlerAtk, u8 battlerDef, u16 move)
         return TRUE;
 
     if (AI_DATA->abilities[battlerDef] == ABILITY_NO_GUARD || AI_DATA->abilities[battlerAtk] == ABILITY_NO_GUARD)
-        return TRUE;
-
-    if (AI_DATA->abilities[battlerDef] == ABILITY_SPACE_DISTORTION || AI_DATA->abilities[battlerAtk] == ABILITY_SPACE_DISTORTION)
         return TRUE;
 
 #if B_TOXIC_NEVER_MISS >= GEN_6
@@ -3076,9 +3066,15 @@ bool32 AI_CanBeInfatuated(u8 battlerAtk, u8 battlerDef, u16 defAbility)
 
 u32 ShouldTryToFlinch(u8 battlerAtk, u8 battlerDef, u16 atkAbility, u16 defAbility, u16 move)
 {
-    if (defAbility == ABILITY_INNER_FOCUS || defAbility == ABILITY_INNER_FIRE || defAbility == ABILITY_INNER_SPARK || defAbility == ABILITY_INNER_WATER
+    if (((AI_DATA->abilities[battlerAtk] != ABILITY_MOLD_BREAKER 
+    &&  (defAbility == ABILITY_SHIELD_DUST 
+      || defAbility == ABILITY_INNER_FOCUS 
+      || defAbility == ABILITY_INNER_FLAME 
+      || defAbility == ABILITY_INNER_SPARK 
+      || defAbility == ABILITY_INNER_WATER))
+      || AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_COVERT_CLOAK
       || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
-      || AI_WhoStrikesFirst(battlerAtk, battlerDef, move) == AI_IS_SLOWER) // Opponent goes first
+      || AI_WhoStrikesFirst(battlerAtk, battlerDef, move) == AI_IS_SLOWER)) // Opponent goes first
     {
         return 0;   // don't try to flinch
     }
@@ -3112,15 +3108,19 @@ bool32 ShouldTrap(u8 battlerAtk, u8 battlerDef, u16 move)
 
 bool32 ShouldFakeOut(u8 battlerAtk, u8 battlerDef, u16 move)
 {
-    if (AI_DATA->holdEffects[battlerAtk] == HOLD_EFFECT_CHOICE_BAND && CountUsablePartyMons(battlerAtk) == 0)
-        return FALSE;   // don't lock attacker into fake out if can't switch out
-
-    if (gDisableStructs[battlerAtk].isFirstTurn
-      && ShouldTryToFlinch(battlerAtk, battlerDef, AI_DATA->abilities[battlerAtk], AI_DATA->abilities[battlerDef], move)
-      && !DoesSubstituteBlockMove(battlerAtk, battlerDef, move))
-        return TRUE;
-
-    return FALSE;
+    if (!gDisableStructs[battlerAtk].isFirstTurn
+    || AI_DATA->abilities[battlerAtk] == ABILITY_GORILLA_TACTICS
+    || AI_DATA->holdEffects[battlerAtk] == HOLD_EFFECT_CHOICE_BAND
+    || AI_GetHoldEffect(battlerDef) == HOLD_EFFECT_COVERT_CLOAK
+    || AI_DATA->holdEffects[battlerDef] == HOLD_EFFECT_COVERT_CLOAK
+    || DoesSubstituteBlockMove(battlerAtk, battlerDef, move)
+    || (AI_DATA->abilities[battlerAtk] != ABILITY_MOLD_BREAKER
+    && (AI_DATA->abilities[battlerDef] == ABILITY_SHIELD_DUST 
+    || AI_DATA->abilities[battlerDef] == ABILITY_INNER_FOCUS
+    || AI_DATA->abilities[battlerDef] == ABILITY_INNER_WATER
+    || AI_DATA->abilities[battlerDef] == ABILITY_INNER_FLAME
+    || AI_DATA->abilities[battlerDef] == ABILITY_INNER_SPARK)))
+        return FALSE;
 }
 
 static u32 FindMoveUsedXTurnsAgo(u32 battlerId, u32 x)

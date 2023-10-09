@@ -964,6 +964,9 @@ const u8 gSpeciesNames[][POKEMON_NAME_LENGTH + 1] = {
     [SPECIES_LAPRAS_MEGA] = _("Lapras"),
     [SPECIES_FLYGON_MEGA] = _("Flygon"),
     [SPECIES_KINGDRA_MEGA] = _("Kingdra"),
+    [SPECIES_SNORLAX_MEGA] = _("Snorlax"),
+    [SPECIES_TYPHLOSION_MEGA] = _("Typhlosion"),
+    [SPECIES_FERALIGATR_MEGA] = _("Feraligatr"),
 #if P_GEN_4_POKEMON == TRUE
     [SPECIES_LOPUNNY_MEGA] = _("Lopunny"),
     [SPECIES_GARCHOMP_MEGA] = _("Garchomp"),

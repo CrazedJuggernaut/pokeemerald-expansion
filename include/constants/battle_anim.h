@@ -505,6 +505,7 @@
 #define BG_AURA_SPHERE 77
 #define BG_STEEL_BEAM_OPPONENT 78
 #define BG_STEEL_BEAM_PLAYER 79
+#define BG_CHLOROBLAST 80
 
 // table ids for general animations (gBattleAnims_General)
 #define B_ANIM_CASTFORM_CHANGE          0
@@ -545,6 +546,9 @@
 #define B_ANIM_ZMOVE_ACTIVATE           35 // Using Z Moves
 #define B_ANIM_AFFECTION_HANGED_ON      36
 #define B_ANIM_SNOW_CONTINUES           37
+#define B_ANIM_ULTRA_BURST              37
+#define B_ANIM_SALT_CURE_DAMAGE         38
+#define B_ANIM_REQUIEM_SETUP            39
 
 // special animations table (gBattleAnims_Special)
 #define B_ANIM_LVL_UP                   0
@@ -585,6 +589,7 @@
 #define TRAP_ANIM_INFESTATION 6
 #define TRAP_ANIM_SNAP_TRAP 7
 #define TRAP_ANIM_THUNDER_CAGE 8
+#define TRAP_ANIM_MAGNET_STORM 9
 
 // Weather defines for battle animation scripts.
 #define ANIM_WEATHER_NONE 0

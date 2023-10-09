@@ -1371,7 +1371,7 @@
 // Basculegion
 #define SPECIES_BASCULEGION_FEMALE           FORMS_START + 329
 
-// Custom Megas
+// Elite Redux Custom Megas
 #define SPECIES_MILOTIC_MEGA                FORMS_START + 330
 #define SPECIES_BUTTERFREE_MEGA             FORMS_START + 331
 #define SPECIES_MACHAMP_MEGA                FORMS_START + 332
@@ -1380,8 +1380,13 @@
 #define SPECIES_FLYGON_MEGA                 FORMS_START + 335
 #define SPECIES_KINGDRA_MEGA                FORMS_START + 336
 
+//My Custom Megas
+#define SPECIES_SNORLAX_MEGA                FORMS_START + 337
+#define SPECIES_TYPHLOSION_MEGA             FORMS_START + 338
+#define SPECIES_FERALIGATR_MEGA             FORMS_START + 339
+
 #define FORMS_START SPECIES_ENAMORUS
-#define SPECIES_EGG SPECIES_KINGDRA_MEGA + 1
+#define SPECIES_EGG SPECIES_FERALIGATR_MEGA + 1
 
 #define NUM_SPECIES SPECIES_EGG
 

@@ -1355,6 +1355,11 @@
 	callnative BS_SetSnow
 	.endm
 
+	.macro applysaltcure battler:req
+	callnative BS_ApplySaltCure
+	.byte \battler
+	.endm
+
 	.macro setzeffect
 	callnative BS_SetZEffect
 	.endm
@@ -1541,6 +1546,10 @@
 
 	.macro tryactivatefellstinger battler:req
 	various \battler, VARIOUS_TRY_ACTIVATE_FELL_STINGER
+	.endm
+
+	.macro tryactivatewildrush battler:req
+	various \battler, VARIOUS_TRY_ACTIVATE_WILD_RUSH
 	.endm
 
 	.macro playmoveanimation battler:req, move:req
@@ -2073,6 +2082,10 @@
 	various \battler, VARIOUS_SET_BEAK_BLAST
 	.endm
 
+	.macro setrequiem battler:req
+	various \battler, VARIOUS_SET_REQUIEM
+	.endm
+
 	.macro swapsidestatuses
 	various BS_ATTACKER, VARIOUS_SWAP_SIDE_STATUSES
 	.endm
@@ -2234,6 +2247,7 @@
 
 	.macro jumpifsafeguard jumpInstr:req
 	jumpifability BS_ATTACKER, ABILITY_INFILTRATOR, 1f
+	jumpifability BS_ATTACKER, ABILITY_SPACE_DISTORTION, 1f
 	jumpifsideaffecting BS_TARGET, SIDE_STATUS_SAFEGUARD, \jumpInstr
 	1:
 	.endm
@@ -2259,6 +2273,18 @@
 	@ Accounts for if the target of Sky Drop was in confuse_lock when the attacker falls asleep due to Yawn.
 	.macro skydropyawn
 	various 0, VARIOUS_SKY_DROP_YAWN
+	.endm
+
+
+	@ Renders item of Corrosive Gas target ineffective if possible.
+	.macro trycorrodeitem battler:req, ptr:req
+	various \battler, VARIOUS_TRY_CORRODE_ITEM
+	.4byte \ptr
+	.endm
+
+	.macro jumpifcantusecorrosivegas ptr:req
+	various 0, VARIOUS_JUMP_IF_CANT_USE_CORROSIVE_GAS
+	.4byte \ptr
 	.endm
 
 	@ Tries to increase or decrease a battler's stat's stat stage by a specified amount. If impossible, jumps to \script.
@@ -2309,4 +2335,16 @@
 	.macro tryrevivalblessing, jumpInstr:req
 	various 0, VARIOUS_TRY_REVIVAL_BLESSING
 	.4byte \jumpInstr
+	.endm
+
+	@ Will jump to script pointer if the specified battler has or has not fainted.
+	.macro jumpiffainted battler:req, value:req, ptr:req
+	getbattlerfainted \battler
+	jumpifbyte CMP_EQUAL, gBattleCommunication, \value, \ptr
+	.endm
+
+	.macro jumpifcantloseitem battler:req, ptr:req
+	callnative BS_JumpIfCantLoseItem
+	.byte \battler
+	.4byte \ptr
 	.endm

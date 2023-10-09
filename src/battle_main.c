@@ -17,7 +17,6 @@
 #include "bg.h"
 #include "data.h"
 #include "decompress.h"
-#include "dexnav.h"
 #include "dma3.h"
 #include "event_data.h"
 #include "evolution_scene.h"
@@ -2000,28 +1999,16 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
             {
             case 0:
             {
-                const struct TrainerMonNoItemDefaultMoves *partyData;
-                if (gSaveBlock2Ptr->optionsBattleStyle == DIFFICULTY_HARD)
-	                    partyData = gHardTrainers[trainerNum].party.NoItemDefaultMoves;
-                else if (gSaveBlock2Ptr->optionsBattleStyle == DIFFICULTY_EASY)
-	                    partyData = gEasyTrainers[trainerNum].party.NoItemDefaultMoves;
-                else
-	                    partyData = gTrainers[trainerNum].party.NoItemDefaultMoves;
-                        fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
-                        CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
-                        break;
+                const struct TrainerMonNoItemDefaultMoves *partyData = trainer->party.NoItemDefaultMoves;
+                fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
+                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                break;
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET:
             {
-                const struct TrainerMonNoItemCustomMoves *partyData;                 
-                if (gSaveBlock2Ptr->optionsBattleStyle == DIFFICULTY_HARD)
-	                    partyData = gHardTrainers[trainerNum].party.NoItemCustomMoves;
-                else if (gSaveBlock2Ptr->optionsBattleStyle == DIFFICULTY_EASY)
-	                    partyData = gEasyTrainers[trainerNum].party.NoItemCustomMoves;
-                else
-	                    partyData = gTrainers[trainerNum].party.NoItemCustomMoves;
-                        fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
-                        CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
+                const struct TrainerMonNoItemCustomMoves *partyData = trainer->party.NoItemCustomMoves;
+                fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
+                CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
                 for (j = 0; j < MAX_MON_MOVES; j++)
                 {
@@ -2032,13 +2019,7 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
             }
             case F_TRAINER_PARTY_HELD_ITEM:
             {
-                const struct TrainerMonItemDefaultMoves *partyData;                 
-                if (gSaveBlock2Ptr->optionsBattleStyle == DIFFICULTY_HARD)
-	                    partyData = gHardTrainers[trainerNum].party.ItemDefaultMoves;
-                else if (gSaveBlock2Ptr->optionsBattleStyle == DIFFICULTY_EASY)
-	                    partyData = gEasyTrainers[trainerNum].party.ItemDefaultMoves;
-                else
-	                    partyData = gTrainers[trainerNum].party.ItemDefaultMoves;
+                const struct TrainerMonItemDefaultMoves *partyData = trainer->party.ItemDefaultMoves;
                 fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
                 CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
@@ -2047,13 +2028,7 @@ u8 CreateNPCTrainerPartyFromTrainer(struct Pokemon *party, const struct Trainer 
             }
             case F_TRAINER_PARTY_CUSTOM_MOVESET | F_TRAINER_PARTY_HELD_ITEM:
             {
-                const struct TrainerMonItemCustomMoves *partyData;                 
-                if (gSaveBlock2Ptr->optionsBattleStyle == DIFFICULTY_HARD)
-	                    partyData = gHardTrainers[trainerNum].party.ItemCustomMoves;
-                else if (gSaveBlock2Ptr->optionsBattleStyle == DIFFICULTY_EASY)
-	                    partyData = gEasyTrainers[trainerNum].party.ItemCustomMoves;
-                else
-	                    partyData = gTrainers[trainerNum].party.ItemCustomMoves;
+                const struct TrainerMonItemCustomMoves *partyData = trainer->party.ItemCustomMoves;
                 fixedIV = partyData[i].iv * MAX_PER_STAT_IVS / 255;
                 CreateMon(&party[i], partyData[i].species, partyData[i].lvl, fixedIV, TRUE, personalityValue, OT_ID_RANDOM_NO_SHINY, 0);
 
@@ -4814,7 +4789,6 @@ s8 GetMovePriority(u32 battlerId, u16 move)
         case EFFECT_SOFTBOILED:
         case EFFECT_ABSORB:
         case EFFECT_ROOST:
-        case EFFECT_JUNGLE_HEALING:
             priority += 3;
             break;
         }
@@ -5150,6 +5124,9 @@ static bool32 TryDoMoveEffectsBeforeMoves(void)
                     return TRUE;
                 case MOVE_SHELL_TRAP:
                     BattleScriptExecute(BattleScript_ShellTrapSetUp);
+                    return TRUE;
+                case MOVE_REQUIEM:
+                    BattleScriptExecute(BattleScript_RequiemSetUp);
                     return TRUE;
                 }
             }
@@ -5516,12 +5493,6 @@ static void FreeResetData_ReturnToOvOrDoEvolutions(void)
     {
         gIsFishingEncounter = FALSE;
         gIsSurfingEncounter = FALSE;
-        if (gDexnavBattle && (gBattleOutcome == B_OUTCOME_WON || gBattleOutcome == B_OUTCOME_CAUGHT))
-            IncrementDexNavChain();
-        else
-            gSaveBlock1Ptr->dexNavChain = 0;
-        
-        gDexnavBattle = FALSE;
         ResetSpriteData();
         if (!(gBattleTypeFlags & (BATTLE_TYPE_LINK
                                   | BATTLE_TYPE_RECORDED_LINK

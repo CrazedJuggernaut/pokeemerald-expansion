@@ -831,6 +831,22 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_MAGICAL_TORQUE] = _("Magical Torque"),
     [MOVE_PSYBLADE] = _("Psyblade"),
     [MOVE_HYDRO_STEAM] = _("Hydro Steam"),
+    [MOVE_THUNDERCLAP] = _("Thunderclap"),
+    [MOVE_STORMTRANCE] = _("Stormtrance"),
+    [MOVE_CONSECRATION] = _("Consecration"),
+    [MOVE_CELESTIAL_FIRE] = _("Celestial Fire"),
+    [MOVE_VORTEX] = _("Vortex"),
+    [MOVE_SNARE_BOMB] = _("Snare Bomb"),
+    [MOVE_GLACIAL_QUAKE] = _("Glacial Quake"),
+    [MOVE_COLDSNAP] = _("Coldsnap"),
+    [MOVE_SEISMIC_SHARD] = _("Seismic Shard")
+    [MOVE_MAGNET_STORM] = _("Magnet Storm"),
+    [MOVE_FRENZIED_MAUL] = _("Frenzied Maul"),
+    [MOVE_ALLURE] = _("Allure"),
+    [MOVE_GRAND_STARFALL] = _("Grand Starfall"),
+    [MOVE_MOUNTING_DREAD] = _("Mounting Dread"),
+    [MOVE_WILD_RUSH] = _("Wild Rush"),
+    [MOVE_REQUIEM] = _("Requiem"),
 };
 #else
 // 12 letters
@@ -1665,6 +1681,22 @@ const u8 gMoveNames[MOVES_COUNT][MOVE_NAME_LENGTH + 1] =
     [MOVE_MAGICAL_TORQUE] = _("MagiclTorque"),
     [MOVE_PSYBLADE] = _("Psyblade"),
     [MOVE_HYDRO_STEAM] = _("Hydro Steam"),
+    [MOVE_THUNDERCLAP] = _("Thunderclap"),
+    [MOVE_STORMTRANCE] = _("Stormtrance"),
+    [MOVE_CONSECRATION] = _("Consecration"),
+    [MOVE_CELESTIAL_FIRE] = _("Celest. Fire"),
+    [MOVE_VORTEX] = _("Vortex"),
+    [MOVE_SNARE_BOMB] = _("Snare Bomb"),
+    [MOVE_GLACIAL_QUAKE] = _("GlacialQuake"),
+    [MOVE_COLDSNAP] = _("Coldsnap"),
+    [MOVE_SEISMIC_SHARD] = _("SeismicShard"),
+    [MOVE_MAGNET_STORM] = _("Magnet Storm"),
+    [MOVE_FRENZIED_MAUL] = _("FrenziedMaul"),
+    [MOVE_ALLURE] = _("Allure"),
+    [MOVE_GRAND_STARFALL] = _("GrandStarfal"),
+    [MOVE_MOUNTING_DREAD] = _("Dread"),
+    [MOVE_WILD_RUSH] = _("Wild Rush"),
+    [MOVE_REQUIEM] = _("Requiem"),
 };
 #endif
 

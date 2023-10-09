@@ -964,6 +964,9 @@ const struct CompressedSpritePalette gMonShinyPaletteTable[] =
     SPECIES_SHINY_PAL(LAPRAS_MEGA, gMonShinyPalette_LaprasMega),
     SPECIES_SHINY_PAL(FLYGON_MEGA, gMonShinyPalette_FlygonMega),
     SPECIES_SHINY_PAL(KINGDRA_MEGA, gMonShinyPalette_KingdraMega),
+    SPECIES_SHINY_PAL(SNORLAX_MEGA, gMonShinyPalette_SnorlaxMega),
+    SPECIES_SHINY_PAL(TYPHLOSION_MEGA, gMonShinyPalette_TyphlosionMega),
+    SPECIES_SHINY_PAL(FERALIGATR_MEGA, gMonShinyPalette_FeraligatrMega),
 #if P_GEN_4_POKEMON == TRUE
     SPECIES_SHINY_PAL(LOPUNNY_MEGA, gMonShinyPalette_LopunnyMega),
     SPECIES_SHINY_PAL(GARCHOMP_MEGA, gMonShinyPalette_GarchompMega),

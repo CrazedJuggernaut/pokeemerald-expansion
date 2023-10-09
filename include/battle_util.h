@@ -15,6 +15,7 @@
 #define MOVE_LIMITATION_BELCH                   (1 << 11)
 #define MOVE_LIMITATION_THROAT_CHOP             (1 << 12)
 #define MOVE_LIMITATION_STUFF_CHEEKS            (1 << 13)
+#define MOVE_LIMITATION_GIGATON_HAMMER          (1 << 14)
 
 #define MOVE_LIMITATION_PLACEHOLDER             (1 << 15)
 #define MOVE_LIMITATIONS_ALL                    0xFFFF
@@ -217,6 +218,7 @@ bool8 IsMoveAffectedByParentalBond(u16 move, u8 battlerId);
 void CopyMonLevelAndBaseStatsToBattleMon(u32 battler, struct Pokemon *mon);
 void CopyMonAbilityAndTypesToBattleMon(u32 battler, struct Pokemon *mon);
 void RecalcBattlerStats(u32 battler, struct Pokemon *mon);
+bool32 IsAlly(u32 battlerAtk, u32 battlerDef);
 void MulModifier(u16 *modifier, u16 val);
 
 // Ability checks

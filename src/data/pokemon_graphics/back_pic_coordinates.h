@@ -986,6 +986,9 @@ const struct MonCoords gMonBackPicCoords[] =
     [SPECIES_LAPRAS_MEGA]                  = { .size = MON_COORDS_SIZE(56, 64), .y_offset =  3 },
     [SPECIES_FLYGON_MEGA]                  = { .size = MON_COORDS_SIZE(64, 64), .y_offset =  3 },
     [SPECIES_KINGDRA_MEGA]                 = { .size = MON_COORDS_SIZE(64, 56), .y_offset =  7 },
+    [SPECIES_SNORLAX_MEGA]                 = { .size = MON_COORDS_SIZE(64, 64), .y_offset =  5 },
+    [SPECIES_TYPHLOSION_MEGA]              = { .size = MON_COORDS_SIZE(64, 64), .y_offset =  3 },
+    [SPECIES_FERALIGATR_MEGA]              = { .size = MON_COORDS_SIZE(64, 64), .y_offset =  3 },
 #if P_GEN_4_POKEMON == TRUE
     [SPECIES_LOPUNNY_MEGA]                 = { .size = MON_COORDS_SIZE(64, 64), .y_offset =  3 },
     [SPECIES_GARCHOMP_MEGA]                = { .size = MON_COORDS_SIZE(64, 56), .y_offset =  4 },

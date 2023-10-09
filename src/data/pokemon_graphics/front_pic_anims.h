@@ -9795,6 +9795,24 @@ static const union AnimCmd sAnim_KingdraMega_1[] =
     ANIMCMD_END,
 };
 
+static const union AnimCmd sAnim_SnorlaxMega_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_TyphlosionMega_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
+static const union AnimCmd sAnim_FeraligatrMega_1[] =
+{
+    ANIMCMD_FRAME(0, 1),
+    ANIMCMD_END,
+};
+
 static const union AnimCmd sAnim_KyogrePrimal_1[] =
 {
     ANIMCMD_FRAME(0, 1),
@@ -11557,6 +11575,9 @@ SINGLE_ANIMATION(KinglerMega);
 SINGLE_ANIMATION(LaprasMega);
 SINGLE_ANIMATION(FlygonMega);
 SINGLE_ANIMATION(KingdraMega);
+SINGLE_ANIMATION(SnorlaxMega);
+SINGLE_ANIMATION(TyphlosionMega);
+SINGLE_ANIMATION(FeraligatrMega);
 SINGLE_ANIMATION(KyogrePrimal);
 SINGLE_ANIMATION(GroudonPrimal);
 SINGLE_ANIMATION(RayquazaMega);
@@ -12651,6 +12672,9 @@ const union AnimCmd *const *const gMonFrontAnimsPtrTable[] =
     [SPECIES_LAPRAS_MEGA] = sAnims_LaprasMega,
     [SPECIES_FLYGON_MEGA] = sAnims_FlygonMega,
     [SPECIES_KINGDRA_MEGA] = sAnims_KingdraMega,
+    [SPECIES_SNORLAX_MEGA] = sAnims_SnorlaxMega,
+    [SPECIES_TYPHLOSION_MEGA] = sAnims_TyphlosionMega,
+    [SPECIES_FERALIGATR_MEGA] = sAnims_FeraligatrMega,
 #if P_GEN_4_POKEMON == TRUE
     [SPECIES_LOPUNNY_MEGA] = sAnims_LopunnyMega,
     [SPECIES_GARCHOMP_MEGA] = sAnims_GarchompMega,

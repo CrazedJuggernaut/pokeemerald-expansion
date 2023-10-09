@@ -1025,6 +1025,7 @@
 #define ITEM_BERSERK_GENE 838
 
 #define ITEM_REPELLENT 839
+#define ITEM_POKE_VIAL 840
 
 #define ITEM_FLYGONITE 841
 #define ITEM_BUTTERFRENITE 842
@@ -1033,10 +1034,11 @@
 #define ITEM_KINGLERITE 845
 #define ITEM_KINGDRANITE 846
 #define ITEM_MILOTICITE 847
+#define ITEM_SNORLAXITE 848
+#define ITEM_TYPHLOSIONITE 849
+#define ITEM_FERALIGATRITE 850
 
-#define ITEM_POKE_VIAL 848
-
-#define ITEMS_COUNT 849
+#define ITEMS_COUNT 851
 #define ITEM_FIELD_ARROW ITEMS_COUNT
 
 // A special item id associated with "Cancel"/"Exit" etc. in a list of items or decorations

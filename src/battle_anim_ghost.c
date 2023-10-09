@@ -233,7 +233,7 @@ static const union AnimCmd sAnim_GrudgeFlame[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sAnims_GrudgeFlame[] =
+const union AnimCmd *const sAnims_GrudgeFlame[] =
 {
     sAnim_GrudgeFlame,
 };

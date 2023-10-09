@@ -768,7 +768,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                     RETURN_SCORE_MINUS(20);
                 break;
             case ABILITY_FLASH_FIRE:
-            case ABILITY_INNER_FIRE:
+            case ABILITY_INNER_FLAME:
             case ABILITY_MOLTEN_BODY:
                 if (moveType == TYPE_FIRE)
                     RETURN_SCORE_MINUS(20);
@@ -1411,7 +1411,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 score -= 10;
             break;
         case EFFECT_SUBSTITUTE:
-            if (gBattleMons[battlerAtk].status2 & STATUS2_SUBSTITUTE || AI_DATA->abilities[battlerDef] == ABILITY_INFILTRATOR)
+            if (gBattleMons[battlerAtk].status2 & STATUS2_SUBSTITUTE || AI_DATA->abilities[battlerDef] == ABILITY_INFILTRATOR || AI_DATA->abilities[battlerDef] == ABILITY_SPACE_DISTORTION)
                 score -= 8;
             else if (AI_DATA->hpPercents[battlerAtk] <= 25)
                 score -= 10;
@@ -2121,7 +2121,7 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 score -= 10; // Don't Fly/dig/etc if opponent is going to fly/dig/etc after you
 
             if (BattlerWillFaintFromWeather(battlerAtk, AI_DATA->abilities[battlerAtk])
-              && (move == MOVE_FLY || move == MOVE_BOUNCE))
+              && (move == MOVE_FLY || move == MOVE_BOUNCE || MOVE_GRAND_STARFALL))
                 score -= 10; // Attacker will faint while in the air
             break;
         case EFFECT_HEALING_WISH:   //healing wish, lunar dance
@@ -2627,6 +2627,8 @@ static s16 AI_CheckBadMove(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
             //break;
         //case EFFECT_BEAK_BLAST:
             //break;
+        //case EFFECT_REQUIEM:
+            //break;
         case EFFECT_SKY_DROP:
             if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_FLYING))
                 score -= 10;
@@ -2913,7 +2915,7 @@ static s16 AI_DoubleBattle(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                     RETURN_SCORE_MINUS(10);
                     break;
                 case ABILITY_FLASH_FIRE:
-                case ABILITY_INNER_FIRE:
+                case ABILITY_INNER_FLAME:
                 case ABILITY_MOLTEN_BODY:
                     if (moveType == TYPE_FIRE
                       && HasMoveWithType(battlerAtkPartner, TYPE_FIRE)
@@ -4116,6 +4118,17 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
                 score += 3;
         }
         break;
+    case EFFECT_WILD_RUSH:
+        if (gBattleMons[battlerAtk].statStages[STAT_SPEED] < MAX_STAT_STAGE
+          && AI_DATA->abilities[battlerAtk] != ABILITY_CONTRARY
+          && CanIndexMoveFaintTarget(battlerAtk, battlerDef, AI_THINKING_STRUCT->movesetIndex, 0))
+        {
+            if (AI_WhoStrikesFirst(battlerAtk, battlerDef, move) == AI_IS_FASTER) // Attacker goes first
+                score += 9;
+            else
+                score += 3;
+        }
+        break;
     case EFFECT_BELLY_DRUM:
         if (!CanTargetFaintAi(battlerDef, battlerAtk) && HasMoveWithSplit(battlerAtk, SPLIT_PHYSICAL) && AI_DATA->abilities[battlerAtk] != ABILITY_CONTRARY)
             score += (MAX_STAT_STAGE - gBattleMons[battlerAtk].statStages[STAT_ATK]);
@@ -4963,6 +4976,10 @@ static s16 AI_CheckViability(u8 battlerAtk, u8 battlerDef, u16 move, s16 score)
          || gBattleMons[battlerAtk].status1 & STATUS1_ANY
          || gBattleMons[BATTLE_PARTNER(battlerAtk)].status1 & STATUS1_ANY)
             score += 3;
+        break;
+    case EFFECT_SALT_CURE:
+        if (IS_BATTLER_OF_TYPE(battlerDef, TYPE_WATER) || IS_BATTLER_OF_TYPE(battlerDef, TYPE_STEEL))
+            score += 2;
         break;
     } // move effect checks
 

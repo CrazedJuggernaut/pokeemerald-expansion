@@ -394,8 +394,8 @@ LittlerootTown_EventScript_GoSaveBirchTrigger::
 
 LittlerootTown_EventScript_TownSign::
     giveitem ITEM_POTION, 2
-    giveitem ITEM_ORAN_BERRY, 3
-    giveitem ITEM_POKE_BALL, 1
+    giveitem ITEM_MASTER_BALL, 3
+    giveitem ITEM_KINGDRANITE, 1
     end
 
 LittlerootTown_EventScript_BirchsLabSign::

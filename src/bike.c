@@ -137,6 +137,7 @@ static void MovePlayerOnMachBike(u8 direction, u16 newKeys, u16 heldKeys)
     sMachBikeTransitions[GetMachBikeTransition(&direction)](direction);
 }
 
+
 // dirTraveling is a variable that is 0 when the player is standing still.
 static u8 GetMachBikeTransition(u8 *dirTraveling)
 {

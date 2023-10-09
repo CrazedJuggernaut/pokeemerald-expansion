@@ -1044,15 +1044,15 @@ extern const u8 EventScript_EnableAutoRun[];
 static bool8 EnableAutoRun(void)
 {
     PlaySE(SE_SELECT);
-    if (gSaveBlock2Ptr->autoRun)
+    if (gSaveBlock2Ptr->AutoRun)
     {
-        gSaveBlock2Ptr->autoRun = FALSE;
-        ScriptContext1_SetupScript(EventScript_DisableAutoRun);
+        gSaveBlock2Ptr->AutoRun = FALSE;
+        ScriptContext_SetupScript(EventScript_DisableAutoRun);
     }
     else
     {
-        gSaveBlock2Ptr->autoRun = TRUE;
-        ScriptContext1_SetupScript(EventScript_EnableAutoRun);
+        gSaveBlock2Ptr->AutoRun = TRUE;
+        ScriptContext_SetupScript(EventScript_EnableAutoRun);
     }
     
     return TRUE;

@@ -377,8 +377,8 @@ static const u8 sEarthquakeDescription[] = _(
     "no effect on flying foes.");
 
 static const u8 sFissureDescription[] = _(
-    "A one-hit KO move that\n"
-    "drops the foe in a fissure.");
+    "A devastating quake, but has\n"
+    "no effect on flying foes.");
 
 static const u8 sDigDescription[] = _(
     "Digs underground the first\n"
@@ -869,8 +869,8 @@ static const u8 sMeanLookDescription[] = _(
     "look that prevents escape.");
 
 static const u8 sAttractDescription[] = _(
-    "Makes the opposite gender\n"
-    "less likely to attack.");
+    "Makes the opponent less\n"
+    "likely to attack.");
 
 static const u8 sSleepTalkDescription[] = _(
     "Uses an available move\n"
@@ -3260,6 +3260,70 @@ static const u8 sHydroSteamDescription[] = _(
     "This move's power increases\n"
     "under harsh sunlight.");
 
+static const u8 sThunderclapDescription[] = _(
+    "A 2-turn move that raises\n"
+    "Attack before attacking.");
+
+static const u8 sStormtranceDescription[] = _(
+    "A rampage of 2 to 3 turns\n"
+    "that confuses the user.");
+
+static const u8 sConsecrationDescription[] = _(
+    "The user slams down creating a\n"
+    "fiery blast that damages all foes");
+
+static const u8 sCelestialFireDescription[] = _(
+    "Three consecutive blasts that\n"
+    "more powerful with each hit.");
+
+static const u8 sVortexDescription[] = _(
+    "The user creates a vortex of dark\n"
+    "energy hitting all opponents.");
+
+static const u8 sSnareBombDescription[] = _(
+    "A smoke bomb that ensnares the\n"
+    "target lowering their defense.");
+
+static const u8 sGlacialQuakeDescription[] = _(
+    "A devastating quake that\n"
+    "chills your foes.");
+
+static const u8 sColdsnapDescription[] = _(
+    "Shoots a frigid beam at the\n"
+    "foe. May inflict frostbite.");
+
+static const u8 sSeismicShardDescription[] = _(
+    "Launches a stone at the\n"
+    "foe. May lower speed.");
+
+static const u8 sMagnetStormDescription[] = _(
+    "Traps the foe in a magnetic\n"
+    "storm for "BINDING_TURNS" turns.");
+
+static const u8 sFrenziedMaulDescription[] = _(
+    "An attack that steals half\n"
+    "the damage inflicted.");
+
+static const u8 sAllureDescription[] = _(
+    "Does double damage to foes\n"
+    "of the opposite gender.");
+
+static const u8 sGrandStarfallDescription[] = _(
+    "Leaps into the sky on the first turn,\n"
+    "then crashes down the next turn.");
+
+static const u8 sMountingDreadDescription[] = _(
+   "Does double damage to foes\n"
+    "with half HP.");
+
+static const u8 sWildRushDescription[] = _(
+    "If it knocks out a foe\n"
+    "the Speed stat is raised.");
+
+static const u8 sRequiemDescription[] = _(
+    "Sings a song before attacking.\n"
+    "Paralyze a foe on contact");
+
 const u8 gNotDoneYetDescription[] = _(
     "This move can't be used. Its\n"
     "effect is in development.");
@@ -4099,4 +4163,22 @@ const u8 *const gMoveDescriptionPointers[MOVES_COUNT - 1] =
     [MOVE_MAGICAL_TORQUE - 1] = sMagicalTorqueDescription,
     [MOVE_PSYBLADE - 1] = sPsybladeDescription,
     [MOVE_HYDRO_STEAM - 1] = sHydroSteamDescription,
+
+    // Custom moves.
+    [MOVE_THUNDERCLAP - 1] = sThunderclapDescription,
+    [MOVE_STORMTRANCE - 1] = sStormtranceDescription,
+    [MOVE_CONSECRATION - 1] = sConsecrationDescription,
+    [MOVE_CELESTIAL_FIRE - 1] = sCelestialFireDescription,
+    [MOVE_VORTEX - 1] = sVortexDescription,
+    [MOVE_SNARE_BOMB - 1] = sSnareBombDescription,
+    [MOVE_GLACIAL_QUAKE - 1] = sGlacialQuakeDescription,
+    [MOVE_COLDSNAP - 1] = sColdsnapDescription,
+    [MOVE_SEISMIC_SHARD - 1] = sSeismicShardDescription,
+    [MOVE_MAGNET_STORM - 1] = sMagnetStormDescription,
+    [MOVE_FRENZIED_MAUL - 1] = sFrenziedMaulDescription,
+    [MOVE_ALLURE - 1] = sAllureDescription,
+    [MOVE_GRAND_STARFALL - 1] = sGrandStarfallDescription,
+    [MOVE_MOUNTING_DREAD - 1] = sMountingDreadDescription,
+    [MOVE_WILD_RUSH - 1] = sWildRushDescription,
+    [MOVE_REQUIEM - 1] = sRequiemDescription,
 };

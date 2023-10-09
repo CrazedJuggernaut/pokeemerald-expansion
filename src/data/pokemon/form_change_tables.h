@@ -245,6 +245,21 @@ static const struct FormChange sKingdraFormChangeTable[] = {
     {FORM_CHANGE_TERMINATOR},
 };
 
+static const struct FormChange sSnorlaxFormChangeTable[] = {
+    {FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM,    SPECIES_SNORLAX_MEGA, ITEM_SNORLAXITE},
+    {FORM_CHANGE_TERMINATOR},
+};
+
+static const struct FormChange sTyphlosionFormChangeTable[] = {
+    {FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM,    SPECIES_TYPHLOSION_MEGA, ITEM_TYPHLOSIONITE},
+    {FORM_CHANGE_TERMINATOR},
+};
+
+static const struct FormChange sFeraligatrFormChangeTable[] = {
+    {FORM_CHANGE_BATTLE_MEGA_EVOLUTION_ITEM,    SPECIES_FERALIGATR_MEGA, ITEM_FERALIGATRITE},
+    {FORM_CHANGE_TERMINATOR},
+};
+
 static const struct FormChange sKyogreFormChangeTable[] = {
     {FORM_CHANGE_BATTLE_PRIMAL_REVERSION,   SPECIES_KYOGRE_PRIMAL, ITEM_BLUE_ORB},
     {FORM_CHANGE_TERMINATOR},

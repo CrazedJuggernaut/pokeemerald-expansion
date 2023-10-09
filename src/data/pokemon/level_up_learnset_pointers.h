@@ -964,6 +964,9 @@ const struct LevelUpMove *const gLevelUpLearnsets[NUM_SPECIES] =
     [SPECIES_LAPRAS_MEGA] = sLaprasLevelUpLearnset,
     [SPECIES_FLYGON_MEGA] = sFlygonLevelUpLearnset,
     [SPECIES_KINGDRA_MEGA] = sKingdraLevelUpLearnset,
+    [SPECIES_SNORLAX_MEGA] = sSnorlaxLevelUpLearnset,
+    [SPECIES_TYPHLOSION_MEGA] = sTyphlosionLevelUpLearnset,
+    [SPECIES_FERALIGATR_MEGA] = sFeraligatrLevelUpLearnset,
 #if P_GEN_4_POKEMON == TRUE
     [SPECIES_LOPUNNY_MEGA] = sLopunnyLevelUpLearnset,
     [SPECIES_GARCHOMP_MEGA] = sGarchompLevelUpLearnset,

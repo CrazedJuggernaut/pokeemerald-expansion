@@ -281,6 +281,7 @@ static const u16 sMoltresFormSpeciesIdTable[] = {
 static const u16 sTyphlosionFormSpeciesIdTable[] = {
     SPECIES_TYPHLOSION,
     SPECIES_TYPHLOSION_HISUIAN,
+    SPECIES_TYPHLOSION_MEGA,
     FORM_SPECIES_END,
 };
 
@@ -1193,4 +1194,15 @@ static const u16 sKingdraFormSpeciesIdTable[] = {
     FORM_SPECIES_END,
 };
 
+static const u16 sSnorlaxFormSpeciesIdTable[] = {
+    SPECIES_SNORLAX,
+    SPECIES_SNORLAX_MEGA,
+    FORM_SPECIES_END,
+};
+
+static const u16 sFeraligatrFormSpeciesIdTable[] = {
+    SPECIES_FERALIGATR,
+    SPECIES_FERALIGATR_MEGA,
+    FORM_SPECIES_END,
+};
 #endif

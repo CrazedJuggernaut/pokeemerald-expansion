@@ -640,20 +640,20 @@ static void PlayerNotOnBikeMoving(u8 direction, u16 heldKeys)
             gPlayerAvatar.creeping = TRUE;
             PlayerGoSlow(direction);
         }
-        else if (heldKeys & B_BUTTON && gSaveBlock2Ptr->autoRun)
-            PlayerGoSpeed2(direction);
-        else if (heldKeys & B_BUTTON || gSaveBlock2Ptr->autoRun)
-            PlayerGoSpeed4(direction);
+        else if (heldKeys & B_BUTTON && gSaveBlock2Ptr->AutoRun)
+            PlayerWalkFast(direction);
+        else if (heldKeys & B_BUTTON || gSaveBlock2Ptr->AutoRun)
+            PlayerWalkFaster(direction);
         else
-            PlayerGoSpeed2(direction);
+            PlayerWalkFast(direction);
     }
 
-    if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_UNDERWATER) && (heldKeys & B_BUTTON) && FlagGet(FLAG_SYS_B_DASH)
+    if (!(gPlayerAvatar.flags & PLAYER_AVATAR_FLAG_UNDERWATER) && (heldKeys & B_BUTTON || gSaveBlock2Ptr->AutoRun)
      && IsRunningDisallowed(gObjectEvents[gPlayerAvatar.objectEventId].currentMetatileBehavior) == 0)
     {
-        if (heldKeys & B_BUTTON && gSaveBlock2Ptr->autoRun == TRUE)
+        if (heldKeys & B_BUTTON && gSaveBlock2Ptr->AutoRun == TRUE)
         {
-            PlayerGoSpeed1(direction);
+            PlayerWalkNormal(direction);
         }
         else
         {
@@ -669,7 +669,7 @@ static void PlayerNotOnBikeMoving(u8 direction, u16 heldKeys)
     }
     else
     {
-       PlayerGoSpeed1(direction);
+       PlayerWalkNormal(direction);
     }
 }
 

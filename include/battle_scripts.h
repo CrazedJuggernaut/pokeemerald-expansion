@@ -472,6 +472,11 @@ extern const u8 BattleScript_StealthRockActivates[];
 extern const u8 BattleScript_SpikesActivates[];
 extern const u8 BattleScript_BerserkGeneRet[];
 extern const u8 BattleScript_TargetFormChangeWithStringNoPopup[];
+extern const u8 BattleScript_DefDown[];
+extern const u8 BattleScript_UltraBurst[];
+extern const u8 BattleScript_SelectingNotAllowedCurrentMove[];
+extern const u8 BattleScript_SelectingNotAllowedCurrentMoveInPalace[];
+extern const u8 BattleScript_SaltCureExtraDamage[];
 extern const u8 BattleScript_EarlyBirdEnds[];
 extern const u8 BattleScript_UnbreakableActivates[];
 extern const u8 BattleScript_SoulSiphonEffect[];
@@ -481,6 +486,10 @@ extern const u8 BattleScript_LunarGuardianActivates[];
 extern const u8 BattleScript_TimeManipulatorActivates[];
 extern const u8 BattleScript_DefDown[];
 extern const u8 BattleScript_LorentzActivated[];
+extern const u8 BattleScript_MoveEffectConsecration[];
+extern const u8 BattleScript_WildRushRaisesStat[];
+extern const u8 BattleScript_RequiemSetUp[];
+extern const u8 BattleScript_RequiemParalysis[];
 
 // zmoves
 extern const u8 BattleScript_ZMoveActivateDamaging[];

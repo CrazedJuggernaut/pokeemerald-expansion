@@ -1335,7 +1335,7 @@ const u16 *const gTeachableLearnsets[NUM_SPECIES] =
     // Enamorus
     [SPECIES_ENAMORUS_THERIAN] = sEnamorusTeachableLearnset,
     [SPECIES_BASCULEGION_FEMALE] = sBasculegionTeachableLearnset,
-    //Custom Megas
+    //Elite Redux Custom Megas
     [SPECIES_MILOTIC_MEGA] = sMiloticTeachableLearnset,
     [SPECIES_BUTTERFREE_MEGA] = sButterfreeTeachableLearnset,
     [SPECIES_MACHAMP_MEGA] = sMachampTeachableLearnset,
@@ -1343,5 +1343,9 @@ const u16 *const gTeachableLearnsets[NUM_SPECIES] =
     [SPECIES_LAPRAS_MEGA] = sLaprasTeachableLearnset,
     [SPECIES_FLYGON_MEGA] = sFlygonTeachableLearnset,
     [SPECIES_KINGDRA_MEGA] = sKingdraTeachableLearnset,
+    //My Custom Megas
+    [SPECIES_SNORLAX_MEGA] = sSnorlaxTeachableLearnset,
+    [SPECIES_TYPHLOSION_MEGA] = sTyphlosionTeachableLearnset,
+    [SPECIES_FERALIGATR_MEGA] = sFeraligatrTeachableLearnset,
 #endif
 };

@@ -2165,20 +2165,5 @@ void BufferSaveMenuText(u8 textId, u8 *dest, u8 color)
             *string = flagCount + CHAR_0;
             *endOfString = EOS;
             break;
-            case SAVE_MENU_DIFFICULTY:
-            difficultySetting = gSaveBlock2Ptr->gameDifficulty;
-            switch (difficultySetting)
-            {
-                case DIFFICULTY_EASY:
-                    StringCopy(string, gText_SavingEasyMode);
-                    break;
-                case DIFFICULTY_NORMAL:
-                    StringCopy(string, gText_SavingNormalMode);
-                    break;
-                case DIFFICULTY_CHAMPION:
-                    StringCopy(string, gText_SavingChampionMode);
-                    break;
-            }
-            break;
     }
 }

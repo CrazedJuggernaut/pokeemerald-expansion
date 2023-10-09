@@ -413,8 +413,21 @@
 #define EFFECT_INFERNAL_PARADE              407
 #define EFFECT_TAKE_HEART                   408
 #define EFFECT_AXE_KICK                     409
-#define EFFECT_BOUNCE                       410
+#define EFFECT_COLLISION_COURSE             410
+#define EFFECT_SPIN_OUT                     411
+#define EFFECT_MAKE_IT_RAIN                 412
+#define EFFECT_CORROSIVE_GAS                413
+#define EFFECT_POPULATION_BOMB              414
+#define EFFECT_MORTAL_SPIN                  415
+#define EFFECT_GIGATON_HAMMER               416
+#define EFFECT_SALT_CURE                    417
+#define EFFECT_BOUNCE                       418
+#define EFFECT_THUNDERCLAP                  419
+#define EFFECT_CONSECRATION                 420
+#define EFFECT_ALLURE                       421
+#define EFFECT_WILD_RUSH                    422
+#define EFFECT_REQUIEM                      423
 
-#define NUM_BATTLE_MOVE_EFFECTS             411
+#define NUM_BATTLE_MOVE_EFFECTS             424
 
 #endif  // GUARD_CONSTANTS_BATTLE_MOVE_EFFECTS_H

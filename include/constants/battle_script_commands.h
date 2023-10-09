@@ -258,6 +258,8 @@
 #define VARIOUS_TRY_TRAINER_SLIDE_MSG_Z_MOVE         166
 #define VARIOUS_TRY_TRAINER_SLIDE_MSG_MEGA_EVOLUTION 167
 #define VARIOUS_TRY_ACTIVATE_SOUL_SIPHON             168
+#define VARIOUS_TRY_ACTIVATE_WILD_RUSH               169
+#define VARIOUS_SET_REQUIEM                          170
 
 // Cmd_manipulatedamage
 #define DMG_CHANGE_SIGN            0

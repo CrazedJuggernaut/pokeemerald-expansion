@@ -396,6 +396,36 @@ void AnimTask_FrozenIceCubeAttacker(u8 taskId)
     gTasks[taskId].func = AnimTask_FrozenIceCube_Step1;
 }
 
+void AnimTask_CentredFrozenIceCube(u8 taskId)
+{
+    // same as AnimTask_FrozenIceCube but center position on target(s)
+	s16 x, y;
+	u8 spriteId;
+	u8 battler1 = gBattleAnimTarget;
+	u8 battler2 = BATTLE_PARTNER(battler1);
+
+	if (!IsDoubleBattle() || IsAlly(gBattleAnimAttacker, gBattleAnimTarget))
+	{
+		x = GetBattlerSpriteCoord(battler1, BATTLER_COORD_X_2);
+		y = GetBattlerSpriteCoord(battler1, BATTLER_COORD_Y_PIC_OFFSET);
+	}
+	else
+	{
+		x = (GetBattlerSpriteCoord(battler1, BATTLER_COORD_X_2) + GetBattlerSpriteCoord(battler2, BATTLER_COORD_X_2)) / 2;
+		y = (GetBattlerSpriteCoord(battler1, BATTLER_COORD_Y_PIC_OFFSET) + GetBattlerSpriteCoord(battler2, BATTLER_COORD_Y_PIC_OFFSET)) / 2;
+	}
+
+	x -= 32;
+	y -= 36;
+
+	spriteId = CreateSprite(&sFrozenIceCubeSpriteTemplate, x, y, 4);
+	if (GetSpriteTileStartByTag(ANIM_TAG_ICE_CUBE) == 0xFFFF)
+		gSprites[spriteId].invisible = TRUE;
+
+    SetSubspriteTables(&gSprites[spriteId], sFrozenIceCubeSubspriteTable);
+    gTasks[taskId].data[15] = spriteId;
+    gTasks[taskId].func = AnimTask_FrozenIceCube_Step1;
+}
 
 void AnimTask_FrozenIceCube(u8 taskId)
 {
